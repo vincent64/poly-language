@@ -1,0 +1,18 @@
+¦ The FullTest project is used to make sure the compiler analyzes and generates
+¦ the code correctly. If compiling this project produces a compile-time error,
+¦ then the compiler has a major issue that should be fixed immediatly.
+¦ This test project is not exhaustive and only represents a necessary condition.
+¦ @author Vincent Philippe (@vincent64)
+¦
+class+ # Main {
+    fn+ void main(String[] args) {
+        //Test primitive operations
+        OperationTest.testInteger();
+        OperationTest.testLong();
+        OperationTest.testFloat();
+        OperationTest.testDouble();
+
+        //Test operator overloading
+        OperationOverloadTest.test();
+    }
+}

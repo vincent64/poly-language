@@ -1,0 +1,245 @@
+package poly.compiler.parser.tree;
+
+import poly.compiler.output.content.AccessModifier;
+import poly.compiler.tokenizer.Token;
+import poly.compiler.util.NodeStringifier;
+
+/**
+ * The ClassDeclaration class. This class represents a class declaration node,
+ * with class attributes, such at the class name, superclass name, access modifier, etc.
+ * It also contains method declarations, field declarations, and nested class declarations.
+ * This node is also the node used for an interface declaration.
+ * @author Vincent Philippe (@vincent64)
+ */
+public class ClassDeclaration extends Node {
+    private AccessModifier accessModifier = AccessModifier.DEFAULT;
+    private String name;
+    private Node superclass;
+    private Node[] interfaces;
+    private Node[] fieldNodes;
+    private Node[] methodNodes;
+    private Node[] nestedClasses;
+    private boolean isStatic, isConstant;
+    private boolean isInterface, isInner;
+
+    /**
+     * Constructs a class declaration node with the given metadata information.
+     * @param meta the metdata information
+     */
+    public ClassDeclaration(Meta meta) {
+        super(meta);
+
+        //Initialize interface names array
+        interfaces = new Node[0];
+
+        //Initialize fields, methods and nested classes arrays
+        fieldNodes = new FieldDeclaration[0];
+        methodNodes = new MethodDeclaration[0];
+        nestedClasses = new ClassDeclaration[0];
+    }
+
+    /**
+     * Sets the class access modifier from the given token.
+     * @param token the token
+     */
+    public void setAccessModifier(Token token) {
+        accessModifier = AccessModifier.findAccessModifier(token.getContent());
+    }
+
+    /**
+     * Sets the class name from the given token.
+     * @param token the token
+     */
+    public void setName(Token token) {
+        name = String.valueOf(token.getContent());
+    }
+
+    /**
+     * Sets the given superclass node.
+     * @param node the superclass node
+     */
+    public void setSuperclass(Node node) {
+        superclass = node;
+    }
+
+    /**
+     * Adds the given interface node.
+     * @param node the interface node
+     */
+    public void addInterface(Node node) {
+        interfaces = add(interfaces, node);
+    }
+
+    /**
+     * Adds the given field declaration node.
+     * @param node the field node
+     */
+    public void addField(Node node) {
+        fieldNodes = add(fieldNodes, node);
+    }
+
+    /**
+     * Adds the given method declaration node.
+     * @param node the methode node
+     */
+    public void addMethod(Node node) {
+        methodNodes = add(methodNodes, node);
+    }
+
+    /**
+     * Adds the given nested class declaration node.
+     * @param node the nested class node
+     */
+    public void addNestedClass(Node node) {
+        nestedClasses = add(nestedClasses, node);
+    }
+
+    /**
+     * Sets the current class declaration as static.
+     */
+    public void setStatic() {
+        isStatic = true;
+    }
+
+    /**
+     * Sets the current class declaration as constant.
+     */
+    public void setConstant() {
+        isConstant = true;
+    }
+
+    /**
+     * Sets the current class declaration as an interface.
+     */
+    public void setInterface() {
+        isInterface = true;
+    }
+
+    /**
+     * Sets the current class declaration as inner.
+     */
+    public void setInner() {
+        isInner = true;
+    }
+
+    /**
+     * Returns the class access modifier.
+     * @return the access modifier
+     */
+    public AccessModifier getAccessModifier() {
+        return accessModifier;
+    }
+
+    /**
+     * Returns the class name.
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the superclass node.
+     * @return the superclass
+     */
+    public Node getSuperclass() {
+        return superclass;
+    }
+
+    /**
+     * Returns the interface nodes.
+     * @return the interfaces
+     */
+    public Node[] getInterfaces() {
+        return interfaces;
+    }
+
+    /**
+     * Returns the field declaration nodes.
+     * @return the fields
+     */
+    public Node[] getFields() {
+        return fieldNodes;
+    }
+
+    /**
+     * Returns the method declaration nodes.
+     * @return the methods
+     */
+    public Node[] getMethods() {
+        return methodNodes;
+    }
+
+    /**
+     * Returns the nested class declaration nodes.
+     * @return the nested classes
+     */
+    public Node[] getNestedClasses() {
+        return nestedClasses;
+    }
+
+    /**
+     * Returns whether the class declaration is static.
+     * @return true if the class is static
+     */
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    /**
+     * Returns whether the class declaration is constant.
+     * @return true if the class is constant
+     */
+    public boolean isConstant() {
+        return isConstant;
+    }
+
+    /**
+     * Returns whether the class declaration is an interface.
+     * @return true if the class is an interface
+     */
+    public boolean isInterface() {
+        return isInterface;
+    }
+
+    /**
+     * Returns whether the class declaration is inner.
+     * @return true if the class is inner
+     */
+    public boolean isInner() {
+        return isInner;
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitClassDeclaration(this);
+    }
+
+    @Override
+    public Node accept(NodeModifier modifier) {
+        return modifier.visitClassDeclaration(this);
+    }
+
+    @Override
+    public String toString() {
+        NodeStringifier string = new NodeStringifier("ClassDeclaration",
+                "accessModifier=" + accessModifier,
+                "name=" + name,
+                "isInterface=" + isInterface,
+                "isStatic=" + isStatic,
+                "isConstant=" + isConstant,
+                "isInner=" + isInner);
+        string.addString("Superclass:");
+        string.addNode(superclass);
+        string.addString("Interfaces:");
+        string.addNodes(interfaces);
+        string.addString("Fields:");
+        string.addNodes(fieldNodes);
+        string.addString("Methods:");
+        string.addNodes(methodNodes);
+        string.addString("Nested classes:");
+        string.addNodes(nestedClasses);
+
+        return string.toString();
+    }
+}

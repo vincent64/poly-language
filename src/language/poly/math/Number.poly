@@ -1,0 +1,7 @@
+¦ The Number class represents a mathematical number.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ Number {
+    fn+ constructor() { }
+}

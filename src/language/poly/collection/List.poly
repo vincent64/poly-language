@@ -1,0 +1,73 @@
+import poly.util.Equatable;
+
+¦ The List interface describes a collection where elements have a position
+¦ and objects can be dynamically added, removed or retrieved.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ List(Collection) {
+
+    ¦ Adds the given object to the list.
+    ¦ @param object the object
+    ¦
+    fn void add(Object object);
+
+    ¦ Inserts the given object at the given index in the list.
+    ¦ @param index the index
+    ¦ @param object the object
+    ¦
+    fn void insert(int index, Object object);
+
+    ¦ Replaces the given object at the given index in the list and returns the previous object at that index.
+    ¦ @param index the index
+    ¦ @param object the object
+    ¦ @returns the previous object
+    ¦
+    fn Object replace(int index, Object object);
+
+    ¦ Returns the object at the given index in the list.
+    ¦ @param index the index
+    ¦ @returns the object
+    ¦
+    fn Object get(int index);
+
+    ¦ Returns the first object in the list
+    ¦ @returns the first object
+    ¦
+    fn Object getFirst() {
+        return get(0);
+    }
+
+    ¦ Returns the last object in the list
+    ¦ @returns the last object
+    ¦
+    fn Object getLast() {
+        return get(size() - 1);
+    }
+
+    ¦ Removes the object at the given index in the list and returns the object that was at that index.
+    ¦ @param index the index
+    ¦ @returns the object
+    ¦
+    fn Object remove(int index);
+
+    ¦ Removes the first object in the list and returns it.
+    ¦ @returns the first object
+    ¦
+    fn Object removeFirst() {
+        return get(0);
+    }
+
+    ¦ Removes the last object in the list and returns it.
+    ¦ @returns the last object
+    ¦
+    fn Object removeLast() {
+        return get(size() - 1);
+    }
+
+    ¦ Returns the object at the given index in the list.
+    ¦ @param index the index
+    ¦ @returns the object
+    ¦
+    op Object access(int index);
+}

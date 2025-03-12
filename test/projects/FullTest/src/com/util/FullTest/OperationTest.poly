@@ -1,0 +1,91 @@
+¦ The OperationTest class tests every binary and unary primitive operation.
+¦
+class+ # OperationTest {
+
+    ¦ Tests the integer operations
+    ¦
+    fn+ void testInteger() {
+        int a = 16;
+        int b = 0xC4;
+        int c = 0b100;
+
+        int m0 = -a;
+        int m1 = a + b;
+        int m2 = a - b;
+        int m3 = a * b;
+        int m4 = a / b;
+        int m5 = a % b;
+
+        int b0 = ~a;
+        int b1 = a & b;
+        int b2 = a | b;
+        int b3 = a ^ b;
+        int b4 = a << b;
+        int b5 = a >> b;
+        int b6 = a >>> b;
+    }
+
+    ¦ Tests the long operations
+    ¦
+    fn+ void testLong() {
+        long a = 16L;
+        long b = 0xC4L;
+        long c = 0b100L;
+
+        long m0 = -a;
+        long m1 = a + b;
+        long m2 = a - b;
+        long m3 = a * b;
+        long m4 = a / b;
+        long m5 = a % b;
+
+        long b0 = ~a;
+        long b1 = a & b;
+        long b2 = a | b;
+        long b3 = a ^ b;
+        long b4 = a << b;
+        long b5 = a >> b;
+        long b6 = a >>> b;
+    }
+
+    ¦ Tests the float operations.
+    ¦
+    fn+ void testFloat() {
+        float a = 16f;
+        float b = 4.1f;
+
+        float m0 = -a;
+        float m1 = a + b;
+        float m2 = a - b;
+        float m3 = a * b;
+        float m4 = a / b;
+        float m5 = a % b;
+    }
+
+    ¦ Tests the double operations.
+    ¦
+    fn+ void testDouble() {
+        float a = 16d;
+        float b = 4.1d;
+
+        float m0 = -a;
+        float m1 = a + b;
+        float m2 = a - b;
+        float m3 = a * b;
+        float m4 = a / b;
+        float m5 = a % b;
+    }
+
+    ¦ Tests the boolean operations.
+    ¦
+    fn+ void testBoolean() {
+        bool a = true;
+        bool b = false;
+
+        bool l0 = !a;
+        bool l1 = a && b;
+        bool l2 = a || b;
+        bool l3 = !(a && b);
+        bool l4 = !(a || b);
+    }
+}

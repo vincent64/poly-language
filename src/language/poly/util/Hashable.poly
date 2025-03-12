@@ -1,0 +1,11 @@
+¦ The Hashable interface allows an object to return an integer hash.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Hashable {
+
+    ¦ Returns the object integer hash.
+    ¦ @returns the hash
+    ¦
+    fn+ int getHash();
+}

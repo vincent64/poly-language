@@ -1,0 +1,81 @@
+import java.lang.StringBuilder;
+
+¦ The Polynomial class represents a mathematical linear polynomial with constant real coefficients.
+¦ This class extends from the DoubleVector class, and can be evaluated, derivated, etc.
+¦ The size of the polynomial is fixed, and the degree of the polynomial is less than the size.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ const Polynomial(DoubleVector) : Function {
+
+    ¦ Constructs a polynomial with the given size.
+    ¦ @param size the polynomial size
+    ¦
+    fn+ constructor(int size) {
+        super(size);
+    }
+
+    ¦ Constructs a polynomial with the given coefficients.
+    ¦ @param the coefficients
+    ¦
+    fn+ constructor(double[] values) {
+        super(values);
+    }
+
+    ¦ Derivates the polynomial.
+    ¦ @returns the derivated polynomial
+    ¦
+    fn+ Polynomial derivate() {
+        double[] values = new[size];
+
+        for(int i = 0; i < values.size - 1; i++) {
+            int j = i + 1;
+            values[i] = this.values[j] * j;
+        }
+
+        //Set the coefficient of the highest degree to zero
+        values[values.size - 1] = 0d;
+
+        return new(values);
+    }
+
+    ¦ Returns the degree of the polynomial.
+    ¦ @returns the polynomial degree (-1 if it is the zero polynomial)
+    ¦
+    fn+ int degree() {
+        for(int i = size - 1; i >= 0; i--) {
+            if(values[i] != 0d) return i;
+        }
+
+        return -1;
+    }
+
+    ¦ Evaluates the polynomial with the given value.
+    ¦ @param value the value
+    ¦ @returns the evaluated polynomial
+    ¦
+    op+ double call(double value) {
+        double result = 0d;
+
+        for(int i = 0; i < values.size; i++) {
+            result += values[i] * value;
+            value *= value;
+        }
+
+        return result;
+    }
+
+    fn+ String toString() {
+        StringBuilder builder = new();
+
+        //Append coefficients
+        for(int i = 0; i <= degree(); i++) {
+            double value = values[i];
+
+            if(value != 0d)
+                builder.insert(0, " " + values[i] + "x^" + i + " ");
+        }
+
+        return builder.toString();
+    }
+}

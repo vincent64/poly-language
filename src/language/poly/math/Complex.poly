@@ -1,0 +1,219 @@
+import poly.util.Equatable;
+
+¦ The Complex class. This class represents a complex (also called imaginary) number.
+¦ A complex number is composed of two values : the real value and the imaginary value.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ Complex(Number) : Equatable {
+    ¦ The complex number 0.
+    + # Complex ZERO = new();
+    ¦ The complex number 1.
+    + # Complex ONE = new(1d);
+    ¦ The complex number i.
+    + # Complex i = new(0d, 1d);
+
+    - double re;
+    - double im;
+
+    ¦ Constructs a complex number with the given real and imaginary values.
+    ¦ @param re the real value
+    ¦ @param im the imaginary value
+    ¦
+    fn+ constructor(double re, double im) {
+        this.re = re;
+        this.im = im;
+    }
+
+    ¦ Constructs a complex number with the given real value.
+    ¦ @param re the real value
+    ¦
+    fn+ constructor(double re) {
+        this(re, 0d);
+    }
+
+    ¦ Constructs a complex number with the initial value zero.
+    ¦
+    fn+ constructor() {
+        this(0d, 0d);
+    }
+
+    ¦ Returns the real value of the complex number.
+    ¦ @returns the real value
+    ¦
+    fn+ double real() {
+        return re;
+    }
+
+    ¦ Returns the imaginary value of the complex number.
+    ¦ @returns the imaginary value
+    ¦
+    fn+ double imaginary() {
+        return im;
+    }
+
+    ¦ Returns the conjugate complex number.
+    ¦ @returns the conjugate number
+    ¦
+    fn+ Complex conjugate() {
+        return new(re, -im);
+    }
+
+    ¦ Returns the modulus of the complex number.
+    ¦ @returns the modulus
+    ¦
+    fn+ double modulus() {
+        return Math.sqrt(re * re + im * im);
+    }
+
+    ¦ Returns the argument of the complex number.
+    ¦ @returns the argument
+    ¦
+    fn+ double argument() {
+        match {
+            case(re > 0)
+                return Math.arctan(im / re);
+            case(re < 0 && im >= 0)
+                return Math.arctan(im / re) + Math.PI;
+            case(re < 0 && im < 0)
+                return Math.arctan(im / re) - Math.PI;
+            case(re == 0 && im > 0)
+                return Math.PI / 2d;
+            case(re == 0 && im < 0)
+                return -(Math.PI / 2d);
+        }
+
+        return 0d;
+    }
+
+    ¦ Returns whether the current complex number has no imaginary part.
+    ¦ @returns true if the complex number is real
+    ¦
+    fn+ bool isReal() {
+        return im == 0d;
+    }
+
+    ¦ Adds the current complex number with the given complex number.
+    ¦ @param that the complex number
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex +(Complex that) {
+        return new(re + that.re, im + that.im);
+    }
+
+    ¦ Adds the current complex number with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex +(double value) {
+        return new(re + value, im);
+    }
+
+    ¦ Subtracts the current complex number with the given complex number.
+    ¦ @param that the complex number
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex -(Complex that) {
+        return new(re - that.re, im - that.im);
+    }
+
+    ¦ Subtracts the current complex number with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex -(double value) {
+        return new(re - value, im);
+    }
+
+    ¦ Multiplies the current complex number with the given complex number.
+    ¦ @param that the complex number
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex *(Complex that) {
+        return new(re * that.re - im * that.im, re * that.im + im * that.re);
+    }
+
+    ¦ Multiplies the current complex number with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex *(double value) {
+        return new(re * value, im * value);
+    }
+
+    ¦ Divides the current complex number with the given complex number.
+    ¦ @param that the complex number
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex /(Complex that) {
+        double denominator = that.re * that.re + that.im * that.im;
+        return new((re * that.re + im * that.im) / denominator,
+                   (im * that.re - re * that.im) / denominator);
+    }
+
+    ¦ Divides the current complex number with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting complex number
+    ¦
+    op+ Complex /(double value) {
+        return new(re / value, im / value);
+    }
+
+    ¦ Negates the current complex number.
+    ¦ @returns the negated complex number
+    ¦
+    op+ Complex -() {
+        return new(-re, -im);
+    }
+
+    ¦ Returns whether the current complex number is equal to the given complex.
+    ¦ @param that the complex number
+    ¦ @returns true if the complex numbers are equal
+    ¦
+    op+ bool ==(Complex that) {
+        return this.re == that.re && this.im == that.im;
+    }
+
+    ¦ Returns whether the current complex number is not equal to the given complex.
+    ¦ @param that the complex number
+    ¦ @returns true if the complex numbers are not equal
+    ¦
+    op+ bool !=(Complex that) {
+        return !(this == that);
+    }
+
+    op+ bool ==(Object object) {
+        if(object !=: Complex) return false;
+        return this == object:Complex;
+    }
+
+    op+ bool !=(Object object) {
+        return !(this == object);
+    }
+
+    fn+ bool equals(Object object) {
+        return this == object;
+    }
+
+    fn+ String toString() {
+        return "" + re + "+i" + im;
+    }
+
+    ¦ Returns the complex number from the given polar coordinate.
+    ¦ @param rho the modulus
+    ¦ @param theta the angle
+    ¦ @returns the complex number
+    ¦
+    fn+ # Complex fromPolar(double rho, double theta) {
+        return new(rho * Math.cos(theta), rho * Math.sin(theta));
+    }
+
+    ¦ Returns the complex number from the given exponential values.
+    ¦ @param rho the modulus
+    ¦ @param theta the angle
+    ¦ @returns the complex number
+    ¦
+    fn+ # Complex fromExponential(double rho, double theta) {
+        return fromPolar(rho, theta);
+    }
+}

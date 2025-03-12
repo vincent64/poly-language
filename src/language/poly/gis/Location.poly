@@ -1,0 +1,96 @@
+import poly.util.Equatable;
+import java.lang.System;
+
+¦ The Location class represents a geographical location with coordinate,
+¦ altitude datum and timestamp.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ Location : Equatable {
+    - const Coordinate coordinate;
+    - const double altitude;
+    - const long timestamp;
+
+    ¦ Constructs a location with the given coordinate, altitude and timestamp.
+    ¦ @param coordinate the coordinate
+    ¦ @param altitude the altitude
+    ¦ @param timestamp the timestamp
+    ¦
+    fn+ constructor(const Coordinate coordinate, const double altitude, const long timestamp) {
+        this.coordinate = coordinate;
+        this.altitude = altitude;
+        this.timestamp = timestamp;
+    }
+
+    ¦ Constructs a location with the given latitude, longitude, altitude and timestamp.
+    ¦ @param latitude the latitude
+    ¦ @param longitude the longitude
+    ¦ @param altitude the altitude
+    ¦ @param timestamp the timestamp
+    ¦
+    fn+ constructor(const double latitude, const double longitude, const double altitude, const long timestamp) {
+        this(new Coordinate(latitude, longitude), altitude, timestamp);
+    }
+
+    ¦ Constructs a location with the given coordinate and altitude.
+    ¦ The location timestamp is set to the current time.
+    ¦ @param coordinate the coordinate
+    ¦ @param altitude the altitude
+    ¦
+    fn+ constructor(const Coordinate coordinate, const double altitude) {
+        this(coordinate, altitude, System.currentTimeMillis());
+    }
+
+    ¦ Constructs a location with the given latitude, longitude and altitude.
+    ¦ The location timestamp is set to the current time.
+    ¦ @param latitude the latitude
+    ¦ @param longitude the longitude
+    ¦ @param altitude the altitude
+    ¦
+    fn+ constructor(const double latitude, const double longitude, const double altitude) {
+        this(latitude, longitude, altitude, System.currentTimeMillis());
+    }
+
+    ¦ Returns the distance between the current location and the given location.
+    ¦ The distance is computed using the Vincenty algorithm for the best accuracy.
+    ¦ @returns the distance between the coordinates (in kilometers)
+    ¦
+    fn+ double distanceTo(Location that) {
+        //TODO
+        return 0d;
+    }
+
+    ¦ Returns the location coordinate.
+    ¦ @returns the coordinate
+    ¦
+    fn+ Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    ¦ Returns the location altitude.
+    ¦ @returns the altitude
+    ¦
+    fn+ double getAltitude() {
+        return altitude;
+    }
+
+    ¦ Returns the location timestamp.
+    ¦ @returns the timestamp
+    ¦
+    fn+ long getTimestamp() {
+        return timestamp;
+    }
+
+    op+ bool ==(Object object) {
+        if(object !=: Location) return false;
+        Location that = object:Location;
+
+        return this.coordinate == that.coordinate
+                && this.altitude == that.altitude
+                && this.timestamp == timestamp;
+    }
+
+    op+ bool !=(Object object) {
+        return !(this == object);
+    }
+}

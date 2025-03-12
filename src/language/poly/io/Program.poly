@@ -1,0 +1,15 @@
+import java.lang.System;
+
+¦ The Program class is a utility class which provides method for the current program.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ # Program {
+
+    ¦ Exits the current program with the given exit code.
+    ¦ @param code the exit code
+    ¦
+    fn+ void exit(int code) {
+        System.exit(code);
+    }
+}

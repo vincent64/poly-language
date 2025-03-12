@@ -1,0 +1,107 @@
+package poly.compiler.file;
+
+import poly.compiler.util.ClassName;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+/**
+ * The LibraryReader class. This class is used to read the
+ */
+public class LibraryReader {
+    private final List<LibraryFile> libraryFiles;
+
+    /**
+     * Constructs a library reader with the given library folder path.
+     * @param libraryPath the library folder path
+     */
+    public LibraryReader(String libraryPath) {
+        libraryFiles = new ArrayList<>();
+
+        //Get library folder path
+        Path path = Paths.get(libraryPath);
+        File libraryDirectory = new File(path.toString());
+
+        //Read library files
+        if(libraryDirectory.exists() && libraryDirectory.isDirectory()) {
+            if(libraryDirectory.listFiles() == null) return;
+
+            for(File file : libraryDirectory.listFiles()) {
+                if(file.isFile() && file.getName().endsWith(JarBuilder.JAR_EXTENSION))
+                    readLibrary(file);
+            }
+        }
+    }
+
+    /**
+     * Reads the library from the given file.
+     * @param file the file
+     */
+    private void readLibrary(File file) {
+        try(ZipFile zipFile = new ZipFile(file)) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while(entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                String name = entry.getName();
+
+                if(!entry.isDirectory() && name.endsWith(ClassWriter.CLASS_EXTENSION)) {
+                    //Get file qualified name without extension
+                    name = name.substring(0, name.length() - ClassWriter.CLASS_EXTENSION.length());
+
+                    //Add file to library files
+                    libraryFiles.add(new LibraryFile.External(ClassName.fromStringQualifiedName(name), file, entry));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read library " + file.getName() + ".");
+        }
+    }
+
+    /**
+     * Loads and return the Java API library files.
+     * @return the Java library files
+     */
+    public static List<LibraryFile> loadJavaLibraryFiles() {
+        try {
+            //Get Java file system
+            FileSystem fileSystem = FileSystems.getFileSystem(URI.create(ClassLoader.JAVA_RUNTIME_URI));
+            Path basePath = fileSystem.getPath(ClassLoader.JAVA_BASE_MODULE);
+
+            //Initialize library files list
+            List<LibraryFile> libraryFiles = new ArrayList<>();
+
+            try(Stream<Path> paths = Files.walk(basePath)) {
+                paths.filter(path -> path.toString().endsWith(ClassWriter.CLASS_EXTENSION))
+                        .forEach(path -> {
+                            //Parse library class name from path name
+                            String pathName = path.toString();
+                            String fileName = pathName.substring(18, pathName.length() - 6);
+                            ClassName className = ClassName.fromStringQualifiedName(fileName);
+
+                            //Add library to the library files list
+                            libraryFiles.add(new LibraryFile.Java(className));
+                        });
+
+                return libraryFiles;
+            }
+        } catch(IOException e) {
+            throw new RuntimeException("Could not load library internal library classes.");
+        }
+    }
+
+    /**
+     * Returns the library files.
+     * @return the library files
+     */
+    public List<LibraryFile> getLibraryFiles() {
+        return libraryFiles;
+    }
+}

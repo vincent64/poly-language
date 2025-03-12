@@ -1,0 +1,179 @@
+import java.lang.System;
+import java.util.Scanner;
+
+¦ The Console class is used to manage inputs and outputs from and to the console.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ # Console {
+    ¦ Prints the given string in the console, and adds a new line.
+    ¦ @param string the string
+    ¦
+    fn+ void println(String string) {
+        System.out.println(string);
+    }
+
+    ¦ Prints the string representation of the given object in the console, and adds a new line.
+    ¦ @param object the object
+    ¦
+    fn+ void println(Object object) {
+        System.out.println(object.toString());
+    }
+
+    ¦ Prints the given integer value in the console, and adds a new line.
+    ¦ @param value the integer value
+    ¦
+    fn+ void println(int value) {
+        System.out.println(String.valueOf(value));
+    }
+
+    ¦ Prints the given long value in the console, and adds a new line.
+    ¦ @param value the long value
+    ¦
+    fn+ void println(long value) {
+        System.out.println(String.valueOf(value));
+    }
+
+    ¦ Prints the given float value in the console, and adds a new line.
+    ¦ @param value the float value
+    ¦
+    fn+ void println(float value) {
+        System.out.println(String.valueOf(value));
+    }
+
+    ¦ Prints the given double value in the console, and adds a new line.
+    ¦ @param value the double value
+    ¦
+    fn+ void println(double value) {
+        System.out.println(String.valueOf(value));
+    }
+
+    ¦ Prints the given boolean value in the console, and adds a new line.
+    ¦ @param value the boolean value
+    ¦
+    fn+ void println(bool value) {
+        System.out.println(String.valueOf(value));
+    }
+
+    ¦ Prints a new line in the console.
+    ¦
+    fn+ void println() {
+        System.out.println();
+    }
+
+    ¦ Prints the given string in the console.
+    ¦ @param string the string
+    ¦
+    fn+ void print(String string) {
+        System.out.print(string);
+    }
+
+    ¦ Prints the string representation of the given object in the console.
+    ¦ @param object the object
+    ¦
+    fn+ void print(Object object) {
+        System.out.print(object.toString());
+    }
+
+    ¦ Prints the given integer value in the console.
+    ¦ @param value the integer value
+    ¦
+    fn+ void print(int value) {
+        System.out.print(String.valueOf(value));
+    }
+
+    ¦ Prints the given long value in the console.
+    ¦ @param value the long value
+    ¦
+    fn+ void print(long value) {
+        System.out.print(String.valueOf(value));
+    }
+
+    ¦ Prints the given float value in the console.
+    ¦ @param value the float value
+    ¦
+    fn+ void print(float value) {
+        System.out.print(String.valueOf(value));
+    }
+
+    ¦ Prints the given double value in the console.
+    ¦ @param value the double value
+    ¦
+    fn+ void print(double value) {
+        System.out.print(String.valueOf(value));
+    }
+
+    ¦ Prints the given boolean value in the console.
+    ¦ @param value the boolean value
+    ¦
+    fn+ void print(bool value) {
+        System.out.print(String.valueOf(value));
+    }
+
+    ¦ Flushes the console output stream (i.e. force print).
+    ¦
+    fn+ void flush() {
+        System.out.flush();
+    }
+
+    ¦ The Console.Input class is used to receive inputs from the console.
+    ¦ The class should be closed after receiving every necessary input.
+    ¦
+    class+ Input : Closeable {
+        - Scanner scanner;
+        - bool isClosed;
+
+        ¦ Constructs a console input.
+        ¦
+        fn+ constructor() {
+            scanner = new(System.in);
+        }
+
+        ¦ Reads and returns the next string inputted in the console.
+        ¦ @returns the inputted string
+        ¦
+        fn+ String readString() {
+            assert(!isClosed);
+            return scanner.nextLine();
+        }
+
+        ¦ Reads and returns the next integer value inputted in the console.
+        ¦ @returns the inputted integer value
+        ¦
+        fn+ int readInt() {
+            assert(!isClosed);
+            return scanner.nextInt();
+        }
+
+        ¦ Reads and returns the next long value inputted in the console.
+        ¦ @returns the inputted long value
+        ¦
+        fn+ long readLong() {
+            assert(!isClosed);
+            return scanner.nextLong();
+        }
+
+        ¦ Reads and returns the next float value inputted in the console.
+        ¦ @returns the inputted float value
+        ¦
+        fn+ float readFloat() {
+            assert(!isClosed);
+            return scanner.nextFloat();
+        }
+
+        ¦ Reads and returns the next double value inputted in the console.
+        ¦ @returns the inputted double value
+        ¦
+        fn+ double readDouble() {
+            assert(!isClosed);
+            return scanner.nextDouble();
+        }
+
+        ¦ Closes the console input.
+        ¦
+        fn+ void close() {
+            isClosed = true;
+            scanner.close();
+        }
+    }
+}

@@ -1,0 +1,34 @@
+¦ The Vector class represents a mathematical vector with a fixed size.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ Vector {
+    ¦ The vector size.
+    ~ const int size;
+
+    ¦ Constructs a vector with the given size.
+    ¦ @param size the vector size (size > 0)
+    ¦
+    fn+ constructor(const int size) {
+        assert(size > 0);
+        this.size = size;
+    }
+
+    ¦ Returns the size of the vector.
+    ¦ @returns the vector size
+    ¦
+    fn+ int size() {
+        return size;
+    }
+
+    ¦ The Vector.Property interface describes the properties of a vector and
+    ¦ provides methods to check those properties.
+    ¦
+    interface+ Property {
+
+        ¦ Returns whether the current vector is a unit vector.
+        ¦ A vector is a unit vector if its length is equal to zero.
+        ¦ @returns true if the the vector is unit
+        fn bool isUnit();
+    }
+}

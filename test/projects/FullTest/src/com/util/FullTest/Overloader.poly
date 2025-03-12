@@ -1,0 +1,46 @@
+class+ Overloader {
+
+    //Math operations
+    op+ int +(int i) { return i; }
+    op+ int -(int i) { return i; }
+    op+ int *(int i) { return i; }
+    op+ int /(int i) { return i; }
+    op+ int %(int i) { return i; }
+    op+ int -() { return 0; }
+
+    //Bitwise operations
+    op+ int &(int i) { return i; }
+    op+ int ^(int i) { return i; }
+    op+ int |(int i) { return i; }
+    op+ int <<(int i) { return i; }
+    op+ int >>(int i) { return i; }
+    op+ int >>>(int i) { return i; }
+    op+ int ~() { return 0; }
+
+    //Boolean operations
+    op+ int &&(int i) { return i; }
+    op+ int ||(int i) { return i; }
+    op+ int !() { return 0; }
+
+    //Comparison operations
+    op+ int ==(int i) { return i; }
+    op+ int !=(int i) { return i; }
+    op+ int >(int i) { return i; }
+    op+ int <(int i) { return i; }
+    op+ int >=(int i) { return i; }
+    op+ int <=(int i) { return i; }
+    op+ int <=>(int i) { return i; }
+
+    //Assignement operations
+    op+ int +=(int i) { return i; }
+    op+ int -=(int i) { return i; }
+    op+ int *=(int i) { return i; }
+    op+ int /=(int i) { return i; }
+    op+ int %=(int i) { return i; }
+    op+ int &=(int i) { return i; }
+    op+ int ^=(int i) { return i; }
+    op+ int |=(int i) { return i; }
+    op+ int <<=(int i) { return i; }
+    op+ int >>=(int i) { return i; }
+    op+ int >>>=(int i) { return i; }
+}

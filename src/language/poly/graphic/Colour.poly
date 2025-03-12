@@ -1,0 +1,6 @@
+¦ The Colour class is there solely to satisfy the bri'ish developers
+¦ who are using the standard library. It does absolutely nothing, please use Color.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class # Colour { }

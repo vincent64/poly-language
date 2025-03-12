@@ -1,0 +1,7 @@
+import poly.io.Console;
+
+class+ # HelloWorld {
+    fn void main() {
+        Console.println("Hello, world!");
+    }
+}

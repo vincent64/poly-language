@@ -1,0 +1,83 @@
+import poly.util.Array;
+
+¦ The BitArray class represents a fixed-size array of bits.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ BitArray {
+    - const long[] array;
+    - const int size;
+
+    ¦ Constructs a bit array with the given size.
+    ¦ @param size the array size
+    ¦
+    fn+ constructor(const int size) {
+        this.size = size;
+        array = new[(size / long.bits) + 1];
+    }
+
+    fn- constructor(long[] array) {
+        this.array = array;
+    }
+
+    ¦ Sets the bit at the given index in the array with the given bit boolean value.
+    ¦ @param index the index
+    ¦ @param value the bit boolean value
+    ¦
+    fn+ void set(int index, bool value) {
+        assert(index < size);
+
+        //Compute indices
+        int bit_index = index % long.bits;
+        int array_index = index / long.bits;
+
+        //Compute bit
+        long bit = (if(value) 1L else 0L) << (long.bits - bit_index);
+        array[array_index] |= bit;
+    }
+
+    ¦ Returns the bit boolean value at the given index in the array.
+    ¦ @param index the index
+    ¦ @returns the bit boolean value
+    ¦
+    fn+ bool get(int index) {
+        //Compute indices
+        int bit_index = index % long.bits;
+        int array_index = index / long.bits;
+
+        //Compute bit
+        long bit = (array[array_index] >> bit_index) & 1;
+        return bit == 0L;
+    }
+
+    ¦ Resets the bit array and set every bit to zero (false).
+    ¦
+    fn+ void reset() {
+        for(int i = 0; i < array.size; i++)
+            array[i] = 0L;
+    }
+
+    ¦ Returns the bit array size.
+    ¦ @returns the array size
+    ¦
+    fn+ int size() {
+        return size;
+    }
+
+    ¦ Returns a new bit array with every bit flipped.
+    ¦ @returns a flipped bit array
+    ¦
+    op+ BitArray ~() {
+        long[] array = Array.copy(this.array);
+
+        //Flip every bit
+        for(int i = 0; i < array.size; i++)
+            array[i] = ~array[i];
+
+        return new(array);
+    }
+
+    op+ bool access(int index) {
+        return get(index);
+    }
+}

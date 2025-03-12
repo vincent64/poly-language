@@ -1,0 +1,19 @@
+¦ The Equatable interface allows classes to be compared in order to see
+¦ if they are equal or not equal.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Equatable {
+
+    ¦ Returns whether the current object is equal to the given object.
+    ¦ @param object the object
+    ¦ @returns true if the objects are equal
+    ¦
+    op+ bool ==(Object object);
+
+    ¦ Returns whether the current object is not equal to the given object.
+    ¦ @param object the object
+    ¦ @returns true if the objects are not equal
+    ¦
+    op+ bool !=(Object object);
+}

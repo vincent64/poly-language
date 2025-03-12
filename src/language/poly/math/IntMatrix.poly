@@ -1,0 +1,478 @@
+import java.lang.System;
+import java.lang.StringBuilder;
+import poly.util.Equatable;
+import poly.util.Array;
+
+¦ The IntMatrix class represents a matrix with integer components.
+¦ The matrix components are stored in row-major order and should be provided as such.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
+    ¦ The matrix integer components.
+    ~ const int[] values;
+
+    ¦ Constructs an integer matrix with the given rows and columns sizes.
+    ¦ Every component are initialized to zero.
+    ¦ @param rows the rows count
+    ¦ @param columns the columns count
+    ¦
+    fn+ constructor(const int rows, const int columns) {
+        super(rows, columns);
+        values = new[rows * columns];
+    }
+
+    ¦ Constructs a square integer matrix with the given size.
+    ¦ Every component are initialized to zero.
+    ¦ @param size the matrix size
+    ¦
+    fn+ constructor(const int size) {
+        this(size, size);
+    }
+
+    ¦ Constructs an integer matrix with the given rows, columns and values.
+    ¦ @param rows the rows count
+    ¦ @param columns the columns count
+    ¦ @param values the component values
+    ¦
+    fn+ constructor(const int rows, const int columns, int[] values) {
+        super(rows, columns);
+        this.values = Array.copy(values);
+    }
+
+    ¦ Constructs an integer matrix with the given values and rows size.
+    ¦ @param values the component values
+    ¦ @param rows the rows count
+    ¦
+    fn+ constructor(int[] values, const int rows) {
+        super(rows, values.size / rows);
+        assert(values.size % rows == 0);
+        this.values = Array.copy(values);
+    }
+
+    ¦ Returns the value of the component at the given row and column index.
+    ¦ @param row the row index
+    ¦ @param column the column index
+    ¦ @returns the component value
+    ¦
+    fn+ int get(int row, int column) {
+        assert(0 <= row && row < rows);
+        assert(0 <= column && column < columns);
+
+        return values[row * columns + column];
+    }
+
+    ¦ Returns the integer vector corresponding to the row at the given index.
+    ¦ @param index the row index
+    ¦ @returns the row vector
+    ¦
+    fn+ IntVector get(int index) {
+        return getRow(index);
+    }
+
+    ¦ Returns the integer vector corresponding to the row at the given row index.
+    ¦ @param row the row index
+    ¦ @returns the row vector
+    ¦
+    fn+ IntVector getRow(int row) {
+        assert(0 <= row && row < rows);
+
+        //Copy the components subarray
+        int[] values = new[columns];
+        System.arraycopy(this.values, row * columns, values, 0, columns);
+
+        return new(values);
+    }
+
+    ¦ Returns the integer vector corresponding to the column at the given column index.
+    ¦ @param column the column index
+    ¦ @returns the column vector
+    ¦
+    fn+ IntVector getColumn(int column) {
+        assert(0 <= column && column < columns);
+
+        //Compute the column components
+        int[] values = new[rows];
+        for(int i = 0; i < rows; i++)
+            values[i] = this.values[i * columns + column];
+
+        return new(values);
+    }
+
+    ¦ Returns the trace of the current matrix.
+    ¦ @returns the trace
+    ¦
+    fn+ int trace() {
+        assert(isSquare());
+        return sum(int i = 0; i < rows; i++) values[i * columns + i];
+    }
+
+    fn+ bool isDiagonal() {
+        assert(isSquare());
+
+        //Check every non-diagonal component
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++) {
+                if(i != j && values[i * columns + j] != 0)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    fn+ bool isHollow() {
+        assert(isSquare());
+
+        //Check every diagonal component
+        for(int i = 0; i < rows; i++) {
+            if(values[i * columns + i] != 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    fn+ bool isUpperTriangular() {
+        assert(isSquare());
+
+        //Check every lower-triangular component
+        for(int i = 1; i < rows; i++) {
+            for(int j = 0; j < i; j++) {
+                if(values[i * columns + j] != 0)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    fn+ bool isLowerTriangular() {
+        assert(isSquare());
+
+        //Check every upper-triangular component
+        for(int i = 0; i < rows - 1; i++) {
+            for(int j = i + 1; j < columns; j++) {
+                if(values[i * columns + j] != 0)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    fn+ bool isSymmetric() {
+        assert(isSquare());
+
+        //Check every component
+        for(int i = 1; i < rows; i++) {
+            for(int j = 0; j < i; j++) {
+                if(values[i * columns + j] != values[j * columns + i])
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    ¦ Returns the transpose of the current matrix.
+    ¦ @returns the transposed matrix
+    ¦
+    fn+ IntMatrix transpose() {
+        assert(isSquare());
+
+        //Transpose components
+        int[] values = new[this.values.size];
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++)
+                values[i * columns + j] = this.values[j * columns + i];
+        }
+
+        return new(values, rows);
+    }
+
+    ¦ Swaps the given rows.
+    ¦ @param row1 the first row
+    ¦ @param row2 the second row
+    ¦ @returns the resulting integer matrix
+    ¦
+    fn+ IntMatrix swapRow(int row1, int row2) {
+        assert(0 <= row1 && row1 < rows);
+        assert(0 <= row2 && row2 < rows);
+
+        //Swap every component in the rows
+        int[] values = Array.copy(this.values);
+        for(int i = 0; i < columns; i++) {
+            int value = values[row1 * columns + i];
+            values[row1 * columns + i] = values[row2 * columns + i];
+            values[row2 * columns + i] = value;
+        }
+
+        return new(values, rows);
+    }
+
+    ¦ Swaps the given columns.
+    ¦ @param column1 the first column
+    ¦ @param column2 the second column
+    ¦ @returns the resulting integer matrix
+    ¦
+    fn+ IntMatrix swapColumn(int column1, int column2) {
+        assert(0 <= column1 && column1 < columns);
+        assert(0 <= column2 && column2 < columns);
+
+        //Swap every component in the columns
+        int[] values = Array.copy(this.values);
+        for(int i = 0; i < rows; i++) {
+            int value = values[i * columns + column1];
+            values[i * columns + column1] = values[i * columns + column2];
+            values[i * columns + column2] = value;
+        }
+
+        return new(values, rows);
+    }
+
+    ¦ Multiplies the given row with the given integer value.
+    ¦ @param row the row
+    ¦ @param value the integer value
+    ¦ @returns the resulting integer matrix
+    ¦
+    fn+ IntMatrix mulRow(int row, int value) {
+        assert(0 <= row && row < rows);
+
+        //Multiply every component in the row
+        int[] values = Array.copy(this.values);
+        for(int i = 0; i < columns; i++)
+            values[row * columns + i] *= value;
+
+        return new(values, rows);
+    }
+
+    ¦ Multiplies the given column with the given integer value.
+    ¦ @param column the column
+    ¦ @param value the integer value
+    ¦ @returns the resulting integer matrix
+    ¦
+    fn+ IntMatrix mulColumn(int column, int value) {
+        assert(0 <= column && column < columns);
+
+        //Multiply every component in the column
+        int[] values = Array.copy(this.values);
+        for(int i = 0; i < rows; i++)
+            values[i * columns + column] *= value;
+
+        return new(values, rows);
+    }
+
+    ¦ Adds the current integer matrix with the given integer matrix.
+    ¦ @param that the integer matrix
+    ¦ @returns the resulting integer matrix
+    ¦
+    op+ IntMatrix +(IntMatrix that) {
+        assert(this.rows == that.rows);
+        assert(this.columns == that.columns);
+
+        //Add every component
+        int[] values = new[this.values.size];
+        for(int i = 0; i < values.size; i++)
+            values[i] = this.values[i] + that.values[i];
+
+        return new(values, rows);
+    }
+
+    ¦ Subtracts the current integer matrix with the given integer matrix.
+    ¦ @param that the integer matrix
+    ¦ @returns the resulting integer matrix
+    ¦
+    op+ IntMatrix -(IntMatrix that) {
+        assert(this.rows == that.rows);
+        assert(this.columns == that.columns);
+
+        //Subtract every component
+        int[] values = new[this.values.size];
+        for(int i = 0; i < values.size; i++)
+            values[i] = this.values[i] + that.values[i];
+
+        return new(values, rows);
+    }
+
+    ¦ Negates the current matrix.
+    ¦ @returns the negated matrix
+    ¦
+    op+ IntMatrix -() {
+        //Negate every component
+        int[] values = new[this.values.size];
+        for(int i = 0; i < values.size; i++)
+            values[i] = -this.values[i];
+
+        return new(values, rows);
+    }
+
+    ¦ Multiplies the current integer matrix with the given integer matrix.
+    ¦ @param that the integer matrix
+    ¦ @returns the resulting integer matrix
+    ¦
+    op+ IntMatrix *(IntMatrix that) {
+        assert(this.columns == that.rows);
+
+        //Multiply every component
+        int[] values = new[this.rows * that.columns];
+        for(int i = 0; i < this.rows; i++) {
+            for(int j = 0; j < that.columns; j++) {
+                values[i * this.columns + j] = sum(int k = 0; k < this.columns; k++)
+                    this.values[i * this.columns + k] * that.values[k * this.columns + j];
+            }
+        }
+
+        return new(values, rows);
+    }
+
+    ¦ Multiplies the current integer matrix with the given integer vector.
+    ¦ @param vector the integer vector
+    ¦ @returns the resulting integer vector
+    ¦
+    op+ IntVector *(IntVector vector) {
+        assert(columns == vector.size);
+
+        //Multiply every component
+        int[] values = new[rows];
+        for(int i = 0; i < rows; i++) {
+            values[i] = sum(int k = 0; k < columns; k++)
+                this.values[i * columns + k] * vector.values[k];
+        }
+
+        return new(values);
+    }
+
+    ¦ Multiplies the current integer matrix with the given integer scalar.
+    ¦ @param value the integer scalar
+    ¦ @returns the resulting integer matrix
+    ¦
+    op+ IntMatrix *(int value) {
+        int[] values = new[this.values.size];
+        for(int i = 0; i < values.size; i++)
+            values[i] = this.values[i] * value;
+
+        return new(values, rows);
+    }
+
+    ¦ Applies the current matrix as a linear transformation on the given integer vector.
+    ¦ @param vector the integer vector
+    ¦ @returns the transformed vector
+    ¦
+    op+ IntVector call(IntVector vector) {
+        return this * vector;
+    }
+
+    ¦ Returns the integer vector corresponding to the row at the given index.
+    ¦ @param index the row index
+    ¦ @returns the row vector
+    ¦
+    op+ IntVector access(int index) {
+        return get(index);
+    }
+
+    ¦ Returns whether the current integer matrix is equal to the given integer matrix.
+    ¦ Two matrices are equal if they have the same size and every component are equal.
+    ¦ @param that the integer matrix
+    ¦ @returns true if the matrices are equal
+    ¦
+    op+ bool ==(IntMatrix that) {
+        if(this.rows != that.rows) return false;
+        if(this.columns != that.columns) return false;
+
+        //Check every component
+        for(int i = 0; i < values.size; i++) {
+            if(this.values[i] != that.values[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    ¦ Returns whether the current integer matrix is not equal to the given integer matrix.
+    ¦ @param that the integer matrix
+    ¦ @returns true if the matrices are not equal
+    ¦
+    op+ bool !=(IntMatrix that) {
+        return !(this == that);
+    }
+
+    op+ bool ==(Object object) {
+        if(object !=: IntMatrix) return false;
+        return this == object:IntMatrix;
+    }
+
+    op+ bool !=(Object object) {
+        return !(this == object);
+    }
+
+    fn+ bool equals(Object object) {
+        return this == object;
+    }
+
+    ¦ Casts the current integer matrix to a long matrix.
+    ¦ @returns the long matrix
+    ¦
+    fn+ LongMatrix toLongMatrix() {
+        long[] values = new[rows * columns];
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++)
+                values[i * columns + j] = this.values[i * columns + j]:long;
+        }
+
+        return new(values, rows);
+    }
+
+    ¦ Casts the current integer matrix to a float matrix.
+    ¦ @returns the float matrix
+    ¦
+    fn+ FloatMatrix toFloatMatrix() {
+        float[] values = new[rows * columns];
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++)
+                values[i * columns + j] = this.values[i * columns + j]:float;
+        }
+
+        return new(values, rows);
+    }
+
+    ¦ Casts the current integer matrix to a double matrix.
+    ¦ @returns the double matrix
+    ¦
+    fn+ DoubleMatrix toDoubleMatrix() {
+        double[] values = new[rows * columns];
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++)
+                values[i * columns + j] = this.values[i * columns + j]:double;
+        }
+
+        return new(values, rows);
+    }
+
+    fn+ String toString() {
+        StringBuilder builder = new();
+
+        //Append every component in a table-shaped string
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++)
+                builder.append(" ").append(values[i * columns + j]).append(" ");
+            builder.append("\n");
+        }
+
+        return builder.toString();
+    }
+
+    ¦ Returns the identity matrix with the given size.
+    ¦ @param size the matrix size
+    ¦ @returns the identity matrix
+    ¦
+    fn+ # IntMatrix newIdentity(int size) {
+        IntMatrix matrix = new(size);
+
+        //Set diagonal to one
+        for(int i = 0; i < size; i++)
+            matrix.values[i * matrix.columns + i] = 1;
+
+        return matrix;
+    }
+}

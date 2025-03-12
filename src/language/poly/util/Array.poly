@@ -1,0 +1,298 @@
+import java.lang.System;
+
+¦ The Array class provides utility methods to manipulate native arrays.
+¦ It contains method to copy, fill, reverse, rotate arrays, and much more.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ # Array {
+
+    ¦ Copies the given integer array and returns a new array.
+    ¦ @param array the integer array
+    ¦ @returns a new array
+    ¦
+    fn+ int[] copy(int[] array) {
+        int[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given long array and returns a new array.
+    ¦ @param array the long array
+    ¦ @returns a new array
+    ¦
+    fn+ long[] copy(long[] array) {
+        long[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given float array and returns a new array.
+    ¦ @param array the float array
+    ¦ @returns a new array
+    ¦
+    fn+ float[] copy(float[] array) {
+        float[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given double array and returns a new array.
+    ¦ @param array the double array
+    ¦ @returns a new array
+    ¦
+    fn+ double[] copy(double[] array) {
+        double[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given boolean array and returns a new array.
+    ¦ @param array the boolean array
+    ¦ @returns a new array
+    ¦
+    fn+ bool[] copy(bool[] array) {
+        bool[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given byte array and returns a new array.
+    ¦ @param array the byte array
+    ¦ @returns a new array
+    ¦
+    fn+ byte[] copy(byte[] array) {
+        byte[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given short array and returns a new array.
+    ¦ @param array the short array
+    ¦ @returns a new array
+    ¦
+    fn+ short[] copy(short[] array) {
+        short[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given char array and returns a new array.
+    ¦ @param array the char array
+    ¦ @returns a new array
+    ¦
+    fn+ char[] copy(char[] array) {
+        char[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Copies the given object array and returns a new array.
+    ¦ The array will only copy the object references.
+    ¦ @param array the object array
+    ¦ @returns a new array
+    ¦
+    fn+ Object[] copy(Object[] array) {
+        Object[] newArray = new[array.size];
+        System.arraycopy(array, 0, newArray, 0, array.size);
+
+        return newArray;
+    }
+
+    ¦ Fills the given array with the given integer value.
+    ¦ @param array the integer array
+    ¦ @param value the integer value
+    ¦
+    fn+ void fill(int[] array, int value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given long value.
+    ¦ @param array the long array
+    ¦ @param value the long value
+    ¦
+    fn+ void fill(long[] array, long value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given float value.
+    ¦ @param array the float array
+    ¦ @param value the float value
+    ¦
+    fn+ void fill(float[] array, float value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given double value.
+    ¦ @param array the double array
+    ¦ @param value the double value
+    ¦
+    fn+ void fill(double[] array, double value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given boolean value.
+    ¦ @param array the boolean array
+    ¦ @param value the boolean value
+    ¦
+    fn+ void fill(bool[] array, bool value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given byte value.
+    ¦ @param array the byte array
+    ¦ @param value the byte value
+    ¦
+    fn+ void fill(byte[] array, byte value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given short value.
+    ¦ @param array the short array
+    ¦ @param value the short value
+    ¦
+    fn+ void fill(short[] array, short value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given char value.
+    ¦ @param array the char array
+    ¦ @param value the char value
+    ¦
+    fn+ void fill(char[] array, char value) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = value;
+    }
+
+    ¦ Fills the given array with the given object.
+    ¦ @param array the object array
+    ¦ @param value the object
+    ¦
+    fn+ void fill(Object[] array, Object object) {
+        for(int i = 0; i < array.size; i++)
+            array[i] = object;
+    }
+
+    ¦ Reverses the given integer array.
+    ¦ @param array the integer array
+    ¦
+    fn+ void reverse(int[] array) {
+        int element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given long array.
+    ¦ @param array the long array
+    ¦
+    fn+ void reverse(long[] array) {
+        long element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given float array.
+    ¦ @param array the float array
+    ¦
+    fn+ void reverse(float[] array) {
+        float element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given double array.
+    ¦ @param array the double array
+    ¦
+    fn+ void reverse(double[] array) {
+        double element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given boolean array.
+    ¦ @param array the boolean array
+    ¦
+    fn+ void reverse(bool[] array) {
+        bool element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given byte array.
+    ¦ @param array the byte array
+    ¦
+    fn+ void reverse(byte[] array) {
+        byte element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given short array.
+    ¦ @param array the short array
+    ¦
+    fn+ void reverse(short[] array) {
+        short element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given char array.
+    ¦ @param array the char array
+    ¦
+    fn+ void reverse(char[] array) {
+        char element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+
+    ¦ Reverses the given object array.
+    ¦ @param array the object array
+    ¦
+    fn+ void reverse(Object[] array) {
+        Object element;
+        for(int i = 0; i < array.size / 2; i++) {
+            element = array[i];
+            array[i] = array[array.size - i - 1];
+            array[array.size - i - 1] = element;
+        }
+    }
+}

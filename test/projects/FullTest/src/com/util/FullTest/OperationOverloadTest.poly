@@ -1,0 +1,47 @@
+¦ The OperationOverloadTest class is used to test the operator overload methods.
+¦
+class+ # OperationOverloadTest {
+    fn+ void test() {
+        Overloader o = new();
+        int i = 256;
+
+        int m1 = o + i;
+        int m2 = o - i;
+        int m3 = o * i;
+        int m4 = o / i;
+        int m5 = o % i;
+        int m6 = -o;
+
+        int m7 = o & i;
+        int m8 = o ^ i;
+        int m9 = o | i;
+        int m10 = o << i;
+        int m11 = o >> i;
+        int m12 = o >>> i;
+        int m13 = ~o;
+
+        int m14 = o && i;
+        int m15 = o || i;
+        int m16 = !o;
+
+        int m17 = o == i;
+        int m18 = o != i;
+        int m19 = o > i;
+        int m20 = o < i;
+        int m21 = o >= i;
+        int m22 = o <= i;
+        int m23 = o <=> i;
+
+        int m24 = o += i;
+        int m25 = o -= i;
+        int m26 = o *= i;
+        int m27 = o /= i;
+        int m28 = o %= i;
+        int m29 = o &= i;
+        int m30 = o ^= i;
+        int m31 = o |= i;
+        int m32 = o <<= i;
+        int m33 = o >>= i;
+        int m34 = o >>>= i;
+    }
+}

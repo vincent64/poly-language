@@ -1,0 +1,360 @@
+import java.lang.StrictMath;
+
+¦ The Math class contains static methods that perform various mathematical operations,
+¦ such as power, square root, etc.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ # Math {
+    ¦ The mathematical pi constant.
+    + const double PI = 3.141592653589d;
+    ¦ The mathematical e constant.
+    + const double E = 2.718281828459d;
+    ¦ The mathematical phi (golden ration) constant.
+    + const double PHI = 1.618033988749d;
+    ¦ The mathematical tau (2 * pi) constant.
+    + const double TAU = 6.283185307179d;
+    ¦ The result of the square root of two.
+    + const double SQRT_TWO = 1.414213562373d;
+    ¦ The result of the square root of three.
+    + const double SQRT_THREE = 1.732050807568d;
+    ¦ The result of the square root of five.
+    + const double SQRT_FIVE = 2.236067977499d;
+
+    ¦ Returns the square root of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the square root value
+    ¦
+    fn+ double sqrt(double x) {
+        return StrictMath.sqrt(x);
+    }
+
+    ¦ Returns the cubic root of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the cubic root value
+    ¦
+    fn+ double cbrt(double x) {
+        return StrictMath.cbrt(x);
+    }
+
+    ¦ Returns the first given integer value raised to the power of the second given integer value.
+    ¦ @param n the first integer value
+    ¦ @param e the second integer value
+    ¦ @returns the first integer raised to the second integer
+    ¦
+    fn+ int pow(int n, int e) {
+        return prod(int i = 0; i < e; i++) n;
+    }
+
+    ¦ Returns the first given double value raised to the power of the second given double value.
+    ¦ @param n the first double value
+    ¦ @param e the second double value
+    ¦ @returns the first double raised to the second double
+    ¦
+    fn+ double pow(double n, double e) {
+        return StrictMath.pow(n, e);
+    }
+
+    ¦ Returns the trigonometric sine of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the sine value
+    ¦
+    fn+ double sin(double x) {
+        return StrictMath.sin(x);
+    }
+
+    ¦ Returns the trigonometric cosine of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the cosine value
+    ¦
+    fn+ double cos(double x) {
+        return StrictMath.cos(x);
+    }
+
+    ¦ Returns the trigonometric tangent of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the tangent value
+    ¦
+    fn+ double tan(double x) {
+        return StrictMath.tan(x);
+    }
+
+    ¦ Returns the trigonometric arcsine of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the arcsine value
+    ¦
+    fn+ double arcsin(double x) {
+        return StrictMath.asin(x);
+    }
+
+    ¦ Returns the trigonometric arccosine of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the arccosine value
+    ¦
+    fn+ double arccos(double x) {
+        return StrictMath.acos(x);
+    }
+
+    ¦ Returns the trigonometric arctangent of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the arctangent value
+    ¦
+    fn+ double arctan(double x) {
+        return StrictMath.atan(x);
+    }
+
+    ¦ Returns the trigonometric hyperbolic sine of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the hyperbolic sine value
+    ¦
+    fn+ double sinh(double x) {
+        return StrictMath.sinh(x);
+    }
+
+    ¦ Returns the trigonometric hyperbolic cosine of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the hyperbolic cosine value
+    ¦
+    fn+ double cosh(double x) {
+        return StrictMath.cosh(x);
+    }
+
+    ¦ Returns the trigonometric hyperbolic tangent of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the hyperbolic tangent value
+    ¦
+    fn+ double tanh(double x) {
+        return StrictMath.tanh(x);
+    }
+
+    ¦ Returns the exponential (base e) of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the exponential sine value
+    ¦
+    fn+ double exp(double x) {
+        return StrictMath.exp(x);
+    }
+
+    ¦ Returns the natural logarithm (base e) of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the natural logarithm value
+    ¦
+    fn+ double log(double x) {
+        return StrictMath.log(x);
+    }
+
+    ¦ Computes and returns the minimum integer value between the two given integer values.
+    ¦ @param a the first integer value
+    ¦ @param b the second integer value
+    ¦ @returns the minimum integer value
+    ¦
+    fn+ int min(int a, int b) {
+        return if(a < b) a else b;
+    }
+
+    ¦ Computes and returns the minimum long value between the two given long values.
+    ¦ @param a the first long value
+    ¦ @param b the second long value
+    ¦ @returns the minimum long value
+    ¦
+    fn+ long min(long a, long b) {
+        return if(a < b) a else b;
+    }
+
+    ¦ Computes and returns the minimum float value between the two given float values.
+    ¦ @param a the first float value
+    ¦ @param b the second float value
+    ¦ @returns the minimum float value
+    ¦
+    fn+ float min(float a, float b) {
+        return if(a < b) a else b;
+    }
+
+    ¦ Computes and returns the minimum double value between the two given double values.
+    ¦ @param a the first double value
+    ¦ @param b the second double value
+    ¦ @returns the minimum double value
+    ¦
+    fn+ double min(double a, double b) {
+        return if(a < b) a else b;
+    }
+
+    ¦ Computes and returns the maximum integer value between the two given integer values.
+    ¦ @param a the first integer value
+    ¦ @param b the second integer value
+    ¦ @returns the maximum integer value
+    ¦
+    fn+ int max(int a, int b) {
+        return if(a > b) a else b;
+    }
+
+    ¦ Computes and returns the maximum long value between the two given long values.
+    ¦ @param a the first long value
+    ¦ @param b the second long value
+    ¦ @returns the maximum long value
+    ¦
+    fn+ long max(long a, long b) {
+        return if(a > b) a else b;
+    }
+
+    ¦ Computes and returns the maximum float value between the two given float values.
+    ¦ @param a the first float value
+    ¦ @param b the second float value
+    ¦ @returns the maximum float value
+    ¦
+    fn+ float max(float a, float b) {
+        return if(a > b) a else b;
+    }
+
+    ¦ Computes and returns the maximum double value between the two given double values.
+    ¦ @param a the first double value
+    ¦ @param b the second double value
+    ¦ @returns the maximum double value
+    ¦
+    fn+ double max(double a, double b) {
+        return if(a > b) a else b;
+    }
+
+    ¦ Returns the absolute value of the given integer value.
+    ¦ @param a the integer value
+    ¦ @returns the absolute value
+    ¦
+    fn+ int abs(int a) {
+        return if(a < 0) -a else a;
+    }
+
+    ¦ Returns the absolute value of the given long value.
+    ¦ @param a the long value
+    ¦ @returns the absolute value
+    ¦
+    fn+ long abs(long a) {
+        return if(a < 0L) -a else a;
+    }
+
+    ¦ Returns the absolute value of the given float value.
+    ¦ @param a the float value
+    ¦ @returns the absolute value
+    ¦
+    fn+ float abs(float a) {
+        return if(a < 0f) -a else a;
+    }
+
+    ¦ Returns the absolute value of the given double value.
+    ¦ @param a the double value
+    ¦ @returns the absolute value
+    ¦
+    fn+ double abs(double a) {
+        return if(a < 0d) -a else a;
+    }
+
+    ¦ Returns the floor of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the floor value
+    ¦
+    fn+ double floor(double x) {
+        return StrictMath.floor(x);
+    }
+
+    ¦ Returns the ceiling of the given double value.
+    ¦ @param x the double value
+    ¦ @returns the ceiling value
+    ¦
+    fn+ double ceil(double x) {
+        return StrictMath.ceil(x);
+    }
+
+    ¦ Converts and returns the given angle in degrees to radians.
+    ¦ @param degrees the angle in degrees
+    ¦ @returns the angle in radians
+    ¦
+    fn+ double toRadians(double degrees) {
+        return degrees * (PI / 180d);
+    }
+
+    ¦ Converts and returns the given angle in radians to degrees.
+    ¦ @param radians the angle in radians
+    ¦ @returns the angle in degrees
+    ¦
+    fn+ double toDegrees(double radians) {
+        return radians * (180d / PI);
+    }
+
+    ¦ Returns the factorial of the given long value.
+    ¦ @param n the long value
+    ¦ @returns the factorial of the given value
+    ¦
+    fn+ long factorial(long n) {
+        assert(n >= 0L);
+
+        //Return obvious values
+        if(n <= 1L) return 1L;
+        if(n == 2L) return 2L;
+
+        return prod(long i = 2L; i < n; i++) i;
+    }
+
+    ¦ Returns whether the given integer value is a prime number.
+    ¦ @param n the integer value
+    ¦ @returns true if the value is a prime number
+    ¦
+    fn+ bool isPrime(int n) {
+        assert(n >= 0);
+
+        //Return obvious values
+        if(n <= 1) return false;
+        if(n == 2 || n == 3) return true;
+        if(n % 2 == 0 || n % 3 == 0) return false;
+
+        //Compute prime algorithm
+        for(int i = 5; i <= sqrt(n:double); i += 6) {
+            if(n % i == 0 || n % (i + 2) == 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    ¦ Returns the greatest common divisor of the two given integer values.
+    ¦ @note This method uses recursion.
+    ¦ @param a the first integer value
+    ¦ @param b the second integer value
+    ¦ @returns the greatest common divisor
+    ¦
+    fn+ int gcd(int a, int b) {
+        if(a == 0) return b;
+
+        return gcd(b % a, a);
+    }
+
+    ¦ Returns the greatest common divisor of the two given long values.
+    ¦ @note This method uses recursion.
+    ¦ @param a the first long value
+    ¦ @param b the second long value
+    ¦ @returns the greatest common divisor
+    ¦
+    fn+ long gcd(long a, long b) {
+        if(a == 0L) return b;
+
+        return gcd(b % a, a);
+    }
+
+    ¦ Returns the least common multiple between of the two given integer values.
+    ¦ @note This method uses recursion.
+    ¦ @param a the first integer value
+    ¦ @param b the second integer value
+    ¦ @returns the least common multiple
+    ¦
+    fn+ int lcm(int a, int b) {
+        return a / gcd(a, b) * b;
+    }
+
+    ¦ Returns the least common multiple between of the two given long values.
+    ¦ @note This method uses recursion.
+    ¦ @param a the first long value
+    ¦ @param b the second long value
+    ¦ @returns the least common multiple
+    ¦
+    fn+ long lcm(long a, long b) {
+        return a / gcd(a, b) * b;
+    }
+}

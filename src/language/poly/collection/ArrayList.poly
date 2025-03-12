@@ -1,0 +1,87 @@
+import java.lang.System;
+
+¦ The ArrayList class represents a list implemented as an array.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ const ArrayList : List {
+    - const int CAPACITY = 16;
+    - Object[] array = new[CAPACITY];
+    - int size;
+
+    fn+ constructor() { }
+
+    fn+ void add(Object object) {
+        allocate();
+        array[size++] = object;
+    }
+
+    fn+ void insert(int index, Object object) {
+        assert(0 <= index && index < size);
+
+        allocate();
+        System.arraycopy(array, index, array, index + 1, size - index);
+        array[index] = object;
+        size++;
+    }
+
+    fn+ Object replace(int index, Object object) {
+        assert(0 <= index && index < size);
+
+        //Retrieve and replace element
+        Object previous = array[index];
+        array[index] = object;
+
+        return previous;
+    }
+
+    fn+ Object get(int index) {
+        assert(0 <= index && index < size);
+        return array[index];
+    }
+
+    fn+ Object remove(int index) {
+        assert(0 <= index && index < size);
+
+        //Retrieve and remove element
+        Object object = array[index];
+        System.arraycopy(array, index + 1, array, index, size - index - 1);
+        array[--size] = null;
+
+        return object;
+    }
+
+    fn+ bool contains(Object object) {
+        for(int i = 0; i < array.size; i++) {
+            if(array[i].equals(object))
+                return true;
+        }
+
+        return false;
+    }
+
+    fn+ void clear() {
+        size = 0;
+        array = new[CAPACITY];
+    }
+
+    fn+ int size() {
+        return size;
+    }
+
+    fn+ bool isEmpty() {
+        return size == 0;
+    }
+
+    op+ Object access(int index) {
+        return get(index);
+    }
+
+    fn- void allocate() {
+        while(size >= array.size) {
+            Object[] newArray = new[array.size + CAPACITY];
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
+        }
+    }
+}

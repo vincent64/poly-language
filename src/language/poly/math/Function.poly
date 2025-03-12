@@ -1,0 +1,12 @@
+¦ The Function interface describes a real function with a single input.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Function {
+
+    ¦ Calls the function with the given double value.
+    ¦ @param x the double value
+    ¦ @returns the output value
+    ¦
+    op double call(double x);
+}

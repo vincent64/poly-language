@@ -1,0 +1,288 @@
+import poly.util.Equatable;
+import poly.util.Comparable;
+
+¦ The Fraction class represents a rational number and is stored
+¦ as a simplified fraction, with the nominator and denominator as long values.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ Fraction(Number) : Equatable {
+    ¦ The fraction for the number one.
+    + # const Fraction ONE = new(1, 1);
+    ¦ The fraction for one half.
+    + # const Fraction HALF = new(1, 2);
+    ¦ The fraction for zero.
+    + # const Fraction ZERO = new(0, 1);
+
+    - long p;
+    - long q;
+
+    ¦ Constructs a fraction with the given nominator and denominator.
+    ¦ @param p the nominator
+    ¦ @param q the denominator
+    ¦
+    fn+ constructor(long p, long q) {
+        assert(q != 0L);
+
+        //Negate nominator only
+        if(q < 0) {
+            p = -p;
+            q = -q;
+        }
+
+        //Initialize simplifed fraction
+        if(p != 0) {
+            long gcd = Math.gcd(Math.abs(p), Math.abs(q));
+            this.p = p / gcd;
+            this.q = q / gcd;
+        } else {
+            this.q = 1L;
+        }
+    }
+
+    ¦ Constructs a fraction with the given nominator and denominator.
+    ¦ @param p the nominator
+    ¦ @param q the denominator
+    ¦
+    fn+ constructor(int p, int q) {
+        this(p:long, q:long);
+    }
+
+    ¦ Constructs a fraction from the given long value.
+    ¦ @param value the long value
+    ¦
+    fn+ constructor(long value) {
+        this(value, 1L);
+    }
+
+    ¦ Constructs a fraction from the given int value.
+    ¦ @param value the int value
+    ¦
+    fn+ constructor(int value) {
+        this(value:long);
+    }
+
+    ¦ Returns the fraction nominator.
+    ¦ @returns the nominator
+    ¦
+    fn+ long nominator() {
+        return p;
+    }
+
+    ¦ Returns the fraction denominator.
+    ¦ @returns the denominator
+    ¦
+    fn+ long denominator() {
+        return q;
+    }
+
+    ¦ Returns the double representation of the fraction.
+    ¦ @returns the double representation
+    ¦
+    fn+ double toDouble() {
+        return p:double / q:double;
+    }
+
+    ¦ Returns whether the fraction can be expressed as an integer.
+    ¦ @returns true if the fraction is an integer
+    ¦
+    fn+ bool isInteger() {
+        return q == 1L;
+    }
+
+    ¦ Adds the current fraction with the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction +(Fraction that) {
+        long q = Math.lcm(this.q, that.q);
+        long p1 = this.p * (q / this.q);
+        long p2 = that.p * (q / that.q);
+
+        return new(p1 + p2, q);
+    }
+
+    ¦ Adds the current fraction with the given long value.
+    ¦ @param value the long value
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction +(long value) {
+        return new(p + value * q, q);
+    }
+
+    ¦ Subtracts the current fraction with the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction -(Fraction that) {
+        long q = Math.lcm(this.q, that.q);
+        long p1 = this.p * (q / this.q);
+        long p2 = that.p * (q / that.q);
+
+        return new(p1 - p2, q);
+    }
+
+    ¦ Subtracts the current fraction with the given long value.
+    ¦ @param value the long value
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction -(long value) {
+        return new(p - value * q, q);
+    }
+
+    ¦ Multiplies the current fraction with the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction *(Fraction that) {
+        return new(this.p * that.p, this.q * that.q);
+    }
+
+    ¦ Multiplies the current fraction with the given long value.
+    ¦ @param value the long value
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction *(long value) {
+        return new(p * value, q);
+    }
+
+    ¦ Divides the current fraction with the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction /(Fraction that) {
+        return new(this.p * that.q, this.q * that.p);
+    }
+
+    ¦ Divides the current fraction with the given long value.
+    ¦ @param value the long value
+    ¦ @returns the resulting fraction
+    ¦
+    op+ Fraction /(long value) {
+        return new(p, q * value);
+    }
+
+    ¦ Negates the current fraction.
+    ¦ @returns the negated fraction
+    ¦
+    op+ Fraction -() {
+        return new(-p, q);
+    }
+
+    ¦ Increments the current fraction.
+    ¦ @returns the incremented fraction
+    ¦
+    op+ Fraction ++() {
+        return new(p + q, q);
+    }
+
+    ¦ Decrements the current fraction.
+    ¦ @returns the decremented fraction
+    ¦
+    op+ Fraction --() {
+        return new(p - q, q);
+    }
+
+    ¦ Returns whether the current fraction is equal to the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns true if the fractions are equal
+    ¦
+    op+ bool ==(Fraction that) {
+        return this.p == that.p && this.q == that.q;
+    }
+
+    ¦ Returns whether the current fraction is equal to the given long value.
+    ¦ @param value the long value
+    ¦ @returns true if the fraction is equal to the value
+    ¦
+    op+ bool ==(long value) {
+        return p == value && q == 1L;
+    }
+
+    ¦ Returns whether the current fraction is not equal to the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns true if the fractions are not equal
+    ¦
+    op+ bool !=(Fraction that) {
+        return this.p != that.p || this.q != that.q;
+    }
+
+    ¦ Returns whether the current fraction is not equal to the given long value.
+    ¦ @param value the long value
+    ¦ @returns true if the fraction is not equal to the value
+    ¦
+    op+ bool !=(long value) {
+        return p != value || q != 1L;
+    }
+
+    ¦ Returns whether the current fraction is greater than the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns true if the current fraction is greater
+    ¦
+    op+ bool >(Fraction that) {
+        long ad = this.p * that.q;
+        long bc = that.p * this.q;
+
+        return if(bc > 0) ad > bc else ad < bc;
+    }
+
+    ¦ Returns whether the current fraction is less than the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns true if the current fraction is less
+    ¦
+    op+ bool <(Fraction that) {
+        long ad = this.p * that.q;
+        long bc = that.p * this.q;
+
+        return if(bc > 0) ad < bc else ad > bc;
+    }
+
+    ¦ Returns whether the current fraction is greater or equal than the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns true if the current fraction is greater or equal
+    ¦
+    op+ bool >=(Fraction that) {
+        long ad = this.p * that.q;
+        long bc = that.p * this.q;
+
+        return if(bc > 0) ad >= bc else ad <= bc;
+    }
+
+    ¦ Returns whether the current fraction is less or equal than the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns true if the current fraction is less or equal
+    ¦
+    op+ bool <=(Fraction that) {
+        long ad = this.p * that.q;
+        long bc = that.p * this.q;
+
+        return if(bc > 0) ad <= bc else ad >= bc;
+    }
+
+    ¦ Compares the current fraction with the given fraction.
+    ¦ @param that the fraction
+    ¦ @returns 1 if the current fraction is greater
+    ¦          0 if the fractions are equal
+    ¦          -1 if the given fraction is greater
+    ¦
+    op+ int <=>(Fraction that) {
+        return if(this > that) 1 else if(this < that) -1 else 0;
+    }
+
+    op+ bool ==(Object object) {
+        if(object !=: Fraction) return false;
+        return this == object:Fraction;
+    }
+
+    op+ bool !=(Object object) {
+        return !(this == object);
+    }
+
+    fn+ bool equals(Object object) {
+        return this == object;
+    }
+
+    fn+ String toString() {
+        return "" + p + "/" + q;
+    }
+}

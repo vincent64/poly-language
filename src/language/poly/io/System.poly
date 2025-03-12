@@ -1,0 +1,34 @@
+¦ The System class is a utility class which provides method for the current system.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ # System {
+
+    ¦ Returns the operating system name.
+    ¦ @returns the OS name
+    ¦
+    fn+ String getOSName() {
+        return java.lang.System.getProperty("os.name");
+    }
+
+    ¦ Returns the operating system version.
+    ¦ @returns the OS version
+    ¦
+    fn+ String getOSVersion() {
+        return java.lang.System.getProperty("os.version");
+    }
+
+    ¦ Returns the operating system architecture.
+    ¦ @returns the OS architecture
+    ¦
+    fn+ String getOSArchitecture() {
+        return java.lang.System.getProperty("os.arch");
+    }
+
+    ¦ Returns the current system user name.
+    ¦ @returns the user name
+    ¦
+    fn+ String getUserName() {
+        return java.lang.System.getProperty("user.name");
+    }
+}

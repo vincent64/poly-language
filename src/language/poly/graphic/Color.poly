@@ -1,0 +1,157 @@
+import poly.math.Math;
+
+¦ The Color class represents a single RGBA color.
+¦ It supports color operations, such as darkening, multiplying, etc.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ const Color {
+    ¦ The white color.
+    + # const Color WHITE = new(0xFFFFFFFF);
+    ¦ The black color.
+    + # const Color BLACK = new(0xFF000000);
+    ¦ The red color.
+    + # const Color RED = new(0xFFFF0000);
+    ¦ The green color.
+    + # const Color GREEN = new(0xFF00FF00);
+    ¦ The blue color.
+    + # const Color BLUE = new(0xFF0000FF);
+
+    - const float red;
+    - const float green;
+    - const float blue;
+    - const float alpha;
+
+    ¦ Constructs a color with the given red, green, blue and alpha components.
+    ¦ @param red the red component (0 <= red <= 1)
+    ¦ @param green the green component (0 <= green <= 1)
+    ¦ @param blue the blue component (0 <= blue <= 1)
+    ¦ @param alpha the alpha component (0 <= alpha <= 1)
+    ¦
+    fn+ constructor(float red, float green, float blue, float alpha) {
+        assert(0.0f <= red && red <= 1.0f);
+        assert(0.0f <= green && green <= 1.0f);
+        assert(0.0f <= blue && blue <= 1.0f);
+        assert(0.0f <= alpha && alpha <= 1.0f);
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alpha = alpha;
+    }
+
+    ¦ Constructs a color with the given red, green and blue components.
+    ¦ @param red the red component (0 <= red <= 1)
+    ¦ @param green the green component (0 <= green <= 1)
+    ¦ @param blue the blue component (0 <= blue <= 1)
+    ¦
+    fn+ constructor(float red, float green, float blue) {
+        this(red, green, blue, 1.0f);
+    }
+
+    ¦ Constructs a color with the given red, green, blue and alpha integer components.
+    ¦ @param red the red component (0 <= red <= 255)
+    ¦ @param green the green component (0 <= green <= 255)
+    ¦ @param blue the blue component (0 <= blue <= 255)
+    ¦ @param alpha the alpha component (0 <= alpha <= 255)
+    ¦
+    fn+ constructor(int red, int green, int blue, int alpha) {
+        this(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
+    }
+
+    ¦ Constructs a color with the given red, green and blue integer components.
+    ¦ @param red the red component (0 <= red <= 255)
+    ¦ @param green the green component (0 <= green <= 255)
+    ¦ @param blue the blue component (0 <= blue <= 255)
+    ¦
+    fn+ constructor(int red, int green, int blue) {
+        this(red, green, blue, 255);
+    }
+
+    ¦ Constructs a color with the given integer representation
+    ¦ @param value the integer color
+    ¦
+    fn+ constructor(int value) {
+        this(((value >> 16) & 0xFF),
+            ((value >> 8) & 0xFF),
+            (value & 0xFF),
+            ((value >> 24) & 0xFF));
+    }
+
+    ¦ Returns the current color as an integer representation.
+    ¦ @returns the integer color
+    ¦
+    fn+ int toInt() {
+        return ((alpha * 255.0f):int << 24)
+            | ((red * 255.0f):int << 16)
+            | ((green * 255.0f):int << 8)
+            | (blue * 255.0f):int;
+    }
+
+    ¦ Adds the given color to the current color.
+    ¦ @param that the color
+    ¦ @returns the resulting color
+    ¦
+    op+ Color +(Color that) {
+        return new(
+            Math.min(red + that.red, 1.0f),
+            Math.min(green + that.green, 1.0f),
+            Math.min(blue + that.blue, 1.0f),
+            Math.min(alpha + that.alpha, 1.0f));
+    }
+
+    ¦ Subtracts the given color to the current color.
+    ¦ @param that the color
+    ¦ @returns the resulting color
+    ¦
+    op+ Color -(Color that) {
+        return new(
+            Math.max(red - that.red, 0.0f),
+            Math.max(green - that.green, 0.0f),
+            Math.max(blue - that.blue, 0.0f),
+            Math.max(alpha - that.alpha, 0.0f));
+    }
+
+    ¦ Multiply the current color by the given color.
+    ¦ @param that the color
+    ¦ @returns the resulting color
+    ¦
+    op+ Color *(Color that) {
+        return new(red * that.red, green * that.green, blue * that.blue, alpha * that.alpha);
+    }
+
+    ¦ Multiply the current color by the given scalar.
+    ¦ @param scalar the scalar
+    ¦ @returns the resulting color
+    ¦
+    op+ Color *(float scalar) {
+        return new(red * scalar, green * scalar, blue * scalar, alpha * scalar);
+    }
+
+    ¦ Returns the red component.
+    ¦ @returns the red component
+    ¦
+    fn+ float red() {
+        return red;
+    }
+
+    ¦ Returns the green component.
+    ¦ @returns the green component
+    ¦
+    fn+ float green() {
+        return green;
+    }
+
+    ¦ Returns the blue component.
+    ¦ @returns the blue component
+    ¦
+    fn+ float blue() {
+        return blue;
+    }
+
+    ¦ Returns the alpha component.
+    ¦ @returns the alpha component
+    ¦
+    fn+ float alpha() {
+        return alpha;
+    }
+}

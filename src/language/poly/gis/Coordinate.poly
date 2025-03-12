@@ -1,0 +1,89 @@
+import poly.util.Equatable;
+import poly.math.Math;
+
+¦ The Coordinate class represents a geographical coordinate with latitude and longitude.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ const Coordinate : Equatable {
+    ¦ The North Pole coordinate.
+    + # const Coordinate NORTH_POLE = new(90.0d, 0.0d);
+    ¦ The South Pole coordinate.
+    + # const Coordinate SOUTH_POLE = new(-90.0d, 0.0d);
+    ¦ The Greenwich coordinate.
+    + # const Coordinate GREENWICH = new(51.477811d, 0.0d);
+
+    - const double latitude;
+    - const double longitude;
+
+    ¦ Constructs a coordinate with the given latitude and longitude.
+    ¦ @param latitude the latitude (-90 <= latitude <= +90)
+    ¦ @param longitude the longitude (-180 <= longitude <= +180)
+    ¦
+    fn+ constructor(const double latitude, const double longitude) {
+        assert(-90.0f <= latitude && latitude <= 90.0f);
+        assert(-180.0f <= longitude && longitude <= 180.0f);
+
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    ¦ Returns the distance between the current coordinate and the given coordinate.
+    ¦ The distance is computed using the Haversine algorithm, which assumes
+    ¦ the Earth is a perfect sphere.
+    ¦ @returns the distance between the coordinates (in kilometers)
+    ¦
+    fn+ double distanceTo(Coordinate that) {
+        //Average earth radius
+        const double EARTH_RADIUS = 6371.0d;
+
+        //Latitude and longitude differences
+        double delta_latitude = Math.toRadians(that.latitude - latitude);
+        double delta_longitude = Math.toRadians(that.longitude - longitude);
+
+        //Compute latitude and longitude haversines
+        double hav_latitude = Math.pow(Math.sin(delta_latitude / 2.0d), 2.0d);
+        double hav_longitude = Math.pow(Math.sin(delta_longitude / 2.0d), 2.0d);
+
+        //Compute haversine
+        double hav = hav_latitude + Math.cos(Math.toRadians(latitude))
+                     * Math.cos(Math.toRadians(that.latitude)) * hav_longitude;
+
+        return 2.0d * EARTH_RADIUS * Math.arcsin(Math.sqrt(hav));
+    }
+
+    ¦ Returns the geographical URI (Uniform Resource Identifier) of the current coordinate.
+    ¦ @returns the geo URI
+    ¦
+    fn+ String getUri() {
+        return "geo:" + latitude + "," + longitude;
+    }
+
+    ¦ Returns the latitude.
+    ¦ @returns the latitude
+    ¦
+    fn+ double getLatitude() {
+        return latitude;
+    }
+
+    ¦ Returns the longitude.
+    ¦ @returns the longitude
+    ¦
+    fn+ double getLongitude() {
+        return longitude;
+    }
+
+    op+ bool ==(Object object) {
+        if(object !=: Coordinate) return false;
+        Coordinate that = object:Coordinate;
+
+        return latitude == that.latitude && longitude == that.longitude;
+    }
+
+    op+ bool !=(Object object) {
+        if(object !=: Coordinate) return false;
+        Coordinate that = object:Coordinate;
+
+        return latitude != that.latitude || longitude != that.longitude;
+    }
+}

@@ -1,0 +1,11 @@
+¦ The Byteable interface allows an object to return its content in bytes.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Byteable {
+
+    ¦ Returns the object bytes array content.
+    ¦ @returns the bytes array
+    ¦
+    fn+ byte[] getBytes();
+}

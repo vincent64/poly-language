@@ -1,0 +1,29 @@
+¦ The Collection interface describes an abstract collection of objects.
+¦ It contains methods to get the size of the collection, whether it is empty,
+¦ to check if it contains a specific object and clear the collection.
+¦ Implementations of this interface includes lists, sets and maps.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Collection {
+
+    ¦ Returns whether the given object is inside the collection.
+    ¦ @param obj the object
+    ¦ @returns true if the collection contains the object
+    ¦
+    fn bool contains(Object object);
+
+    ¦ Removes every element from the collection.
+    ¦
+    fn void clear();
+
+    ¦ Returns the size of the collection.
+    ¦ @returns the collection size
+    ¦
+    fn int size();
+
+    ¦ Returns whether the collection is empty.
+    ¦ @returns true if the collection is empty
+    ¦
+    fn bool isEmpty();
+}

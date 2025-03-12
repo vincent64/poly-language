@@ -1,0 +1,22 @@
+<!-- File type descriptor file for IntelliJ -->
+<filetype binary="false" default_extension="poly" description="Poly programming language" name="Poly">
+  <highlighting>
+    <options>
+      <option name="LINE_COMMENT" value="//" />
+      <!-- Uncomment the line below and comment out the line above to switch between comment and docstring -->
+      <!--<option name="LINE_COMMENT" value="¦" />-->
+      <option name="COMMENT_START" value="/*" />
+      <option name="COMMENT_END" value="*/" />
+      <option name="HEX_PREFIX" value="0x" />
+      <option name="NUM_POSTFIXES" value="f,d" />
+      <option name="HAS_BRACES" value="true" />
+      <option name="HAS_BRACKETS" value="true" />
+      <option name="HAS_PARENS" value="true" />
+    </options>
+    <keywords keywords="bool;byte;class;const;constructor;do;double;else;false;field;float;fn;for;if;import;int;interface;lambda;long;new;null;prod;return;short;sum;super;this;true;void;while" ignore_case="false" />
+    <keywords2 keywords="#;:;@" />
+  </highlighting>
+  <extensionMap>
+    <mapping ext="poly" />
+  </extensionMap>
+</filetype>

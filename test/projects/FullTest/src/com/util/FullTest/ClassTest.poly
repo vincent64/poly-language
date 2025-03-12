@@ -1,0 +1,53 @@
+interface+ Thingable {
+    fn+ Thing getThing();
+    fn int getThingCount() {
+        getThing().count;
+    }
+}
+
+interface Adder {
+    fn void addThing(Thing thing);
+}
+
+interface Propertiable {
+    fn+ bool isEmpty();
+    fn bool isFull() {
+        return !isEmpty();
+    }
+}
+
+class Container {
+    int count;
+
+    fn+ constructor() {
+        count = 0;
+    }
+}
+
+class+ Thing(Container) : Thingable, Adder {
+    - Property property;
+
+    fn+ constructor() {
+        property = this.new();
+    }
+
+    fn+ void addThing() {
+        super.count++;
+    }
+
+    fn+ Thing getThing() {
+        return this;
+    }
+
+    fn+ int getThingCount() {
+        return count;
+    }
+
+    inner Property : Propertiable {
+        fn+ constructor() { }
+
+        fn+ bool isEmpty() {
+            return outer.count == 0;
+        }
+    }
+}

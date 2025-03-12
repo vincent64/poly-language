@@ -1,0 +1,110 @@
+¦ The LinkedList class represents a list implemented as linked nodes.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+class+ const LinkedList : List {
+    - Node first = null;
+    - int size;
+
+    fn+ constructor() { }
+
+    fn+ void add(Object object) {
+        Node last = getNodeAt(size - 1);
+        last.next = new(last.next, object);
+        size++;
+    }
+
+    fn+ void insert(int index, Object object) {
+        assert(0 <= index && index < size);
+
+        if(index == 0) {
+            first = new(first, object);
+        } else {
+            Node previous = getNodeAt(index - 1);
+            previous.next = new(previous.next, object);
+        }
+
+        size++;
+    }
+
+    fn+ Object replace(int index, Object object) {
+        assert(0 <= index && index < size);
+
+        //Retrieve and replace element
+        Node node = getNodeAt(index);
+        Object previous = node.object;
+        node.object = object;
+
+        return previous;
+    }
+
+    fn+ Object get(int index) {
+        assert(0 <= index && index < size);
+        return getNodeAt(index).object;
+    }
+
+    fn+ Object remove(int index) {
+        assert(0 <= index && index < size);
+
+        Object previous;
+        if(index == 0) {
+            previous = first.object;
+            first = first.next;
+        } else {
+            Node preceding = getNodeAt(index - 1);
+            previous = preceding.next.object;
+            preceding.next = preceding.next.next;
+        }
+        size--;
+
+        return previous;
+    }
+
+    fn+ bool contains(Object object) {
+        Node node = first;
+        for(int i = 1; i < size; i++) {
+            if(node.object.equals(object))
+                return true;
+
+            node = node.next;
+        }
+
+        return false;
+    }
+
+    fn+ void clear() { }
+
+    fn+ int size() {
+        return size;
+    }
+
+    fn+ bool isEmpty() {
+        return size == 0;
+    }
+
+    op+ Object access(int index) {
+        return get(index);
+    }
+
+    fn- Node getNodeAt(int index) {
+        Node node = first;
+
+        //Traverse the nodes
+        for(int i = 0; i < index; i++)
+            node = node.next;
+
+        return node;
+    }
+
+    ¦ The LinkedList.Node class represents a node in the linked list.
+    ¦
+    class- Node {
+        - Node next;
+        - Object object;
+
+        fn+ constructor(Node next, Object object) {
+            this.next = next;
+            this.object = object;
+        }
+    }
+}

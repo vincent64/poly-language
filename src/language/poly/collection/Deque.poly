@@ -1,0 +1,38 @@
+¦ The Deque interface describes an abstract First-out data structure.
+¦ It contains methods to push and pop object. Class implementing this
+¦ interface are commonly Stack and Queue.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Deque {
+
+    ¦ Pushes the given object to the deque.
+    ¦ @param the object
+    ¦
+    fn void push(Object obj);
+
+    ¦ Pops the first object off the deque and returns it.
+    ¦ @returns the topmost object
+    ¦
+    fn Object pop();
+
+    ¦ Pops the n first objects off the deque and returns them in a list.
+    ¦ @param the object count
+    ¦ @returns the first objects list
+    fn List pop(int count);
+
+    ¦ Returns the first object.
+    ¦ @returns the first object
+    ¦
+    fn Object peek();
+
+    ¦ Returns the deque size.
+    ¦ @returns the size
+    ¦
+    fn int size();
+
+    ¦ Returns whether the deque is empty.
+    ¦ @returns true if the deque is empty
+    ¦
+    fn bool isEmpty();
+}

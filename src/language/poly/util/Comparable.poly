@@ -1,0 +1,40 @@
+¦ The Comparable interface allows classes to be compared.
+¦ This interface extends from the Equatable interface.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.1
+¦
+interface+ Comparable(Equatable) {
+
+    ¦ Returns whether the current object is greater than the given object.
+    ¦ @param object the object
+    ¦ @returns true if the current object is greater
+    ¦
+    op+ bool >(Object object);
+
+    ¦ Returns whether the current object is less than the given object.
+    ¦ @param object the object
+    ¦ @returns true if the current object is less
+    ¦
+    op+ bool <(Object object);
+
+    ¦ Returns whether the current object is greater or equal than the given object.
+    ¦ @param object the object
+    ¦ @returns true if the current object is greater or equal
+    ¦
+    op+ bool >=(Object object);
+
+    ¦ Returns whether the current object is less or equal than the given object.
+    ¦ @param object the object
+    ¦ @returns true if the current object is less or equal
+    ¦
+    op+ bool <=(Object object);
+
+    ¦ Compares the current object with the given object, and returns an integer-based
+    ¦ value according to the comparison.
+    ¦ @param object the object
+    ¦ @returns 1 if the current object is greater than the other;
+    ¦          0 if the objects are equal;
+    ¦          -1 if the current object is less than the other
+    ¦
+    op+ int <=>(Object object);
+}

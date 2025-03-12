@@ -1,0 +1,1573 @@
+package poly.compiler.parser;
+
+import poly.compiler.analyzer.type.Primitive;
+import poly.compiler.error.ParsingError;
+import poly.compiler.parser.literal.CharParser;
+import poly.compiler.parser.literal.NumericParser;
+import poly.compiler.parser.literal.StringParser;
+import poly.compiler.parser.tree.*;
+import poly.compiler.parser.tree.expression.*;
+import poly.compiler.parser.tree.statement.*;
+import poly.compiler.parser.tree.variable.ArgumentList;
+import poly.compiler.parser.tree.variable.Parameter;
+import poly.compiler.parser.tree.variable.ParameterList;
+import poly.compiler.parser.tree.variable.VariableDeclaration;
+import poly.compiler.tokenizer.Token;
+import poly.compiler.tokenizer.content.Operator;
+import poly.compiler.tokenizer.content.Symbol;
+import poly.compiler.util.Character;
+
+import static poly.compiler.tokenizer.content.Attribute.*;
+import static poly.compiler.tokenizer.content.Keyword.*;
+import static poly.compiler.tokenizer.content.Operator.*;
+import static poly.compiler.tokenizer.content.Symbol.*;
+import static poly.compiler.util.Character.isSameString;
+
+/**
+ * The Parser class. This class is used to transform the list of tokens produced by
+ * the tokenizer into an Abstract Syntax Tree (AST), which can then be used to create
+ * the output class file. This class goes through every token one-by-one and make sure
+ * they follow the language's grammar. If an unexpected token is found, a compile-time
+ * UnexpectedToken error is thrown, indicating the location of the error in the code.
+ * The output tree is made up of nodes, which can represent a statement, an expression,
+ * a declaration, etc. Even though the parser will make sure the code follow the
+ * language's grammar, not every syntactic error are detected during this phase.
+ * @author Vincent Philippe (@vincent64)
+ */
+public class Parser {
+    private final Token[] tokens;
+    private Token currentToken;
+    private int currentTokenIndex;
+
+    private Parser(Token[] tokens) {
+        this.tokens = tokens;
+    }
+
+    public static Parser getInstance(Token[] tokens) {
+        return new Parser(tokens);
+    }
+
+    /**
+     * Parses the tokens list and returns the Abstract Syntax Tree.
+     * @return the AST
+     */
+    public ContentNode parse() {
+        //Make sure there is at least one token
+        if(tokens.length == 0)
+            return new ContentNode();
+
+        //Set current starting token
+        currentTokenIndex = 0;
+        currentToken = tokens[currentTokenIndex];
+
+        return parseContent();
+    }
+
+    /**
+     * Advances to the next token, by setting the current token to be the next one.
+     * This method should not be called if the current token is the last one of the code.
+     * Therefore, if it does get called with the last token, an UnexpectedEndOfCode error
+     * is thrown, saying the code ended abruptely where it should have not.
+     */
+    private void nextToken() {
+        //Throw error if the code ended unexpectedly
+        if(isLastToken()) new ParsingError.UnexpectedEndOfCode(currentToken);
+
+        //Update current token
+        currentToken = tokens[++currentTokenIndex];
+    }
+
+    /**
+     * Takes a peek at and returns the next token in the list, like it goes forward
+     * in time. Similarly to the nextToken, it throws an UnexpectedEndOfCode error
+     * if the code ended too abruptely.
+     * @return the next token in the list
+     */
+    private Token peekToken() {
+        //Throw error if the next token is out of bounds
+        if(isLastToken()) new ParsingError.UnexpectedEndOfCode(currentToken);
+
+        return tokens[currentTokenIndex + 1];
+    }
+
+    /**
+     * Returns whether the current token is the last one in the list.
+     * @return true if the current token is the last one
+     */
+    private boolean isLastToken() {
+        return currentTokenIndex >= tokens.length - 1;
+    }
+
+    /**
+     * Matches the current token with the given string content,
+     * and advances to the next token.
+     * @param content the string content
+     */
+    private void match(char[] content) {
+        if(!isSameString(currentToken.getContent(), content)) {
+            //Throw missing token error
+            if(isSameString(content, SEMICOLON) || isSameString(content, CLOSING_PARENTHESIS))
+                new ParsingError.MissingToken(currentToken, content);
+
+            //Throw unexpected token error
+            new ParsingError.UnexpectedToken(currentToken);
+        }
+
+        if(!isLastToken()) nextToken();
+        else currentTokenIndex++;
+    }
+
+    /**
+     * Returns whether the current token is matching the given string content.
+     * @param content the string content
+     * @return true if the current token is matching the content
+     */
+    private boolean isMatching(char[] content) {
+        return !isLastToken() && isSameString(currentToken.getContent(), content);
+    }
+
+    /**
+     * Returns wether the current token is matching the given token type.
+     * @param type the token type
+     * @return true if the current token is matching the type
+     */
+    private boolean isMatchingType(Token.Type type) {
+        return currentToken.getType() == type;
+    }
+
+    /**
+     * Returns wether the current token is matching the given string content,
+     * and advances to the next token if it is the case.
+     * @param content the string content
+     * @return true if the current token is matching the content
+     */
+    private boolean matches(char[] content) {
+        if(isMatching(content)) {
+            nextToken();
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    //Parsing content and import statements
+
+    private ContentNode parseContent() {
+        ContentNode node = new ContentNode();
+
+        //Parse import statements
+        while(isMatching(IMPORT))
+            node.addImport(parseImportStatement());
+
+        //Parse class declarations
+        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE))
+            node.addClass(parseClassDeclaration());
+
+        //Throw an error if there are tokens left
+        if(currentTokenIndex < tokens.length)
+            new ParsingError.UnexpectedEndOfCode(currentToken);
+
+        return node;
+    }
+
+    private Node parseImportStatement() {
+        ImportStatement node = new ImportStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match import keyword
+        match(IMPORT);
+
+        //Parse import package name
+        node.setPackageName(parseQualifiedName());
+
+        //Match semicolon at the end
+        match(SEMICOLON);
+
+        return node;
+    }
+
+
+
+    //Parsing declarations and initializations
+
+    private Node parseClassDeclaration() {
+        ClassDeclaration node = new ClassDeclaration(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match class or interface keyword
+        if(matches(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER)) {
+            if(matches(CLASS_INTERFACE))
+                node.setInterface();
+
+            if(matches(CLASS_INNER))
+                node.setInner();
+        }
+
+        //Parse class access modifier
+        if(isAccessModifierSymbol(currentToken)) {
+            node.setAccessModifier(currentToken);
+            nextToken();
+        }
+
+        //Check if class is static
+        if(matches(SHARP)) node.setStatic();
+
+        //Check if class is constant
+        if(matches(VAR_CONST)) node.setConstant();
+
+        //Parse class name
+        if(isMatchingType(Token.Type.IDENTIFIER)) {
+            node.setName(currentToken);
+            nextToken();
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        //Parse superclass name if there is one
+        if(matches(OPENING_PARENTHESIS)) {
+            node.setSuperclass(parseQualifiedName());
+            match(CLOSING_PARENTHESIS);
+        }
+
+        //Parse interface names if there are some
+        if(matches(COLON)) {
+            do {
+                node.addInterface(parseQualifiedName());
+            } while(matches(COMMA));
+        }
+
+        //Match opening bracket
+        match(OPENING_CURLY_BRACKET);
+
+        //Parse class fields
+        while(isAccessModifierSymbol(currentToken)
+                || isMatching(VAR_CONST)
+                || isMatching(SHARP)
+                || isPrimitiveKeyword(currentToken)
+                || isMatchingType(Token.Type.IDENTIFIER))
+            node.addField(parseFieldDeclaration());
+
+        //Parse class methods
+        while(isMatching(METHOD) || isMatching(METHOD_OPERATOR))
+            node.addMethod(parseMethodDeclaration());
+
+        //Parse class innerclasses
+        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER))
+            node.addNestedClass(parseClassDeclaration());
+
+        //Match closing bracket
+        match(CLOSING_CURLY_BRACKET);
+
+        return node;
+    }
+
+    private Node parseFieldDeclaration() {
+        FieldDeclaration node = new FieldDeclaration(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse field access modifier
+        if(isAccessModifierSymbol(currentToken)) {
+            node.setAccessModifier(currentToken);
+            nextToken();
+        }
+
+        //Check if field is static
+        if(matches(SHARP)) node.setStatic();
+
+        //Parse variable declaration
+        node.setVariable(parseVariableDeclaration());
+
+        //Match semicolon at the end
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseMethodDeclaration() {
+        MethodDeclaration node = new MethodDeclaration(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match method keyword
+        if(matches(METHOD) || isMatching(METHOD_OPERATOR)) {
+            if(matches(METHOD_OPERATOR)) node.setOperator();
+        }
+
+        //Parse method access modifier
+        if(isAccessModifierSymbol(currentToken)) {
+            node.setAccessModifier(currentToken);
+            nextToken();
+        }
+
+        //Check if method is static
+        if(matches(SHARP)) node.setStatic();
+
+        //Check if method is constant
+        if(matches(VAR_CONST)) node.setConstant();
+
+        //Check if method is a constructor
+        if(matches(METHOD_CONSTRUCTOR)) {
+            node.setConstructor();
+        } else {
+            //Parse method return type
+            if(!matches(METHOD_VOID))
+                node.setReturnType(parseType());
+
+            //Check if method is operator
+            if(node.isOperator()) {
+                if(isMethodOperator(currentToken)) {
+                    node.setName(currentToken);
+                    nextToken();
+                } else new ParsingError.UnexpectedToken(currentToken);
+            } else {
+                //Parse method name
+                if(isMatchingType(Token.Type.IDENTIFIER)) {
+                    node.setName(currentToken);
+                    nextToken();
+                } else new ParsingError.UnexpectedToken(currentToken);
+            }
+        }
+
+        //Parse method arguments
+        match(OPENING_PARENTHESIS);
+        node.setParameterList(parseParameterList());
+        match(CLOSING_PARENTHESIS);
+
+        //Check if method has empty body
+        if(matches(SEMICOLON)) {
+            node.setEmpty();
+
+            return node;
+        }
+
+        //Parse method content
+        node.setStatementBlock(parseStatementBlock());
+
+        return node;
+    }
+
+    private Node parseVariableDeclaration() {
+        VariableDeclaration node = new VariableDeclaration(Node.Meta.fromLeadingToken(currentToken));
+
+        //Check if variable is constant
+        if(matches(VAR_CONST)) node.setConstant();
+
+        //Parse variable type
+        node.setType(parseType());
+
+        //Parse variable name
+        if(isMatchingType(Token.Type.IDENTIFIER)) {
+            node.setName(currentToken);
+            nextToken();
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        //Parse variable initialization
+        if(matches(Symbol.EQUAL))
+            node.setInitializationExpression(parseExpression());
+
+        return node;
+    }
+
+
+
+    //Parsing statements
+
+    private Node parseStatementBlock() {
+        StatementBlock node = new StatementBlock(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse block of statements
+        if(matches(OPENING_CURLY_BRACKET)) {
+            while(!isMatching(CLOSING_CURLY_BRACKET))
+                node.addStatement(parseStatement());
+
+            match(CLOSING_CURLY_BRACKET);
+        } else {
+            node.addStatement(parseStatement());
+        }
+
+        return node;
+    }
+
+    private Node parseStatement() {
+        //Parse statements starting with a keyword
+        if(isKeyword(currentToken)) {
+            //Parse if-statement
+            if(isMatching(STATEMENT_IF))
+                return parseIfStatement();
+
+            //Parse for-statement
+            if(isMatching(STATEMENT_FOR))
+                return parseForStatement();
+
+            //Parse while-statement
+            if(isMatching(STATEMENT_WHILE))
+                return parseWhileStatement();
+
+            //Parse do-statement
+            if(isMatching(STATEMENT_DO))
+                return parseDoStatement();
+
+            //Parse switch-statement
+            if(isMatching(STATEMENT_SWITCH))
+                return parseSwitchStatement();
+
+            //Parse match-statement
+            if(isMatching(STATEMENT_MATCH))
+                return parseMatchStatement();
+
+            //Parse assert-statement
+            if(isMatching(STATEMENT_ASSERT))
+                return parseAssertStatement();
+
+            //Parse return statement
+            if(isMatching(STATEMENT_RETURN))
+                return parseReturnStatement();
+
+            //Parse break statement
+            if(isMatching(STATEMENT_BREAK))
+                return parseBreakStatement();
+
+            //Parse continue statement
+            if(isMatching(STATEMENT_CONTINUE))
+                return parseContinueStatement();
+
+            //Parse this statement
+            if(isMatching(EXPRESSION_THIS))
+                return parseThisStatement();
+
+            //Parse super statement
+            if(isMatching(EXPRESSION_SUPER))
+                return parseSuperStatement();
+
+            //Parse variable declaration
+            if(isPrimitiveKeyword(currentToken) || isMatching(VAR_CONST)) {
+                Node node = parseVariableDeclaration();
+                match(SEMICOLON);
+
+                return node;
+            }
+        }
+
+        //Parse dangling statements block
+        if(isMatching(OPENING_CURLY_BRACKET))
+            return parseStatementBlock();
+
+        return parseVariableStatement();
+    }
+
+    private Node parseVariableStatement() {
+        //Parse statement starting with identifier
+        if(isMatchingType(Token.Type.IDENTIFIER)) {
+            Token nextToken = peekToken();
+
+            //Parse variable declaration
+            if(nextToken.getType() == Token.Type.IDENTIFIER) {
+                Node node = parseVariableDeclaration();
+                match(SEMICOLON);
+
+                return node;
+            }
+
+            //Parse expression
+            Node node = parseExpression();
+
+            //Parse variable declaration
+            if((isMatchingType(Token.Type.IDENTIFIER) || isMatching(OPENING_SQUARE_BRACKET))
+                    && (node instanceof QualifiedName || node instanceof SimpleName)) {
+                //Parse array type
+                while(matches(OPENING_SQUARE_BRACKET)) {
+                    ArrayType arrayType = new ArrayType(Node.Meta.fromLeadingToken(currentToken));
+                    arrayType.setType(node);
+                    node = arrayType;
+
+                    match(CLOSING_SQUARE_BRACKET);
+                }
+
+                VariableDeclaration variableDeclaration = new VariableDeclaration(Node.Meta.fromLeadingToken(currentToken));
+                variableDeclaration.setType(node);
+
+                //Parse variable name
+                if(isMatchingType(Token.Type.IDENTIFIER)) {
+                    variableDeclaration.setName(currentToken);
+                    nextToken();
+                } else new ParsingError.UnexpectedToken(currentToken);
+
+                //Parse variable initialization
+                if(matches(Symbol.EQUAL))
+                    variableDeclaration.setInitializationExpression(parseExpression());
+
+                //Match semicolon at the end
+                match(SEMICOLON);
+
+                return variableDeclaration;
+            }
+
+            //Parse expression statement from expression
+            ExpressionStatement expressionStatement = new ExpressionStatement(Node.Meta.fromLeadingToken(currentToken));
+            expressionStatement.setExpression(node);
+
+            //Match semicolon at the end
+            match(SEMICOLON);
+
+            return expressionStatement;
+        }
+
+        return parseExpressionStatement();
+    }
+
+    private Node parseIfStatement() {
+        IfStatement node = new IfStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match if keyword
+        match(STATEMENT_IF);
+
+        //Parse condition expression
+        match(OPENING_PARENTHESIS);
+        node.setCondition(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Parse statement body
+        node.setStatementBlock(parseStatementBlock());
+
+        //Parse else condition statement
+        while(matches(STATEMENT_ELSE))
+            node.setElseStatementBlock(parseStatementBlock());
+
+        return node;
+    }
+
+    private Node parseForStatement() {
+        ForStatement node = new ForStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match for keyword and parenthesis
+        match(STATEMENT_FOR);
+        match(OPENING_PARENTHESIS);
+
+        //Parse variable initialiation
+        node.setVariableInitialization(parseStatement());
+
+        //Parse condition expression
+        node.setCondition(parseExpression());
+        match(SEMICOLON);
+
+        //Parse variable incrementation
+        ExpressionStatement expressionStatement = new ExpressionStatement(Node.Meta.fromLeadingToken(currentToken));
+        expressionStatement.setExpression(parseExpression());
+        node.setIncrementExpression(expressionStatement);
+
+        //Match closing parenthesis
+        match(CLOSING_PARENTHESIS);
+
+        //Parse statement body
+        node.setStatementBlock(parseStatementBlock());
+
+        return node;
+    }
+
+    private Node parseWhileStatement() {
+        WhileStatement node = new WhileStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match while keyword
+        match(STATEMENT_WHILE);
+
+        //Parse condition expression
+        match(OPENING_PARENTHESIS);
+        node.setCondition(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Parse statement body
+        node.setStatementBlock(parseStatementBlock());
+
+        return node;
+    }
+
+    private Node parseDoStatement() {
+        DoStatement node = new DoStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match do keyword
+        match(STATEMENT_DO);
+
+        //Parse statement body
+        node.setStatementBlock(parseStatementBlock());
+
+        //Match while keyword
+        match(STATEMENT_WHILE);
+
+        //Parse condition expression
+        match(OPENING_PARENTHESIS);
+        node.setCondition(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Match semicolon
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseSwitchStatement() {
+        SwitchStatement node = new SwitchStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match switch keyword
+        match(STATEMENT_SWITCH);
+
+        //Parse switch expression
+        match(OPENING_PARENTHESIS);
+        node.setExpression(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Match opening bracket
+        match(OPENING_CURLY_BRACKET);
+
+        //Parse case statements
+        while(isMatching(STATEMENT_CASE))
+            node.addCase(parseCase());
+
+        //Match closing bracket
+        match(CLOSING_CURLY_BRACKET);
+
+        return node;
+    }
+
+    private Node parseMatchStatement() {
+        MatchStatement node = new MatchStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match match keyword and opening bracket
+        match(STATEMENT_MATCH);
+        match(OPENING_CURLY_BRACKET);
+
+        //Parse case statements
+        while(isMatching(STATEMENT_CASE))
+            node.addCase(parseCase());
+
+        //Match closing curly bracket
+        match(CLOSING_CURLY_BRACKET);
+
+        return node;
+    }
+
+    private Node parseAssertStatement() {
+        AssertStatement node = new AssertStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match assert keyword
+        match(STATEMENT_ASSERT);
+
+        //Parse assert expression
+        match(OPENING_PARENTHESIS);
+        node.setCondition(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Match semicolon at the end
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseReturnStatement() {
+        ReturnStatement node = new ReturnStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match return keyword
+        match(STATEMENT_RETURN);
+
+        //Parse return expression
+        if(!isMatching(SEMICOLON))
+            node.setExpression(parseExpression());
+
+        //Match semicolon at the end
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseBreakStatement() {
+        BreakStatement node = new BreakStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match break keyword and semicolon
+        match(STATEMENT_BREAK);
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseContinueStatement() {
+        ContinueStatement node = new ContinueStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match continue keyword and semicolon
+        match(STATEMENT_CONTINUE);
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseThisStatement() {
+        if(Character.isSameString(peekToken().getContent(), OPENING_PARENTHESIS)) {
+            ThisStatement node = new ThisStatement(Node.Meta.fromLeadingToken(currentToken));
+
+            //Match this keyword
+            match(EXPRESSION_THIS);
+
+            //Parse arguments list
+            match(OPENING_PARENTHESIS);
+            node.setArgumentList(parseArgumentList());
+            match(CLOSING_PARENTHESIS);
+
+            //Match semicolon at the end
+            match(SEMICOLON);
+
+            return node;
+        }
+
+        return parseExpressionStatement();
+    }
+
+    private Node parseSuperStatement() {
+        if(Character.isSameString(peekToken().getContent(), OPENING_PARENTHESIS)) {
+            SuperStatement node = new SuperStatement(Node.Meta.fromLeadingToken(currentToken));
+
+            //Match super keyword
+            match(EXPRESSION_SUPER);
+
+            //Parse arguments list
+            match(OPENING_PARENTHESIS);
+            node.setArgumentList(parseArgumentList());
+            match(CLOSING_PARENTHESIS);
+
+            //Match semicolon at the end
+            match(SEMICOLON);
+
+            return node;
+        }
+
+        return parseExpressionStatement();
+    }
+
+    private Node parseExpressionStatement() {
+        ExpressionStatement node = new ExpressionStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse expression
+        node.setExpression(parseExpression());
+
+        //Match semicolon at the end
+        match(SEMICOLON);
+
+        return node;
+    }
+
+
+
+    //Parsing expressions
+
+    private Node parseExpression() {
+        //Parse if-expression
+        if(isMatching(STATEMENT_IF))
+            return parseIfExpression();
+
+        //Parse sum-expression
+        if(isMatching(EXPRESSION_SUM))
+            return parseSumExpression();
+
+        //Parse prod-expression
+        if(isMatching(EXPRESSION_PROD))
+            return parseProdExpression();
+
+        return parseExpressionAssignement();
+    }
+
+    private Node parseIfExpression() {
+        IfExpression node = new IfExpression(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match if keyword
+        match(STATEMENT_IF);
+
+        //Parse condition expression
+        match(OPENING_PARENTHESIS);
+        node.setCondition(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Parse expression
+        node.setExpression(parseExpression());
+
+        //Match else keyword
+        match(STATEMENT_ELSE);
+
+        //Parse else expression
+        node.setElseExpression(parseExpression());
+
+        return node;
+    }
+
+    private Node parseSumExpression() {
+        SumExpression node = new SumExpression(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match sum keyword and parenthesis
+        match(EXPRESSION_SUM);
+        match(OPENING_PARENTHESIS);
+
+        //Parse variable initialiation
+        node.setVariableInitialization(parseVariableDeclaration());
+        match(SEMICOLON);
+
+        //Parse condition
+        node.setCondition(parseExpression());
+        match(SEMICOLON);
+
+        //Parse variable incrementation
+        ExpressionStatement expressionStatement = new ExpressionStatement(Node.Meta.fromLeadingToken(currentToken));
+        expressionStatement.setExpression(parseExpression());
+        node.setIncrementExpression(expressionStatement);
+
+        //Match closing parenthesis
+        match(CLOSING_PARENTHESIS);
+
+        //Parse expression
+        node.setExpression(parseExpression());
+
+        return node;
+    }
+
+    private Node parseProdExpression() {
+        ProdExpression node = new ProdExpression(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match prod keyword and parenthesis
+        match(EXPRESSION_PROD);
+        match(OPENING_PARENTHESIS);
+
+        //Parse variable initialiation
+        node.setVariableInitialization(parseVariableDeclaration());
+        match(SEMICOLON);
+
+        //Parse condition
+        node.setCondition(parseExpression());
+        match(SEMICOLON);
+
+        //Parse variable incrementation
+        ExpressionStatement expressionStatement = new ExpressionStatement(Node.Meta.fromLeadingToken(currentToken));
+        expressionStatement.setExpression(parseExpression());
+        node.setIncrementExpression(expressionStatement);
+
+        //Match closing parenthesis
+        match(CLOSING_PARENTHESIS);
+
+        //Parse expression
+        node.setExpression(parseExpression());
+
+        return node;
+    }
+
+    private Node parseExpressionAssignement() {
+        Node node = parseExpressionNullCoalescing();
+
+        //Parse assignement expression
+        if(isAssignOperator(currentToken)) {
+            AssignementExpression assignementExpression = new AssignementExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(Symbol.EQUAL))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT);
+            if(matches(ASSIGN_ADD))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_ADDITION);
+            if(matches(ASSIGN_SUB))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SUBTRACTION);
+            if(matches(ASSIGN_MUL))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_MULTIPLICATION);
+            if(matches(ASSIGN_DIV))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_DIVISION);
+            if(matches(ASSIGN_MOD))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_MODULO);
+            if(matches(ASSIGN_BITWISE_AND))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_BITWISE_AND);
+            if(matches(ASSIGN_BITWISE_XOR))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_BITWISE_XOR);
+            if(matches(ASSIGN_BITWISE_OR))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_BITWISE_OR);
+            if(matches(ASSIGN_SHIFT_LEFT))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SHIFT_LEFT);
+            if(matches(ASSIGN_SHIFT_RIGHT))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SHIFT_RIGHT);
+            if(matches(ASSIGN_SHIFT_RIGHT_ARITHMETIC))
+                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SHIFT_RIGHT_ARITHMETIC);
+
+            assignementExpression.setVariable(node);
+            assignementExpression.setExpression(parseExpression());
+            node = assignementExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionNullCoalescing() {
+        Node node = parseExpressionLogicalOr();
+
+        //Parse Elvis operator expression
+        if(matches(NULL_COALESCING)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+            binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_NULL);
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionLogicalOr());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionLogicalOr() {
+        Node node = parseExpressionLogicalAnd();
+
+        //Parse logical OR expression
+        while(matches(LOGICAL_OR)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+            binaryExpression.setKind(BinaryExpression.Kind.LOGICAL_OR);
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionLogicalAnd());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionLogicalAnd() {
+        Node node = parseExpressionBitwiseOr();
+
+        //Parse logical AND expression
+        while(matches(LOGICAL_AND)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+            binaryExpression.setKind(BinaryExpression.Kind.LOGICAL_AND);
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionBitwiseOr());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionBitwiseOr() {
+        Node node = parseExpressionBitwiseXor();
+
+        //Parse bitwise OR expression
+        while(matches(BITWISE_OR)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+            binaryExpression.setKind(BinaryExpression.Kind.BITWISE_OR);
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionBitwiseXor());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionBitwiseXor() {
+        Node node = parseExpressionBitwiseAnd();
+
+        //Parse bitwise XOR expression
+        while(matches(BITWISE_XOR)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+            binaryExpression.setKind(BinaryExpression.Kind.BITWISE_XOR);
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionBitwiseAnd());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionBitwiseAnd() {
+        Node node = parseExpressionEquality();
+
+        //Parse bitwise AND expression
+        while(matches(BITWISE_AND)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+            binaryExpression.setKind(BinaryExpression.Kind.BITWISE_AND);
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionEquality());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionEquality() {
+        Node node = parseExpressionComparison();
+
+        //Parse equality expression
+        while(isMatching(Operator.EQUAL) || isMatching(NOT_EQUAL)
+                || isMatching(REFERENCE_EQUAL) || isMatching(REFERENCE_NOT_EQUAL)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(Operator.EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.EQUALITY_EQUAL);
+            if(matches(NOT_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.EQUALITY_NOT_EQUAL);
+            if(matches(REFERENCE_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.REFERENCE_EQUAL);
+            if(matches(REFERENCE_NOT_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.REFERENCE_NOT_EQUAL);
+
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionComparison());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionComparison() {
+        Node node = parseExpressionRelational();
+
+        //Parse comparison expression
+        while(isMatching(GREATER) || isMatching(LESS) || isMatching(GREATER_EQUAL) || isMatching(LESS_EQUAL)
+                || isMatching(SPACESHIP)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(GREATER))
+                binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_GREATER);
+            if(matches(LESS))
+                binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_LESS);
+            if(matches(GREATER_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_GREATER_EQUAL);
+            if(matches(LESS_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_LESS_EQUAL);
+            if(matches(SPACESHIP))
+                binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_SPACESHIP);
+
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionRelational());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionRelational() {
+        Node node = parseExpressionShift();
+
+        //Parse relational expression
+        while(isMatching(TYPE_EQUAL) || isMatching(TYPE_NOT_EQUAL)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(TYPE_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.TYPE_EQUAL);
+            if(matches(TYPE_NOT_EQUAL))
+                binaryExpression.setKind(BinaryExpression.Kind.TYPE_NOT_EQUAL);
+
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseQualifiedName());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionShift() {
+        Node node = parseExpressionTerm();
+
+        //Parse bit-shift expression
+        while(isMatching(SHIFT_LEFT) || isMatching(SHIFT_RIGHT) || isMatching(SHIFT_RIGHT_ARITHMETIC)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(SHIFT_LEFT))
+                binaryExpression.setKind(BinaryExpression.Kind.BITWISE_SHIFT_LEFT);
+            if(matches(SHIFT_RIGHT))
+                binaryExpression.setKind(BinaryExpression.Kind.BITWISE_SHIFT_RIGHT);
+            if(matches(SHIFT_RIGHT_ARITHMETIC))
+                binaryExpression.setKind(BinaryExpression.Kind.BITWISE_SHIFT_RIGHT_ARITHMETIC);
+
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionTerm());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionTerm() {
+        Node node = parseExpressionFactor();
+
+        //Parse term expression
+        while(isMatching(ADD) || isMatching(SUB)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(ADD))
+                binaryExpression.setKind(BinaryExpression.Kind.OPERATION_ADDITION);
+            if(matches(SUB))
+                binaryExpression.setKind(BinaryExpression.Kind.OPERATION_SUBTRACTION);
+
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionFactor());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionFactor() {
+        Node node = parseExpressionUnary();
+
+        //Parse factor expression
+        while(isMatching(MUL) || isMatching(DIV) || isMatching(MOD)) {
+            BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(MUL))
+                binaryExpression.setKind(BinaryExpression.Kind.OPERATION_MULTIPLICATION);
+            if(matches(DIV))
+                binaryExpression.setKind(BinaryExpression.Kind.OPERATION_DIVISION);
+            if(matches(MOD))
+                binaryExpression.setKind(BinaryExpression.Kind.OPERATION_MODULO);
+
+            binaryExpression.setFirst(node);
+            binaryExpression.setSecond(parseExpressionUnary());
+            node = binaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionUnary() {
+        //Parse unary expression
+        if(isMatching(SUB) || isMatching(LOGICAL_NOT) || isMatching(BITWISE_NOT)
+            || isMatching(INCREMENT) || isMatching(DECREMENT)) {
+            UnaryExpression node = new UnaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(SUB))
+                node.setType(UnaryExpression.Kind.OPERATION_NEGATE);
+            if(matches(LOGICAL_NOT))
+                node.setType(UnaryExpression.Kind.LOGICAL_NOT);
+            if(matches(BITWISE_NOT))
+                node.setType(UnaryExpression.Kind.BITWISE_NOT);
+            if(matches(INCREMENT))
+                node.setType(UnaryExpression.Kind.PRE_INCREMENT);
+            if(matches(DECREMENT))
+                node.setType(UnaryExpression.Kind.PRE_DECREMENT);
+
+            node.setExpression(parseExpressionUnary());
+
+            return node;
+        } else {
+            return parseExpressionPostUnary();
+        }
+    }
+
+    private Node parseExpressionPostUnary() {
+        Node node = parseExpressionCast();
+
+        //Parse post-unary expression
+        if(isMatching(INCREMENT) || isMatching(DECREMENT)) {
+            UnaryExpression unaryExpression = new UnaryExpression(Node.Meta.fromLeadingToken(currentToken));
+
+            if(matches(INCREMENT))
+                unaryExpression.setType(UnaryExpression.Kind.POST_INCREMENT);
+            if(matches(DECREMENT))
+                unaryExpression.setType(UnaryExpression.Kind.POST_DECREMENT);
+
+            unaryExpression.setExpression(node);
+            node = unaryExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionCast() {
+        Node node = parseExpressionPrimary();
+
+        //Parse casting expression
+        while(matches(COLON)) {
+            CastExpression castExpression = new CastExpression(Node.Meta.fromLeadingToken(currentToken));
+            castExpression.setExpression(node);
+            castExpression.setCastType(parseType());
+            node = castExpression;
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionPrimary() {
+        //Parse literal boolean expression
+        if(isMatching(EXPRESSION_TRUE) || isMatching(EXPRESSION_FALSE)) {
+            Node node = new Literal.Boolean(Node.Meta.fromLeadingToken(currentToken), isMatching(EXPRESSION_TRUE));
+            nextToken();
+
+            return node;
+        }
+
+        //Parse literal numeric expression
+        if(isMatchingType(Token.Type.LITERAL_NUMERIC)) {
+            NumericParser numericParser = new NumericParser(currentToken);
+            Node node = numericParser.parse();
+            nextToken();
+
+            return node;
+        }
+
+        //Parse literal character expression
+        if(isMatchingType(Token.Type.LITERAL_CHAR)) {
+            CharParser charParser = new CharParser(currentToken);
+            Node node = charParser.parse();
+            nextToken();
+
+            return node;
+        }
+
+        //Parse literal null expression
+        if(matches(EXPRESSION_NULL))
+            return new Literal.Null(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse primitive attribute
+        if(isPrimitiveKeyword(currentToken) && !isMatching(PRIMITIVE_BOOLEAN))
+            return parsePrimitiveAttribute();
+
+        return parseExpressionMemberAccess();
+    }
+
+    private Node parseExpressionMemberAccess() {
+        Node node = parseExpressionMember();
+
+        //Parse member access, array access or method call
+        while(isMatching(DOT) || isMatching(OPENING_SQUARE_BRACKET) || isMatching(OPENING_PARENTHESIS)) {
+            //Parse member access
+            if(matches(DOT)) {
+                //Retrieve next token
+                Token nextToken = peekToken();
+
+                if((node instanceof QualifiedName || node instanceof SimpleName)
+                        && isMatchingType(Token.Type.IDENTIFIER)
+                        && !isSameString(nextToken.getContent(), OPENING_PARENTHESIS)) {
+                    //Parse qualified name
+                    QualifiedName qualifiedName = new QualifiedName(Node.Meta.fromLeadingToken(currentToken));
+                    qualifiedName.setQualifiedName(node);
+                    qualifiedName.setName(currentToken.getContent());
+                    node = qualifiedName;
+                    nextToken();
+                } else {
+                    //Parse member access
+                    MemberAccess memberAccess = new MemberAccess(Node.Meta.fromLeadingToken(currentToken));
+                    memberAccess.setMember(node);
+                    memberAccess.setAccessor(parseExpressionAccess());
+                    node = memberAccess;
+                }
+            }
+
+            //Parse array access
+            else if(isMatching(OPENING_SQUARE_BRACKET)) {
+                //Check if start of array declaration
+                if(isSameString(peekToken().getContent(), CLOSING_SQUARE_BRACKET))
+                    return node;
+
+                //Match opening bracket
+                match(OPENING_SQUARE_BRACKET);
+
+                //Parse array access
+                ArrayAccess arrayAccess = new ArrayAccess(Node.Meta.fromLeadingToken(currentToken));
+                arrayAccess.setArray(node);
+                arrayAccess.setAccessExpression(parseExpression());
+                node = arrayAccess;
+
+                //Match closing bracket
+                match(CLOSING_SQUARE_BRACKET);
+            }
+
+            //Parse method call
+            else if(matches(OPENING_PARENTHESIS)) {
+                //Parse method call
+                MethodCall methodCall = new MethodCall(Node.Meta.fromLeadingToken(currentToken));
+                methodCall.setMember(node);
+                methodCall.setArgumentList(parseArgumentList());
+                node = methodCall;
+                nextToken();
+            }
+        }
+
+        return node;
+    }
+
+    private Node parseExpressionMember() {
+        //Parse expression in parentheses
+        if(matches(OPENING_PARENTHESIS)) {
+            Node node = parseExpression();
+            match(CLOSING_PARENTHESIS);
+
+            return node;
+        }
+
+        //Parse literal string expression
+        if(isMatchingType(Token.Type.LITERAL_STRING)) {
+            StringParser stringParser = new StringParser(currentToken);
+            Node node = stringParser.parse();
+            nextToken();
+
+            return node;
+        }
+
+        //Parse this expression
+        if(isMatching(EXPRESSION_THIS))
+            return parseExpressionThis();
+
+        //Parse super expression
+        if(isMatching(EXPRESSION_SUPER))
+            return parseExpressionSuper();
+
+        //Parse outer expression
+        if(isMatching(EXPRESSION_OUTER))
+            return parseExpressionOuter();
+
+        return parseExpressionAccess();
+    }
+
+    private Node parseExpressionAccess() {
+        //Parse construction expression
+        if(isMatching(CLASS_NEW))
+            return parseExpressionCreation();
+
+        //Throw an error if the token is not a valid identifier
+        if(!isMatchingType(Token.Type.IDENTIFIER))
+            new ParsingError.UnexpectedToken(currentToken);
+
+        return parseIdentifier();
+    }
+
+    private Node parseIdentifier() {
+        //Parse method call
+        if(Character.isSameString(peekToken().getContent(), OPENING_PARENTHESIS))
+            return parseMethodCall();
+
+        //Parse identifier
+        SimpleName node = new SimpleName(Node.Meta.fromLeadingToken(currentToken));
+        node.setName(currentToken);
+        nextToken();
+
+        return node;
+    }
+
+    private Node parseMethodCall() {
+        MethodCall node = new MethodCall(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse method name
+        node.setMethodName(currentToken);
+        nextToken();
+
+        //Match argument list
+        match(OPENING_PARENTHESIS);
+        node.setArgumentList(parseArgumentList());
+        match(CLOSING_PARENTHESIS);
+
+        return node;
+    }
+
+    private Node parseExpressionThis() {
+        //Match this keyword
+        match(EXPRESSION_THIS);
+
+        return new ThisExpression(Node.Meta.fromLeadingToken(currentToken));
+    }
+
+    private Node parseExpressionSuper() {
+        //Match super keyword
+        match(EXPRESSION_SUPER);
+
+        return new SuperExpression(Node.Meta.fromLeadingToken(currentToken));
+    }
+
+    private Node parseExpressionOuter() {
+        //Match outer keyword
+        match(EXPRESSION_OUTER);
+
+        return new OuterExpression(Node.Meta.fromLeadingToken(currentToken));
+    }
+
+    private Node parseExpressionCreation() {
+        //Match new keyword
+        match(CLASS_NEW);
+
+        //Parse type if there is one
+        Node type = null;
+        if(isPrimitiveKeyword(currentToken)
+                || isMatchingType(Token.Type.IDENTIFIER))
+            type = parseTypeName();
+
+        //Parse constructor arguments
+        if(isMatching(OPENING_PARENTHESIS) || isMatching(OPENING_SQUARE_BRACKET)) {
+            //Parse class creation
+            if(matches(OPENING_PARENTHESIS)) {
+                ClassCreation node = new ClassCreation(Node.Meta.fromLeadingToken(currentToken));
+                node.setType(type);
+                node.setArgumentList(parseArgumentList());
+
+                //Match closing parenthesis
+                match(CLOSING_PARENTHESIS);
+
+                return node;
+            }
+
+            //Parse array creation
+            if(matches(OPENING_SQUARE_BRACKET)) {
+                ArrayCreation node = new ArrayCreation(Node.Meta.fromLeadingToken(currentToken));
+                node.setType(type);
+
+                //Parse array initialization
+                node.setInitializationExpression(parseExpression());
+
+                //Match closing bracket
+                match(CLOSING_SQUARE_BRACKET);
+
+                return node;
+            }
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        return null;
+    }
+
+    private Node parsePrimitiveAttribute() {
+        PrimitiveAttribute node = new PrimitiveAttribute(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse primitive type
+        if(isPrimitiveKeyword(currentToken) && !isMatching(PRIMITIVE_BOOLEAN)) {
+            if(matches(PRIMITIVE_BYTE))
+                node.setPrimitiveKind(Primitive.Kind.BYTE);
+            if(matches(PRIMITIVE_SHORT))
+                node.setPrimitiveKind(Primitive.Kind.SHORT);
+            if(matches(PRIMITIVE_CHAR))
+                node.setPrimitiveKind(Primitive.Kind.CHAR);
+            if(matches(PRIMITIVE_INTEGER))
+                node.setPrimitiveKind(Primitive.Kind.INTEGER);
+            if(matches(PRIMITIVE_LONG))
+                node.setPrimitiveKind(Primitive.Kind.LONG);
+            if(matches(PRIMITIVE_FLOAT))
+                node.setPrimitiveKind(Primitive.Kind.FLOAT);
+            if(matches(PRIMITIVE_DOUBLE))
+                node.setPrimitiveKind(Primitive.Kind.DOUBLE);
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        //Match dot
+        match(DOT);
+
+        //Parse attribute
+        if(isAttribute(currentToken)) {
+            if(matches(BITS))
+                node.setKind(PrimitiveAttribute.Kind.BITS);
+            if(matches(BYTES))
+                node.setKind(PrimitiveAttribute.Kind.BYTES);
+            if(matches(MINIMUM))
+                node.setKind(PrimitiveAttribute.Kind.MINIMUM);
+            if(matches(MAXIMUM))
+                node.setKind(PrimitiveAttribute.Kind.MAXIMUM);
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        return node;
+    }
+
+    private Node parseQualifiedName() {
+        Node node = parseSimpleName();
+
+        //Parse qualified name
+        while(matches(DOT) && isMatchingType(Token.Type.IDENTIFIER)) {
+            QualifiedName qualifiedName = new QualifiedName(Node.Meta.fromLeadingToken(currentToken));
+            qualifiedName.setQualifiedName(node);
+            qualifiedName.setName(currentToken.getContent());
+            node = qualifiedName;
+            nextToken();
+        }
+
+        return node;
+    }
+
+    private Node parseSimpleName() {
+        SimpleName simpleName = new SimpleName(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse simple name
+        if(isMatchingType(Token.Type.IDENTIFIER)) {
+            simpleName.setName(currentToken);
+            nextToken();
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        return simpleName;
+    }
+
+    private Node parseType() {
+        Node node = parseTypeName();
+
+        //Parse array type
+        while(matches(OPENING_SQUARE_BRACKET)) {
+            ArrayType arrayType = new ArrayType(Node.Meta.fromLeadingToken(currentToken));
+            arrayType.setType(node);
+            node = arrayType;
+
+            match(CLOSING_SQUARE_BRACKET);
+        }
+
+        return node;
+    }
+
+    private Node parseTypeName() {
+        //Parse primitive type
+        if(isPrimitiveKeyword(currentToken)) {
+            PrimitiveType node = new PrimitiveType(Node.Meta.fromLeadingToken(currentToken));
+            node.setKind(currentToken);
+            nextToken();
+
+            return node;
+        }
+
+        return parseQualifiedName();
+    }
+
+
+
+    //Other expression and statement parsing
+
+    private Node parseArgumentList() {
+        ArgumentList node = new ArgumentList(Node.Meta.fromLeadingToken(currentToken));
+
+        //Return empty argument list
+        if(isMatching(CLOSING_PARENTHESIS))
+            return node;
+
+        //Parse arguments list
+        do {
+            node.addArgument(parseExpression());
+        } while(matches(COMMA));
+
+        return node;
+    }
+
+    private Node parseParameterList() {
+        ParameterList node = new ParameterList(Node.Meta.fromLeadingToken(currentToken));
+
+        //Return empty parameter list
+        if(isMatching(CLOSING_PARENTHESIS))
+            return node;
+
+        //Parse parameter list
+        do {
+            node.addParameter(parseParameter());
+        } while(matches(COMMA));
+
+        return node;
+    }
+
+    private Node parseParameter() {
+        Parameter node = new Parameter(Node.Meta.fromLeadingToken(currentToken));
+
+        //Check if parameter is constant
+        if(matches(VAR_CONST))
+            node.setConstant();
+
+        //Parse parameter type
+        node.setType(parseType());
+
+        //Parse parameter name
+        if(isMatchingType(Token.Type.IDENTIFIER)) {
+            node.setName(currentToken);
+            nextToken();
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        return node;
+    }
+
+    private Node parseCase() {
+        CaseStatement node = new CaseStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match case keyword
+        match(STATEMENT_CASE);
+
+        //Parse case expression
+        match(OPENING_PARENTHESIS);
+        node.setExpression(parseExpression());
+        match(CLOSING_PARENTHESIS);
+
+        //Parse case body
+        node.setStatementBlock(parseStatementBlock());
+
+        return node;
+    }
+}
