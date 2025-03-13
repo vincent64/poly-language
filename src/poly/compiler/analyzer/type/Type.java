@@ -121,14 +121,17 @@ public abstract class Type {
 
             ClassSymbol classTypeSymbol;
 
+            //Find class in importations table
             if((classTypeSymbol = importTable.findImportation(className.getFirst())) != null) {
                 if((classTypeSymbol = classTypeSymbol.findClass(className.withoutFirst())) != null)
                     return new Object(classTypeSymbol);
             }
 
+            //Find class in current package
             if((classTypeSymbol = classSymbol.getPackageSymbol().findClass(className)) != null)
                 return new Object(classTypeSymbol);
 
+            //Find class in project root
             if((classTypeSymbol = Classes.findClass(className)) != null)
                 return new Object(classTypeSymbol);
         }
