@@ -7,11 +7,19 @@ package poly.compiler.analyzer.type;
 public class Primitive extends Type {
     private final Kind kind;
 
+    /**
+     * Constructs a primitive with the given primitive kind.
+     * @param kind the primitive kind
+     */
     public Primitive(Kind kind) {
         super(Type.Kind.PRIMITIVE);
         this.kind = kind;
     }
 
+    /**
+     * Returns the primitive kind.
+     * @return the primitive kind
+     */
     public Kind getPrimitiveKind() {
         return kind;
     }
@@ -58,18 +66,26 @@ public class Primitive extends Type {
         return kind == Kind.BOOLEAN;
     }
 
+    /**
+     * Returns the widest primitive between the two given primitive.
+     * The widest primitive is the primitive which can have the greatest range of values.
+     * @param primitive1 the first primitive
+     * @param primitive2 the second primitive
+     * @return the widest primitive
+     */
     public static Primitive getWidestPrimitiveBetween(Primitive primitive1, Primitive primitive2) {
         if(primitive1.getPrimitiveKind() == Primitive.Kind.DOUBLE
-                || primitive2.getPrimitiveKind() == Primitive.Kind.DOUBLE)
+                || primitive2.getPrimitiveKind() == Primitive.Kind.DOUBLE) {
             return new Primitive(Kind.DOUBLE);
-        else if(primitive1.getPrimitiveKind() == Primitive.Kind.FLOAT
-                || primitive2.getPrimitiveKind() == Primitive.Kind.FLOAT)
+        } else if(primitive1.getPrimitiveKind() == Primitive.Kind.FLOAT
+                || primitive2.getPrimitiveKind() == Primitive.Kind.FLOAT) {
             return new Primitive(Kind.FLOAT);
-        else if(primitive1.getPrimitiveKind() == Primitive.Kind.LONG
-                || primitive2.getPrimitiveKind() == Primitive.Kind.LONG)
+        } else if(primitive1.getPrimitiveKind() == Primitive.Kind.LONG
+                || primitive2.getPrimitiveKind() == Primitive.Kind.LONG) {
             return new Primitive(Kind.LONG);
-        else
+        } else {
             return new Primitive(Kind.INTEGER);
+        }
     }
 
     @Override
