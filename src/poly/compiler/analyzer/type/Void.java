@@ -5,6 +5,9 @@ package poly.compiler.analyzer.type;
  * @author Vincent Philippe (@vincent64)
  */
 public class Void extends Type {
+    /**
+     * Constructs a void type.
+     */
     public Void() {
         super(null);
     }
