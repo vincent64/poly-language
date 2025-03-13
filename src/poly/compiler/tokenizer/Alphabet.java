@@ -43,7 +43,7 @@ public class Alphabet {
 
     /** The empty characters alphabet. */
     private static final char[] EMPTY_ALPHABET = new char[] {
-            ' ', '\n', '\r'
+            ' ', '\n', '\r', '\t'
     };
 
     /**
