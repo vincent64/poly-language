@@ -293,6 +293,10 @@ public class CodeGenerator implements NodeVisitor {
         forStatement.getStatementBlock().accept(this);
         loopStack.removeLast();
 
+        //Resolve jumps to neutral-clause
+        generateStackMapFrame();
+        branching.resolveJumps(instructions, programCounter);
+
         //Visit increment expression
         forStatement.getIncrementExpression().accept(this);
 
@@ -328,6 +332,10 @@ public class CodeGenerator implements NodeVisitor {
         whileStatement.getStatementBlock().accept(this);
         loopStack.removeLast();
 
+        //Resolve jumps to neutral-clause
+        generateStackMapFrame();
+        branching.resolveJumps(instructions, programCounter);
+
         addInstruction(Instruction.forUnconditionalJump(jumpOffset - programCounter));
 
         //Resolve jumps to false-clause
@@ -348,6 +356,10 @@ public class CodeGenerator implements NodeVisitor {
         loopStack.add(branching);
         doStatement.getStatementBlock().accept(this);
         loopStack.removeLast();
+
+        //Resolve jumps to neutral-clause
+        generateStackMapFrame();
+        branching.resolveJumps(instructions, programCounter);
 
         //Visit condition expression
         visitCondition((Expression) doStatement.getCondition(), branching, true);
@@ -548,6 +560,7 @@ public class CodeGenerator implements NodeVisitor {
 
         //Add jump to false-clause
         branching.addFalseJumpIndex(instructions.size(), programCounter);
+        addInstruction(Instruction.forUnconditionalJump(0));
     }
 
     @Override
@@ -557,8 +570,9 @@ public class CodeGenerator implements NodeVisitor {
         //Retrieve branching from current loop
         Branching branching = loopStack.getLast();
 
-        //Add jump to true-clause
-        branching.addTrueJumpIndex(instructions.size(), programCounter);
+        //Add jump to neutral-clause
+        branching.addJumpIndex(instructions.size(), programCounter);
+        addInstruction(Instruction.forUnconditionalJump(0));
     }
 
     @Override
