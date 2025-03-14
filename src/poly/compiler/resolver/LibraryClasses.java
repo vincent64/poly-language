@@ -32,13 +32,13 @@ public class LibraryClasses {
 
         //Load Poly standard library
         if(Parameters.getPolylibPath() != null) {
-            LibraryReader polyLibraryReader = new LibraryReader(Parameters.getPolylibPath());
+            LibraryReader polyLibraryReader = LibraryReader.fromPolyLibrary(Parameters.getPolylibPath());
             libraryFiles.addAll(polyLibraryReader.getLibraryFiles());
         }
 
         //Load third-party libraries
         if(Parameters.getLibraryPath() != null) {
-            LibraryReader libraryReader = new LibraryReader(Parameters.getLibraryPath());
+            LibraryReader libraryReader = LibraryReader.fromLibrary(Parameters.getLibraryPath());
             libraryFiles.addAll(libraryReader.getLibraryFiles());
         }
 
