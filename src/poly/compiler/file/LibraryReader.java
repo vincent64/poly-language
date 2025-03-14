@@ -62,10 +62,13 @@ public class LibraryReader {
 
         //Read library files
         if(libraryDirectory.exists() && libraryDirectory.isDirectory()) {
-            if(libraryDirectory.listFiles() == null)
+            File[] files = libraryDirectory.listFiles();
+
+            //Make sure files are not null
+            if(files == null)
                 return libraryReader;
 
-            for(File file : libraryDirectory.listFiles()) {
+            for(File file : files) {
                 if(file.isFile() && file.getName().endsWith(JarBuilder.JAR_EXTENSION))
                     libraryReader.readLibrary(file);
             }
