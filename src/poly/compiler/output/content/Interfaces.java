@@ -6,6 +6,11 @@ import poly.compiler.util.ByteArray;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Interfaces class. This class represents the list of interfaces in a class file.
+ * Every interface is referenced by its constant pool index.
+ * @author Vincent Philippe (@vincent64)
+ */
 public class Interfaces implements Byteable {
     private final List<Short> interfaceIndices;
     private short interfaceCount;
@@ -15,6 +20,10 @@ public class Interfaces implements Byteable {
         interfaceIndices = new ArrayList<>();
     }
 
+    /**
+     * Adds an interface with the given constant pool index.
+     * @param index the index
+     */
     public void addInterface(short index) {
         interfaceIndices.add(index);
         interfaceCount++;
@@ -24,7 +33,7 @@ public class Interfaces implements Byteable {
     public byte[] getBytes() {
         ByteArray byteArray = new ByteArray();
 
-        //Add interface count
+        //Add interfaces count
         byteArray.add(interfaceCount);
 
         //Add every interface content
@@ -34,6 +43,10 @@ public class Interfaces implements Byteable {
         return byteArray.getBytes();
     }
 
+    /**
+     * Returns the interface count.
+     * @return the interface count
+     */
     public short getInterfaceCount() {
         return interfaceCount;
     }
