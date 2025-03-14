@@ -61,6 +61,7 @@ public class SymbolResolver {
      */
     private void resolveClass() {
         ClassSymbol classSymbol = classDefinition.getClassSymbol();
+        ClassDeclaration classDeclaration = classDefinition.getClassDeclaration();
 
         //Resolve superclass
         TypeSymbol superclassTypeSymbol = (TypeSymbol) classSymbol.getSuperclassSymbol();
@@ -85,9 +86,15 @@ public class SymbolResolver {
 
         List<Symbol> interfaceSymbols = classSymbol.getInterfaceSymbols();
 
-        //Make sure there is no interfaces if the class is an interface
-        if(classSymbol.isInterface() && !interfaceSymbols.isEmpty())
-            new ResolvingError.InvalidInterfaceInheritance(classDefinition.getClassDeclaration());
+        if(classSymbol.isInterface()) {
+            //Make sure there is no interfaces if the class is an interface
+            if(!interfaceSymbols.isEmpty())
+                new ResolvingError.InvalidInterfaceInheritance(classDefinition.getClassDeclaration());
+
+            //Add the superinterface to the interface symbols
+            if(classDeclaration.getSuperclass() != null)
+                interfaceSymbols.add(TypeSymbol.fromNode(classDefinition.getClassDeclaration().getSuperclass()));
+        }
 
         //Resolve interfaces
         for(int i = 0; i < interfaceSymbols.size(); i++) {
