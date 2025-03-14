@@ -75,6 +75,20 @@ public class LibraryReader {
     }
 
     /**
+     * Returns a library reader from the given Poly standard library path.
+     * @param polyLibraryPath the standard library path
+     * @return a library reader
+     */
+    public static LibraryReader fromPolyLibrary(String polyLibraryPath) {
+        LibraryReader libraryReader = new LibraryReader();
+
+        //Read library files
+        libraryReader.readLibrary(new File(Paths.get(polyLibraryPath).toString()));
+
+        return libraryReader;
+    }
+
+    /**
      * Loads and return the Java API library files.
      * @return the Java library files
      */
