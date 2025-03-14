@@ -25,7 +25,7 @@ public class TypeSymbol extends Symbol {
      * @param node the node
      * @return the type symbol
      */
-    protected static TypeSymbol fromNode(Node node) {
+    public static TypeSymbol fromNode(Node node) {
         return new TypeSymbol(node != null ? ClassName.fromNodeQualifiedName(node) : null);
     }
 
