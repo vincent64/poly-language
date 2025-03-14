@@ -293,6 +293,14 @@ public class ClassFile implements Byteable {
     }
 
     /**
+     * Returns the class interface indices list.
+     * @return the interfaces
+     */
+    public List<Short> getInterfaces() {
+        return interfaces.getInterfaces();
+    }
+
+    /**
      * Returns the class fields list.
      * @return the fields
      */
