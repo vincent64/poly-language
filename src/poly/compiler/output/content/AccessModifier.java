@@ -40,11 +40,21 @@ public enum AccessModifier {
         this.methodAccessFlag = methodAccessFlag;
     }
 
+    /**
+     * Returns the class access modifier from the given access flag.
+     * @param accessFlag the access flag
+     * @return the access modifier
+     */
     public static AccessModifier fromClassAccessFlag(int accessFlag) {
         if((accessFlag & PUBLIC.getClassAccessFlag()) != 0) return PUBLIC;
         return DEFAULT;
     }
 
+    /**
+     * Returns the method access modifier from the given method access flag.
+     * @param accessFlag the access flag
+     * @return the access modifier
+     */
     public static AccessModifier fromMethodAccessFlag(int accessFlag) {
         if((accessFlag & PUBLIC.getMethodAccessFlag()) != 0) return PUBLIC;
         if((accessFlag & PRIVATE.getMethodAccessFlag()) != 0) return PRIVATE;
@@ -52,6 +62,11 @@ public enum AccessModifier {
         return DEFAULT;
     }
 
+    /**
+     * Returns the field access modifier from the given field access flag.
+     * @param accessFlag the access flag
+     * @return the access modifier
+     */
     public static AccessModifier fromFieldAccessFlag(int accessFlag) {
         if((accessFlag & PUBLIC.getFieldAccessFlag()) != 0) return PUBLIC;
         if((accessFlag & PRIVATE.getFieldAccessFlag()) != 0) return PRIVATE;
