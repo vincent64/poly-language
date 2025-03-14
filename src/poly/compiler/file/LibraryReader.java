@@ -19,26 +19,9 @@ import java.util.zip.ZipFile;
 public class LibraryReader {
     private final List<LibraryFile> libraryFiles;
 
-    /**
-     * Constructs a library reader with the given library folder path.
-     * @param libraryPath the library folder path
-     */
-    public LibraryReader(String libraryPath) {
+    private LibraryReader() {
+        //Initialize library files list
         libraryFiles = new ArrayList<>();
-
-        //Get library folder path
-        Path path = Paths.get(libraryPath);
-        File libraryDirectory = new File(path.toString());
-
-        //Read library files
-        if(libraryDirectory.exists() && libraryDirectory.isDirectory()) {
-            if(libraryDirectory.listFiles() == null) return;
-
-            for(File file : libraryDirectory.listFiles()) {
-                if(file.isFile() && file.getName().endsWith(JarBuilder.JAR_EXTENSION))
-                    readLibrary(file);
-            }
-        }
     }
 
     /**
@@ -63,6 +46,32 @@ public class LibraryReader {
         } catch (IOException e) {
             throw new RuntimeException("Could not read library " + file.getName() + ".");
         }
+    }
+
+    /**
+     * Returns a library reader from the given library folder path.
+     * @param libraryPath the library path
+     * @return a library reader
+     */
+    public static LibraryReader fromLibrary(String libraryPath) {
+        LibraryReader libraryReader = new LibraryReader();
+
+        //Get library folder path
+        Path path = Paths.get(libraryPath);
+        File libraryDirectory = new File(path.toString());
+
+        //Read library files
+        if(libraryDirectory.exists() && libraryDirectory.isDirectory()) {
+            if(libraryDirectory.listFiles() == null)
+                return libraryReader;
+
+            for(File file : libraryDirectory.listFiles()) {
+                if(file.isFile() && file.getName().endsWith(JarBuilder.JAR_EXTENSION))
+                    libraryReader.readLibrary(file);
+            }
+        }
+
+        return libraryReader;
     }
 
     /**
