@@ -191,14 +191,13 @@ public class ClassName {
 
         //Add package names
         for(int i = 0; i < packageNames.size(); i++) {
-            string.append(packageNames.get(i)).append(".");
+            if(i > 0) string.append(".");
+            string.append(packageNames.get(i));
         }
 
         //Add class names
-        for(int i = 0; i < classNames.size(); i++) {
-            if(i != 0) string.append(".");
-            string.append(classNames.get(i));
-        }
+        for(String className : classNames)
+            string.append(".").append(className);
 
         return string.toString();
     }
