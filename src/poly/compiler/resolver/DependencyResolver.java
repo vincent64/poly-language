@@ -131,7 +131,7 @@ public class DependencyResolver {
 
                 //Make sure the methods are valid
                 checkSignature(implementedMethod, methodSymbol);
-            } else if(methodSymbol.isEmpty())
+            } else if(methodSymbol.isEmpty() && !classSymbol.isInterface())
                 new ResolvingError.MissingImplementation(classDeclaration, classDefinition.getClassSymbol(), methodSymbol);
         }
     }
