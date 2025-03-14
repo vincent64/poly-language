@@ -983,7 +983,9 @@ public class CodeGenerator implements NodeVisitor {
         methodCall.getArgumentList().accept(this);
 
         //Generate instructions
-        if(methodSymbol.isStatic()) {
+        if(methodSymbol.getClassSymbol().isInterface()) {
+            generateCallInterfaceMethod(methodSymbol);
+        } else if(methodSymbol.isStatic()) {
             generateCallStaticMethod(methodSymbol);
         } else {
             generateCallVirtualMethod(methodSymbol);
@@ -1063,7 +1065,7 @@ public class CodeGenerator implements NodeVisitor {
                         || member instanceof SuperExpression;
 
                 //Generate instructions
-                if(classSymbol.isInterface() && methodSymbol.isEmpty()) {
+                if(methodSymbol.getClassSymbol().isInterface()) {
                     generateCallInterfaceMethod(methodSymbol);
                 } else if(isSpecial) {
                     generateCallSpecialMethod(methodSymbol);
