@@ -44,6 +44,14 @@ public class Interfaces implements Byteable {
     }
 
     /**
+     * Returns the list of interface indices.
+     * @return the interfaces list
+     */
+    public List<Short> getInterfaces() {
+        return List.copyOf(interfaceIndices);
+    }
+
+    /**
      * Returns the interface count.
      * @return the interface count
      */
