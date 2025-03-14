@@ -49,17 +49,19 @@ public class Parameters {
                 case "-jar" -> JAR_OUTPUT = true;
 
                 //Initialize arguments
-                case "--src" -> SOURCE_PATH =
-                        PROJECT_PATH + File.separator + arguments[i++];
-                case "--out" -> OUTPUT_PATH =
-                        PROJECT_PATH + File.separator + arguments[i++];
-                case "--libs" -> LIBRARY_PATH =
-                        PROJECT_PATH + File.separator + arguments[i++];
+                case "--src" -> SOURCE_PATH = arguments[i++];
+                case "--out" -> OUTPUT_PATH = arguments[i++];
+                case "--libs" -> LIBRARY_PATH = arguments[i++];
 
                 //Make sure the argument is valid
                 default -> new GeneralError.UnknownArgument(argument);
             }
         }
+
+        //Resolve paths according to project path
+        SOURCE_PATH = Path.of(PROJECT_PATH).resolve(SOURCE_PATH).toString();
+        OUTPUT_PATH = Path.of(PROJECT_PATH).resolve(OUTPUT_PATH).toString();
+        if(LIBRARY_PATH != null) LIBRARY_PATH = Path.of(PROJECT_PATH).resolve(LIBRARY_PATH).toString();
 
         try {
             //Find working folder
