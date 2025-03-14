@@ -84,6 +84,7 @@ public class ClassReader {
             packageSymbol.addSymbol(classSymbol);
         }
 
+        //Resolve superclass
         if(superclassIndex != 0) {
             //Get superclass constant
             Constant superclassConstant = constantPool.getConstant(superclassIndex);
@@ -99,6 +100,22 @@ public class ClassReader {
             classSymbol.setSuperclassSymbol(superclassSymbol);
         } else {
             classSymbol.setSuperclassSymbol(null);
+        }
+
+        //Resolve interfaces
+        for(Short interfaceIndex : classFile.getInterfaces()) {
+            //Get interface constant
+            Constant interfaceConstant = constantPool.getConstant(interfaceIndex);
+            short nameIndex = ByteArray.getShortFromByteArray(interfaceConstant.getContent());
+            //Get interface name constant
+            Constant nameConstant = constantPool.getConstant(nameIndex);
+            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+
+            ClassName interfaceName = ClassName.fromStringQualifiedName(qualifiedName);
+
+            //Find or load interface symbol in library
+            ClassSymbol interfaceSymbol = LibraryClasses.findClass(interfaceName);
+            classSymbol.getInterfaceSymbols().add(interfaceSymbol);
         }
 
         //Resolve field symbols
