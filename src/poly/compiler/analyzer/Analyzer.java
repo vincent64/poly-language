@@ -1228,63 +1228,8 @@ public class Analyzer implements NodeModifier {
         if(!isVariableExpression(variableExpression))
             new AnalyzingError.ExpectedVariableExpression(variableExpression);
 
-        //Analyze simple name variable
-        if(variableExpression instanceof SimpleName simpleName) {
-            Variable variable = variableTable.findVariableWithName(simpleName.getName());
-
-            if(variable != null) {
-                //Make sure the variable isn't already assigned if constant
-                if(variable.isConstant() && variable.isAssigned())
-                    new AnalyzingError.InvalidConstantAssignement(assignementExpression, simpleName.getName());
-
-            } else {
-                //Find field in current class
-                FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), classSymbol);
-
-                //Make sure the field is not assigned outside constructor if constant
-                if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
-                    new AnalyzingError.InvalidConstantAssignement(assignementExpression, simpleName.getName());
-            }
-        }
-
-        //Analyze member access variable
-        else if(variableExpression instanceof MemberAccess memberAccess) {
-            SimpleName simpleName = (SimpleName) memberAccess.getAccessor();
-            Type type = ((Expression) memberAccess.getMember()).getExpressionType();
-
-            //Make sure the variable is not the array size
-            if(type.getKind() == Type.Kind.ARRAY)
-                new AnalyzingError.InvalidConstantAssignement(assignementExpression, simpleName.getName());
-
-            ClassSymbol classSymbol = ((Object) type).getClassSymbol();
-            FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), this.classSymbol);
-
-            //Make sure the field is not assigned outside constructor if constant
-            if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
-                new AnalyzingError.InvalidConstantAssignement(assignementExpression, simpleName.getName());
-        }
-
-        //Analyze qualified name variable
-        else if(variableExpression instanceof QualifiedName qualifiedName) {
-            //Make sure the qualified name is a variable
-            if(qualifiedName.getExpressionType() == null)
-                new AnalyzingError.ExpectedVariableExpression(variableExpression);
-
-            Type type;
-            if((type = getTypeFromNode(qualifiedName.getQualifiedName())) == null)
-                type = ((Expression) qualifiedName.getQualifiedName()).getExpressionType();
-
-            //Make sure the variable is not the array size
-            if(type.getKind() == Type.Kind.ARRAY)
-                new AnalyzingError.InvalidConstantAssignement(assignementExpression, qualifiedName.getName());
-
-            ClassSymbol classSymbol = ((Object) type).getClassSymbol();
-            FieldSymbol fieldSymbol = classSymbol.findField(qualifiedName.getName(), this.classSymbol);
-
-            //Make sure the field is not assigned outside constructor if constant
-            if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
-                new AnalyzingError.InvalidConstantAssignement(assignementExpression, qualifiedName.getName());
-        }
+        //Visit variable expression
+        visitVariableExpression(variableExpression);
 
         Type variableType = variableExpression.getExpressionType();
 
@@ -1961,6 +1906,71 @@ public class Analyzer implements NodeModifier {
         }
 
         return null;
+    }
+
+    /**
+     * Visits the given variable expression node.
+     * This method makes sure the variable is not constant and can be assigned.
+     * @param variableExpression the variable expression
+     */
+    private void visitVariableExpression(Node variableExpression) {
+        //Analyze simple name variable
+        if(variableExpression instanceof SimpleName simpleName) {
+            Variable variable = variableTable.findVariableWithName(simpleName.getName());
+
+            if(variable != null) {
+                //Make sure the variable isn't already assigned if constant
+                if(variable.isConstant() && variable.isAssigned())
+                    new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+
+            } else {
+                //Find field in current class
+                FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), classSymbol);
+
+                //Make sure the field is not assigned outside constructor if constant
+                if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
+                    new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+            }
+        }
+
+        //Analyze member access variable
+        else if(variableExpression instanceof MemberAccess memberAccess) {
+            SimpleName simpleName = (SimpleName) memberAccess.getAccessor();
+            Type type = ((Expression) memberAccess.getMember()).getExpressionType();
+
+            //Make sure the variable is not the array size
+            if(type.getKind() == Type.Kind.ARRAY)
+                new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+
+            ClassSymbol classSymbol = ((Object) type).getClassSymbol();
+            FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), this.classSymbol);
+
+            //Make sure the field is not assigned outside constructor if constant
+            if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
+                new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+        }
+
+        //Analyze qualified name variable
+        else if(variableExpression instanceof QualifiedName qualifiedName) {
+            //Make sure the qualified name is a variable
+            if(qualifiedName.getExpressionType() == null)
+                new AnalyzingError.ExpectedVariableExpression(variableExpression);
+
+            Type type;
+            if((type = getTypeFromNode(qualifiedName.getQualifiedName())) == null)
+                type = ((Expression) qualifiedName.getQualifiedName()).getExpressionType();
+
+            //Make sure the variable is not the array size
+            if(type.getKind() == Type.Kind.ARRAY)
+                new AnalyzingError.InvalidConstantAssignement(variableExpression, qualifiedName.getName());
+
+            ClassSymbol classSymbol = ((Object) type).getClassSymbol();
+            FieldSymbol fieldSymbol = classSymbol.findField(qualifiedName.getName(), this.classSymbol);
+
+            //Make sure the field is not assigned outside constructor if constant
+            if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
+                new AnalyzingError.InvalidConstantAssignement(variableExpression, qualifiedName.getName());
+        }
     }
 
 
