@@ -179,12 +179,6 @@ public final class ClassSymbol extends Symbol {
         //Find candidates in current class
         findMethodCandidates(name, types, methodCandidates, sourceClass, includeSuperclass);
 
-        //Find candidates in interfaces
-        if(includeSuperclass) {
-            for(Symbol interfaceSymbol : interfaceSymbols)
-                ((ClassSymbol) interfaceSymbol).findMethodCandidates(name, types, methodCandidates, sourceClass, true);
-        }
-
         //Return no method
         if(methodCandidates.isEmpty())
             return null;
@@ -228,6 +222,12 @@ public final class ClassSymbol extends Symbol {
         //Find candidates in the superclass
         if(!isRoot() && includeSuperclass)
             ((ClassSymbol) superclassSymbol).findMethodCandidates(name, types, methodCandidates, sourceClass, true);
+
+        //Find candidates in the interfaces
+        if(includeSuperclass) {
+            for(Symbol interfaceSymbol : interfaceSymbols)
+                ((ClassSymbol) interfaceSymbol).findMethodCandidates(name, types, methodCandidates, sourceClass, true);
+        }
     }
 
     /**
