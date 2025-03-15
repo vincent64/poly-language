@@ -583,6 +583,9 @@ public class Analyzer implements NodeModifier {
                     if(!isVariableExpression(expression))
                         new AnalyzingError.ExpectedVariableExpression(expression);
 
+                    //Visit variable expression
+                    visitVariableExpression(expression);
+
                     //Define resulting type
                     unaryExpression.setExpressionType(expression.getExpressionType());
                 }
