@@ -55,14 +55,14 @@ interface+ List(Collection) {
     ¦ @returns the first object
     ¦
     fn Object removeFirst() {
-        return get(0);
+        return remove(0);
     }
 
     ¦ Removes the last object in the list and returns it.
     ¦ @returns the last object
     ¦
     fn Object removeLast() {
-        return get(size() - 1);
+        return remove(size() - 1);
     }
 
     ¦ Returns the object at the given index in the list.
