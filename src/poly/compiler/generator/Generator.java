@@ -121,4 +121,23 @@ public class Generator {
         if(attribute != null)
             classFile.addAttribute(attribute);
     }
+
+    private void generateNestedClasses(ClassSymbol classSymbol) {
+        List<ClassSymbol> nestedClassSymbols = classSymbol.getClasses();
+        ConstantPool constantPool = classFile.getConstantPool();
+        NestMembersAttribute attribute = null;
+
+        for(ClassSymbol nestedClassSymbol : nestedClassSymbols) {
+            //Initialize attribute
+            if(attribute == null)
+                attribute = new NestMembersAttribute(constantPool);
+
+            //Add nested class
+            attribute.addNestedClass((short) constantPool.addClassConstant(nestedClassSymbol.getClassInternalQualifiedName()));
+        }
+
+        //Add the attribute to the class file if not empty
+        if(attribute != null)
+            classFile.addAttribute(attribute);
+    }
 }
