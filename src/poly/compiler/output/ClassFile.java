@@ -75,6 +75,10 @@ public class ClassFile implements Byteable {
         if(classSymbol.isConstant())
             accessFlag |= Instructions.ClassAccessFlag.FINAL;
 
+        //Set class static flag if nested but not inner
+        if(classSymbol.getOwnerSymbol() instanceof ClassSymbol && !classSymbol.isInner())
+            accessFlag |= Instructions.ClassAccessFlag.STATIC;
+
         this.accessFlag = accessFlag;
 
         //Set class in constant pool
