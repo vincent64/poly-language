@@ -9,8 +9,12 @@ class+ const LinkedList : List {
     fn+ constructor() { }
 
     fn+ void add(Object object) {
-        Node last = getNodeAt(size - 1);
-        last.next = new(last.next, object);
+        if(isEmpty()) {
+            first = new(first, object);
+        } else {
+            Node last = getNodeAt(size - 1);
+            last.next = new(last.next, object);
+        }
         size++;
     }
 
