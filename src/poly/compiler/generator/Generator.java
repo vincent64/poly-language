@@ -5,6 +5,7 @@ import poly.compiler.output.ClassFile;
 import poly.compiler.output.attribute.CodeAttribute;
 import poly.compiler.output.attribute.InnerClassesAttribute;
 import poly.compiler.output.attribute.NestHostAttribute;
+import poly.compiler.output.attribute.NestMembersAttribute;
 import poly.compiler.output.content.ConstantPool;
 import poly.compiler.resolver.ClassDefinition;
 import poly.compiler.resolver.MethodDefinition;
@@ -57,14 +58,13 @@ public class Generator {
         for(MethodDefinition methodDefinition : classDefinition.getMethodDefinitions())
             generateMethod(methodDefinition);
 
-        //Generate inner classes attribute
+        //Generate inner and nested classes attributes
         generateInnerClasses(classSymbol);
+        generateNestedClasses(classSymbol);
 
         //Generate outer class attribute
-        if(classSymbol.isInner()) {
-            classFile.addAttribute(new NestHostAttribute(classFile.getConstantPool(),
-                    (ClassSymbol) classSymbol.getOwnerSymbol()));
-        }
+        if(classSymbol.getOwnerSymbol() instanceof ClassSymbol outerClassSymbol)
+            classFile.addAttribute(new NestHostAttribute(classFile.getConstantPool(), outerClassSymbol));
 
         return classFile;
     }
