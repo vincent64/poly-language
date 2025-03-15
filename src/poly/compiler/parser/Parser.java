@@ -1450,7 +1450,11 @@ public class Parser {
         Node node = parseSimpleName();
 
         //Parse qualified name
-        while(matches(DOT) && isMatchingType(Token.Type.IDENTIFIER)) {
+        while(matches(DOT)) {
+            //Make sure there is an identifier after the dot
+            if(!isMatchingType(Token.Type.IDENTIFIER))
+                new ParsingError.UnexpectedToken(currentToken);
+
             QualifiedName qualifiedName = new QualifiedName(Node.Meta.fromLeadingToken(currentToken));
             qualifiedName.setQualifiedName(node);
             qualifiedName.setName(currentToken.getContent());
