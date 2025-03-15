@@ -27,7 +27,6 @@ class+ const LinkedList : List {
             Node previous = getNodeAt(index - 1);
             previous.next = new(previous.next, object);
         }
-
         size++;
     }
 
