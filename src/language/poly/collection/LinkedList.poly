@@ -72,7 +72,10 @@ class+ const LinkedList : List {
         return false;
     }
 
-    fn+ void clear() { }
+    fn+ void clear() {
+        size = 0;
+        first = null;
+    }
 
     fn+ int size() {
         return size;
