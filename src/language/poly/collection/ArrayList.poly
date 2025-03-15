@@ -69,10 +69,6 @@ class+ const ArrayList : List {
         return size;
     }
 
-    fn+ bool isEmpty() {
-        return size == 0;
-    }
-
     op+ Object access(int index) {
         return get(index);
     }

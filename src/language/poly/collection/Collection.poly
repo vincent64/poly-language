@@ -25,5 +25,7 @@ interface+ Collection {
     ¦ Returns whether the collection is empty.
     ¦ @returns true if the collection is empty
     ¦
-    fn bool isEmpty();
+    fn bool isEmpty() {
+        return size() == 0;
+    }
 }
