@@ -58,8 +58,7 @@ public class Generator {
         for(MethodDefinition methodDefinition : classDefinition.getMethodDefinitions())
             generateMethod(methodDefinition);
 
-        //Generate inner and nested classes attributes
-        generateInnerClasses(classSymbol);
+        //Generate nested classes attributes
         generateNestedClasses(classSymbol);
 
         //Generate outer class attribute
@@ -95,49 +94,34 @@ public class Generator {
         classFile.addMethod(methodDefinition.getMethodSymbol(), codeAttribute);
     }
 
-    private void generateInnerClasses(ClassSymbol classSymbol) {
-        List<ClassSymbol> nestedClassSymbols = classSymbol.getClasses();
-        ConstantPool constantPool = classFile.getConstantPool();
-        InnerClassesAttribute attribute = null;
-
-        if(nestedClassSymbols.isEmpty()) return;
-
-        for(ClassSymbol nestedClassSymbol : nestedClassSymbols) {
-            if(nestedClassSymbol.isInner()) {
-                //Initialize attribute
-                if(attribute == null)
-                    attribute = new InnerClassesAttribute(constantPool);
-
-                //Add inner class
-                attribute.addInnerClass(
-                        nestedClassSymbol.getAccessModifier().getClassAccessFlag(),
-                        (short) constantPool.addUTF8Constant(nestedClassSymbol.getClassInternalQualifiedName()),
-                        (short) constantPool.addClassConstant(nestedClassSymbol.getClassInternalQualifiedName()),
-                        (short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()));
-            }
-        }
-
-        //Add the attribute to the class file if not empty
-        if(attribute != null)
-            classFile.addAttribute(attribute);
-    }
-
+    /**
+     * Generates the attributes for the given class symbol nested classes.
+     * @param classSymbol the class symbol
+     */
     private void generateNestedClasses(ClassSymbol classSymbol) {
         List<ClassSymbol> nestedClassSymbols = classSymbol.getClasses();
         ConstantPool constantPool = classFile.getConstantPool();
-        NestMembersAttribute attribute = null;
+
+        //Return no nested classes
+        if(nestedClassSymbols.isEmpty())
+            return;
+
+        InnerClassesAttribute innerClassesAttribute = new InnerClassesAttribute(constantPool);
+        NestMembersAttribute nestMembersAttribute = new NestMembersAttribute(constantPool);
 
         for(ClassSymbol nestedClassSymbol : nestedClassSymbols) {
-            //Initialize attribute
-            if(attribute == null)
-                attribute = new NestMembersAttribute(constantPool);
-
+            //Add inner class
+            innerClassesAttribute.addInnerClass(
+                    nestedClassSymbol.getAccessModifier().getClassAccessFlag(),
+                    (short) constantPool.addUTF8Constant(nestedClassSymbol.getClassInternalQualifiedName()),
+                    (short) constantPool.addClassConstant(nestedClassSymbol.getClassInternalQualifiedName()),
+                    (short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()));
             //Add nested class
-            attribute.addNestedClass((short) constantPool.addClassConstant(nestedClassSymbol.getClassInternalQualifiedName()));
+            nestMembersAttribute.addNestedClass((short) constantPool.addClassConstant(nestedClassSymbol.getClassInternalQualifiedName()));
         }
 
-        //Add the attribute to the class file if not empty
-        if(attribute != null)
-            classFile.addAttribute(attribute);
+        //Add the attributes to the class file
+        classFile.addAttribute(innerClassesAttribute);
+        classFile.addAttribute(nestMembersAttribute);
     }
 }
