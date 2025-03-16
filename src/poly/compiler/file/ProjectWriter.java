@@ -27,12 +27,30 @@ public class ProjectWriter {
         File outputDirectoy = new File(path.toString());
         outputDirectoy.mkdirs();
 
+        //Clean the output directory
+        cleanDirectory(outputDirectoy);
+
         for(ClassFile classFile : classFiles) {
             try {
                 //Write the class file
                 ClassWriter.write(classFile, path);
             } catch(IOException e) {
                 throw new RuntimeException("Could not write class file " + classFile + ".");
+            }
+        }
+    }
+
+    /**
+     * Removes every class files from the given directory and subdirectories.
+     * For safety reasons, this method only deletes class files and not the folders.
+     * @param directory the directory
+     */
+    private static void cleanDirectory(File directory) {
+        for(File file : directory.listFiles()) {
+            if(file.isDirectory()) {
+                cleanDirectory(file);
+            } else if(file.getName().endsWith(ClassWriter.CLASS_EXTENSION)) {
+                file.delete();
             }
         }
     }
