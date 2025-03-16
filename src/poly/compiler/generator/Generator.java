@@ -113,7 +113,7 @@ public class Generator {
             //Add inner class
             innerClassesAttribute.addInnerClass(
                     nestedClassSymbol.getAccessModifier().getClassAccessFlag(),
-                    (short) constantPool.addUTF8Constant(nestedClassSymbol.getClassInternalQualifiedName()),
+                    (short) constantPool.addUTF8Constant(nestedClassSymbol.getName()),
                     (short) constantPool.addClassConstant(nestedClassSymbol.getClassInternalQualifiedName()),
                     (short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()));
             //Add nested class
