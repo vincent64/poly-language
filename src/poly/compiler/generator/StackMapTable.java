@@ -16,8 +16,9 @@ import java.util.List;
 public class StackMapTable implements Byteable {
     private final List<StackMapFrame> frames;
     private List<VerificationType> lastLocalTypes;
-    private int lastVariableCount;
+    private List<VerificationType> previousLastLocalTypes;
     private int lastOffset;
+    private int previousLastOffset;
 
     /**
      * Constructs a stack map table.
@@ -26,6 +27,7 @@ public class StackMapTable implements Byteable {
         //Initialize frames list
         frames = new ArrayList<>();
         lastLocalTypes = new ArrayList<>();
+        previousLastLocalTypes = new ArrayList<>();
     }
 
     /**
@@ -35,19 +37,41 @@ public class StackMapTable implements Byteable {
      * @param programCounter the program counter
      */
     public void addFrame(OperandStack operandStack, LocalTable localTable, int programCounter) {
+        //Add new stack map frame
         if(programCounter >= lastOffset) {
             int offset = programCounter - lastOffset;
 
-            //Add the frame according to previous frame
-            if(operandStack.isEmpty() && localTable.getLocalTypes().equals(lastLocalTypes) && offset < 64) {
-                frames.add(StackMapFrame.createSameFrame(offset));
-            } else {
-                frames.add(StackMapFrame.createFullFrame(operandStack, localTable, offset));
-            }
+            //Generate frame according to previous frame
+            StackMapFrame frame = operandStack.isEmpty()
+                    && localTable.getLocalTypes().equals(lastLocalTypes) && offset < 64
+                    ? StackMapFrame.createSameFrame(offset)
+                    : StackMapFrame.createFullFrame(operandStack, localTable, offset);
 
-            //Set previous frame to current frame values
+            //Add the frame to the table
+            frames.add(frame);
+
+            //Update previous frame values
+            previousLastLocalTypes = lastLocalTypes;
             lastLocalTypes = List.copyOf(localTable.getLocalTypes());
-            lastVariableCount = localTable.getCount();
+            previousLastOffset = lastOffset;
+            lastOffset = programCounter + 1;
+        }
+
+        //Replace last stack map frame
+        else if(programCounter == lastOffset - 1 && lastOffset > 0) {
+            int offset = programCounter - previousLastOffset;
+
+            //Generate frame according to previous frame
+            StackMapFrame frame = operandStack.isEmpty()
+                    && localTable.getLocalTypes().equals(previousLastLocalTypes) && offset < 64
+                    ? StackMapFrame.createSameFrame(offset)
+                    : StackMapFrame.createFullFrame(operandStack, localTable, offset);
+
+            //Replace the last frame in the table
+            frames.set(frames.size() - 1, frame);
+
+            //Update previous frame values
+            lastLocalTypes = List.copyOf(localTable.getLocalTypes());
             lastOffset = programCounter + 1;
         }
     }
