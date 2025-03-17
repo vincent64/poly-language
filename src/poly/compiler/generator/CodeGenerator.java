@@ -2101,7 +2101,7 @@ public class CodeGenerator implements NodeVisitor {
                 }
             }
 
-            case FLOAT -> addInstruction(I2D);
+            case FLOAT -> addInstruction(F2D);
         }
     }
 
