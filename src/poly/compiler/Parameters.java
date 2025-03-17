@@ -16,7 +16,7 @@ import java.nio.file.Path;
 public class Parameters {
     private static boolean OPTIMIZATIONS = false;
     private static boolean VERBOSITY = false;
-    private static boolean WARNINGS = true;
+    private static boolean WARNINGS = false;
     private static boolean JAR_OUTPUT = false;
     private static String PROJECT_PATH = null;
     private static String SOURCE_PATH = "src";

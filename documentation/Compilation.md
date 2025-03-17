@@ -45,7 +45,7 @@ The various options and their functionnality are described in the table below :
 
 | Parameter   | Default | Description                                                                                     |
 |-------------|---------|-------------------------------------------------------------------------------------------------|
-| `-warnings` | true    | Displays messages for code warnings.                                                            |
+| `-warnings` | false   | Displays messages for code warnings.                                                            |
 | `-verbose`  | false   | Displays messages related to the compilation process.                                           |
 | `-optimize` | false   | Optimizes the output code. Enabling this option may result in slightly longer compilation time. |
 | `-jar`      | false   | Produces a JAR file with the output code.                                                       |
