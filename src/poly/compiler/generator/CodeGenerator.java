@@ -2105,6 +2105,9 @@ public class CodeGenerator implements NodeVisitor {
         }
     }
 
+    /**
+     * Generates a stack map frame at the current program counter.
+     */
     private void generateStackMapFrame() {
         stackMapTable.addFrame(operandStack, localTable, programCounter);
     }
