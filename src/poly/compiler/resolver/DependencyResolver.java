@@ -103,8 +103,9 @@ public class DependencyResolver {
         //Check overridable methods
         checkOverride(classSymbol, new ArrayList<>());
 
-        //Check implementable methods
         List<MethodSymbol> implementableMethods = new ArrayList<>();
+
+        //Check implementable methods
         for(Symbol interfaceSymbol : classSymbol.getInterfaceSymbols()) {
             List<MethodSymbol> interfaceMethods = new ArrayList<>();
 
@@ -128,6 +129,10 @@ public class DependencyResolver {
         for(MethodSymbol methodSymbol : implementableMethods) {
             if(methodSymbols.contains(methodSymbol)) {
                 MethodSymbol implementedMethod = methodSymbols.get(methodSymbols.indexOf(methodSymbol));
+
+                //Make sure the implementation is not static
+                if(implementedMethod.isStatic())
+                    new ResolvingError.MissingImplementation(classDeclaration, classDefinition.getClassSymbol(), methodSymbol);
 
                 //Make sure the methods are valid
                 checkSignature(implementedMethod, methodSymbol);
@@ -197,6 +202,10 @@ public class DependencyResolver {
             checkImplement(superinterfaceSymbol, implementableMethods);
 
         for(MethodSymbol methodSymbol : classSymbol.getMethods()) {
+            //Skip static methods
+            if(methodSymbol.isStatic())
+                continue;
+
             if(!implementableMethods.contains(methodSymbol)) {
                 implementableMethods.add(methodSymbol);
             } else {
