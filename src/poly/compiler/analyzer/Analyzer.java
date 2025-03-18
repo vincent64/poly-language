@@ -177,17 +177,9 @@ public class Analyzer implements NodeModifier {
                 && !object.getClassSymbol().isAccessibleFrom(classSymbol))
             new AnalyzingError.UnresolvableClass(type, type.toString());
 
-        //Add the variable to the table
-        Variable variable = variableTable.addVariable(variableType,
-                variableDeclaration.getName(),
-                variableDeclaration.isConstant());
-
         Expression expression = (Expression) variableDeclaration.getInitializationExpression();
 
         if(expression != null) {
-            //Set the variable as assigned
-            variable.setAsAssigned();
-
             //Infer type if possible
             inferType(expression, variableType);
 
@@ -209,6 +201,15 @@ public class Analyzer implements NodeModifier {
                 new AnalyzingError.TypeConversion(expression,
                         expression.getExpressionType(), variableType);
         }
+
+        //Add the variable to the table
+        Variable variable = variableTable.addVariable(variableType,
+                variableDeclaration.getName(),
+                variableDeclaration.isConstant());
+
+        //Set the variable as assigned
+        if(expression != null)
+            variable.setAsAssigned();
 
         return variableDeclaration;
     }
