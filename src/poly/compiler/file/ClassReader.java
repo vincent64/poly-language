@@ -9,6 +9,7 @@ import poly.compiler.util.ByteArray;
 import poly.compiler.util.ClassName;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * The ClassReader class. This class is used to read the content of a class file
@@ -88,20 +89,7 @@ public class ClassReader {
         resolveSuperclass(constantPool, classSymbol, superclassIndex);
 
         //Resolve interfaces
-        for(Short interfaceIndex : classFile.getInterfaces()) {
-            //Get interface constant
-            Constant interfaceConstant = constantPool.getConstant(interfaceIndex);
-            short nameIndex = ByteArray.getShortFromByteArray(interfaceConstant.getContent());
-            //Get interface name constant
-            Constant nameConstant = constantPool.getConstant(nameIndex);
-            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
-
-            ClassName interfaceName = ClassName.fromStringQualifiedName(qualifiedName);
-
-            //Find or load interface symbol in library
-            ClassSymbol interfaceSymbol = LibraryClasses.findClass(interfaceName);
-            classSymbol.getInterfaceSymbols().add(interfaceSymbol);
-        }
+        resolveInterfaces(constantPool, classSymbol, classFile.getInterfaces());
 
         //Resolve field symbols
         for(Field field : classFile.getFields())
@@ -136,6 +124,29 @@ public class ClassReader {
             classSymbol.setSuperclassSymbol(superclassSymbol);
         } else {
             classSymbol.setSuperclassSymbol(null);
+        }
+    }
+
+    /**
+     * Resolves the interfaces from the given interface indices.
+     * @param constantPool the constant pool
+     * @param classSymbol the class symbol
+     * @param interfaceIndies the interface indices
+     */
+    private void resolveInterfaces(ConstantPool constantPool, ClassSymbol classSymbol, List<Short> interfaceIndies) {
+        for(short interfaceIndex : interfaceIndies) {
+            //Get interface constant
+            Constant interfaceConstant = constantPool.getConstant(interfaceIndex);
+            short nameIndex = ByteArray.getShortFromByteArray(interfaceConstant.getContent());
+            //Get interface name constant
+            Constant nameConstant = constantPool.getConstant(nameIndex);
+            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+
+            ClassName interfaceName = ClassName.fromStringQualifiedName(qualifiedName);
+
+            //Find or load interface symbol in library
+            ClassSymbol interfaceSymbol = LibraryClasses.findClass(interfaceName);
+            classSymbol.getInterfaceSymbols().add(interfaceSymbol);
         }
     }
 
