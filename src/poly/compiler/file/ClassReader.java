@@ -85,22 +85,7 @@ public class ClassReader {
         }
 
         //Resolve superclass
-        if(superclassIndex != 0) {
-            //Get superclass constant
-            Constant superclassConstant = constantPool.getConstant(superclassIndex);
-            short nameIndex = ByteArray.getShortFromByteArray(superclassConstant.getContent());
-            //Get superclass name constant
-            Constant nameConstant = constantPool.getConstant(nameIndex);
-            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
-
-            ClassName superclassName = ClassName.fromStringQualifiedName(qualifiedName);
-
-            //Find or load superclass symbol in library
-            ClassSymbol superclassSymbol = LibraryClasses.findClass(superclassName);
-            classSymbol.setSuperclassSymbol(superclassSymbol);
-        } else {
-            classSymbol.setSuperclassSymbol(null);
-        }
+        resolveSuperclass(constantPool, classSymbol, superclassIndex);
 
         //Resolve interfaces
         for(Short interfaceIndex : classFile.getInterfaces()) {
@@ -127,6 +112,31 @@ public class ClassReader {
             classSymbol.addSymbol(MethodSymbol.fromClassFile(method, classSymbol, constantPool));
 
         return classSymbol;
+    }
+
+    /**
+     * Resolves the superclass from the given superclass index.
+     * @param constantPool the constant pool
+     * @param classSymbol the class symbol
+     * @param superclassIndex the superclass index
+     */
+    private void resolveSuperclass(ConstantPool constantPool, ClassSymbol classSymbol, short superclassIndex) {
+        if(superclassIndex != 0) {
+            //Get superclass constant
+            Constant superclassConstant = constantPool.getConstant(superclassIndex);
+            short nameIndex = ByteArray.getShortFromByteArray(superclassConstant.getContent());
+            //Get superclass name constant
+            Constant nameConstant = constantPool.getConstant(nameIndex);
+            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+
+            ClassName superclassName = ClassName.fromStringQualifiedName(qualifiedName);
+
+            //Find or load superclass symbol in library
+            ClassSymbol superclassSymbol = LibraryClasses.findClass(superclassName);
+            classSymbol.setSuperclassSymbol(superclassSymbol);
+        } else {
+            classSymbol.setSuperclassSymbol(null);
+        }
     }
 
     /**
