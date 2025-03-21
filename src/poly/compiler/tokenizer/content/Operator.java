@@ -48,7 +48,7 @@ public class Operator {
     public static final char[] SHIFT_RIGHT = {'>', '>'};
     public static final char[] SHIFT_RIGHT_ARITHMETIC = {'>', '>', '>'};
 
-    //Assignement operators
+    //Assignment operators
     public static final char[] ASSIGN_ADD = {'+', '='};
     public static final char[] ASSIGN_SUB = {'-', '='};
     public static final char[] ASSIGN_MUL = {'*', '='};
@@ -83,7 +83,7 @@ public class Operator {
             INCREMENT, DECREMENT
     };
 
-    private static final char[][] ASSIGNEMENT = {
+    private static final char[][] ASSIGNMENT = {
             Symbol.EQUAL, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MUL, ASSIGN_DIV, ASSIGN_MOD,
             ASSIGN_BITWISE_AND, ASSIGN_BITWISE_XOR, ASSIGN_BITWISE_OR,
             ASSIGN_SHIFT_LEFT, ASSIGN_SHIFT_RIGHT, ASSIGN_SHIFT_RIGHT_ARITHMETIC
@@ -126,21 +126,21 @@ public class Operator {
     }
 
     /**
-     * Returns whether the given token is an assignement operator token.
+     * Returns whether the given token is an assignment operator token.
      * @param token the token
-     * @return true if the token is an assignement operator
+     * @return true if the token is an assignment operator
      */
     public static boolean isAssignOperator(Token token) {
         return isAssignOperator(token.getContent());
     }
 
     /**
-     * Returns whether the given content is an assignement operator.
+     * Returns whether the given content is an assignment operator.
      * @param content the content
-     * @return true if the content is an assignement operator
+     * @return true if the content is an assignment operator
      */
     public static boolean isAssignOperator(char[] content) {
-        for(char[] operator : ASSIGNEMENT) {
+        for(char[] operator : ASSIGNMENT) {
             if(isSameString(content, operator)) return true;
         }
 

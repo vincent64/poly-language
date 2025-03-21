@@ -43,6 +43,7 @@ public interface NodeVisitor {
     default void visitArrayAccess(ArrayAccess arrayAccess) {}
     default void visitArrayCreation(ArrayCreation arrayCreation) {}
     default void visitArrayType(ArrayType arrayType) {}
+    default void visitAssignmentExpression(AssignmentExpression assignmentExpression) {}
     default void visitBinaryExpression(BinaryExpression binaryExpression) {}
     default void visitCaseStatement(CaseStatement caseStatement) {}
     default void visitCastExpression(CastExpression castExpression) {}
@@ -66,6 +67,5 @@ public interface NodeVisitor {
     default void visitArgumentList(ArgumentList argumentList) {}
     default void visitParameter(Parameter parameter) {}
     default void visitParameterList(ParameterList parameterList) {}
-    default void visitVariableAssignement(AssignementExpression assignementExpression) {}
     default void visitVariableDeclaration(VariableDeclaration variableDeclaration) {}
 }

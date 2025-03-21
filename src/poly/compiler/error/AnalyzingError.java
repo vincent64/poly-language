@@ -398,18 +398,18 @@ public abstract class AnalyzingError extends Error {
         }
     }
 
-    public static class InvalidAssignement extends AnalyzingError {
+    public static class InvalidAssignment extends AnalyzingError {
         private static final String MESSAGE = "Cannot assign variable with type '%s'";
 
-        public InvalidAssignement(Node node) {
+        public InvalidAssignment(Node node) {
             super(node, MESSAGE);
         }
     }
 
-    public static class InvalidConstantAssignement extends AnalyzingError {
+    public static class InvalidConstantAssignment extends AnalyzingError {
         private static final String MESSAGE = "Constant variable or field '%s' is already assigned";
 
-        public InvalidConstantAssignement(Node node, String name) {
+        public InvalidConstantAssignment(Node node, String name) {
             super(node, MESSAGE.formatted(name));
         }
     }

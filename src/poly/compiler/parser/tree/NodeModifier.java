@@ -46,6 +46,7 @@ public interface NodeModifier {
     default Node visitArrayAccess(ArrayAccess arrayAccess) { return arrayAccess; }
     default Node visitArrayCreation(ArrayCreation arrayCreation) { return arrayCreation; }
     default Node visitArrayType(ArrayType arrayType) { return arrayType; }
+    default Node visitAssignmentExpression(AssignmentExpression assignmentExpression) { return assignmentExpression; }
     default Node visitBinaryExpression(BinaryExpression binaryExpression) { return binaryExpression; }
     default Node visitCaseStatement(CaseStatement caseStatement) { return caseStatement; }
     default Node visitCastExpression(CastExpression castExpression) { return castExpression; }
@@ -69,6 +70,5 @@ public interface NodeModifier {
     default Node visitArgumentList(ArgumentList argumentList) { return argumentList; }
     default Node visitParameter(Parameter parameter) { return parameter; }
     default Node visitParameterList(ParameterList parameterList) { return parameterList; }
-    default Node visitVariableAssignement(AssignementExpression assignementExpression) { return assignementExpression; }
     default Node visitVariableDeclaration(VariableDeclaration variableDeclaration) { return variableDeclaration; }
 }

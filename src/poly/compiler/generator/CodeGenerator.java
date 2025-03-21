@@ -630,16 +630,16 @@ public class CodeGenerator implements NodeVisitor {
 
         Expression expression = (Expression) expressionStatement.getExpression();
 
-        //Visit assignement expression
-        if(expression instanceof AssignementExpression assignementExpression) {
-            if(assignementExpression.getVariable() instanceof SimpleName simpleName)
-                visitSimpleNameAssignement(assignementExpression, simpleName, false);
-            else if(assignementExpression.getVariable() instanceof MemberAccess memberAccess)
-                visitMemberAccessAssignement(assignementExpression, memberAccess, false);
-            else if(assignementExpression.getVariable() instanceof QualifiedName qualifiedName)
-                visitQualifiedNameAssignement(assignementExpression, qualifiedName, false);
-            else if(assignementExpression.getVariable() instanceof ArrayAccess arrayAccess)
-                visitArrayAccessAssignement(assignementExpression, arrayAccess, false);
+        //Visit assignment expression
+        if(expression instanceof AssignmentExpression assignmentExpression) {
+            if(assignmentExpression.getVariable() instanceof SimpleName simpleName)
+                visitSimpleNameAssignement(assignmentExpression, simpleName, false);
+            else if(assignmentExpression.getVariable() instanceof MemberAccess memberAccess)
+                visitMemberAccessAssignement(assignmentExpression, memberAccess, false);
+            else if(assignmentExpression.getVariable() instanceof QualifiedName qualifiedName)
+                visitQualifiedNameAssignement(assignmentExpression, qualifiedName, false);
+            else if(assignmentExpression.getVariable() instanceof ArrayAccess arrayAccess)
+                visitArrayAccessAssignement(assignmentExpression, arrayAccess, false);
             return;
         }
 
@@ -1216,24 +1216,24 @@ public class CodeGenerator implements NodeVisitor {
     }
 
     @Override
-    public void visitVariableAssignement(AssignementExpression assignementExpression) {
-        addLineNumber(assignementExpression);
+    public void visitAssignmentExpression(AssignmentExpression assignmentExpression) {
+        addLineNumber(assignmentExpression);
 
         //Visit variable as simple name
-        if(assignementExpression.getVariable() instanceof SimpleName simpleName)
-            visitSimpleNameAssignement(assignementExpression, simpleName, true);
+        if(assignmentExpression.getVariable() instanceof SimpleName simpleName)
+            visitSimpleNameAssignement(assignmentExpression, simpleName, true);
 
         //Visit variable as member access
-        else if(assignementExpression.getVariable() instanceof MemberAccess memberAccess)
-            visitMemberAccessAssignement(assignementExpression, memberAccess, true);
+        else if(assignmentExpression.getVariable() instanceof MemberAccess memberAccess)
+            visitMemberAccessAssignement(assignmentExpression, memberAccess, true);
 
         //Visit variable as qualified name
-        else if(assignementExpression.getVariable() instanceof QualifiedName qualifiedName)
-            visitQualifiedNameAssignement(assignementExpression, qualifiedName, true);
+        else if(assignmentExpression.getVariable() instanceof QualifiedName qualifiedName)
+            visitQualifiedNameAssignement(assignmentExpression, qualifiedName, true);
 
         //Visit variable as array access
-        else if(assignementExpression.getVariable() instanceof ArrayAccess arrayAccess)
-            visitArrayAccessAssignement(assignementExpression, arrayAccess, true);
+        else if(assignmentExpression.getVariable() instanceof ArrayAccess arrayAccess)
+            visitArrayAccessAssignement(assignmentExpression, arrayAccess, true);
     }
 
     @Override
@@ -1708,23 +1708,23 @@ public class CodeGenerator implements NodeVisitor {
     }
 
     /**
-     * Visits the given assignement expression and generate augmented assignement.
-     * @param assignementExpression the assignement expression
-     * @param type the assignement type
+     * Visits the given assignment expression and generate augmented assignment.
+     * @param assignmentExpression the assignment expression
+     * @param type the assignment type
      * @param isResultNeeded whether the result value is needed
-     * @param isSingleDepth whether the stack depth is one value deep (for instance assignement)
-     * @param isDoubleDepth whether the stack depth is two values deep (for array assignement)
+     * @param isSingleDepth whether the stack depth is one value deep (for instance assignment)
+     * @param isDoubleDepth whether the stack depth is two values deep (for array assignment)
      */
-    private void visitAssignement(AssignementExpression assignementExpression, Type type,
+    private void visitAssignement(AssignmentExpression assignmentExpression, Type type,
                                   boolean isResultNeeded, boolean isSingleDepth, boolean isDoubleDepth) {
-        //Visit assignement expression
-        visitExpression((Expression) assignementExpression.getExpression());
+        //Visit assignment expression
+        visitExpression((Expression) assignmentExpression.getExpression());
 
-        //Perform augmented assignement operation
-        if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT)
-            generateAssignementOperation(assignementExpression, (Primitive) type);
+        //Perform augmented assignment operation
+        if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT)
+            generateAssignementOperation(assignmentExpression, (Primitive) type);
 
-        //Duplicate result after assignement
+        //Duplicate result after assignment
         if(isResultNeeded) {
             addInstruction(type instanceof Primitive primitive && primitive.isWideType()
                     ? isDoubleDepth ? DUP2_X2 : isSingleDepth ? DUP2_X1 : DUP2
@@ -1733,28 +1733,28 @@ public class CodeGenerator implements NodeVisitor {
     }
 
     /**
-     * Visits the given assignement expression as a simple name variable or field.
-     * @param assignementExpression the assignement expression
+     * Visits the given assignment expression as a simple name variable or field.
+     * @param assignmentExpression the assignment expression
      * @param simpleName the simple name
      * @param isResultNeeded whether the result value is needed
      */
-    private void visitSimpleNameAssignement(AssignementExpression assignementExpression, SimpleName simpleName, boolean isResultNeeded) {
+    private void visitSimpleNameAssignement(AssignmentExpression assignmentExpression, SimpleName simpleName, boolean isResultNeeded) {
         Variable variable = variableTable.findVariableWithName(simpleName.getName());
 
-        //Generate variable assignement
+        //Generate variable assignment
         if(variable != null) {
-            //Load variable if augmented assignement
-            if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT)
+            //Load variable if augmented assignment
+            if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT)
                 addInstruction(Instruction.forLoading(variable));
 
-            //Visit assignement
-            visitAssignement(assignementExpression, variable.getType(), isResultNeeded, false, false);
+            //Visit assignment
+            visitAssignement(assignmentExpression, variable.getType(), isResultNeeded, false, false);
 
             //Generate instructions
             addInstruction(Instruction.forStoring(variable));
         }
 
-        //Generate field assignement
+        //Generate field assignment
         else {
             FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), classSymbol);
 
@@ -1762,8 +1762,8 @@ public class CodeGenerator implements NodeVisitor {
             if(!fieldSymbol.isStatic())
                 addInstruction(ALOAD_0);
 
-            //Load field if augmented assignement
-            if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT) {
+            //Load field if augmented assignment
+            if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT) {
                 if(fieldSymbol.isStatic()) {
                     generateGetStaticField(fieldSymbol);
                 } else {
@@ -1772,8 +1772,8 @@ public class CodeGenerator implements NodeVisitor {
                 }
             }
 
-            //Visit assignement
-            visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
+            //Visit assignment
+            visitAssignement(assignmentExpression, fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
 
             //Generate instructions
             generatePutField(fieldSymbol);
@@ -1781,12 +1781,12 @@ public class CodeGenerator implements NodeVisitor {
     }
 
     /**
-     * Visits the given assignement expression as a member access field.
-     * @param assignementExpression the assignement expression
+     * Visits the given assignment expression as a member access field.
+     * @param assignmentExpression the assignment expression
      * @param memberAccess the member access
      * @param isResultNeeded whether the result value is needed
      */
-    private void visitMemberAccessAssignement(AssignementExpression assignementExpression, MemberAccess memberAccess, boolean isResultNeeded) {
+    private void visitMemberAccessAssignement(AssignmentExpression assignmentExpression, MemberAccess memberAccess, boolean isResultNeeded) {
         Expression member = (Expression) memberAccess.getMember();
         SimpleName simpleName = (SimpleName) memberAccess.getAccessor();
 
@@ -1797,26 +1797,26 @@ public class CodeGenerator implements NodeVisitor {
         ClassSymbol classSymbol = ((Object) memberType).getClassSymbol();
         FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), this.classSymbol);
 
-        //Load field if augmented assignement
-        if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT) {
+        //Load field if augmented assignment
+        if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT) {
             addInstruction(DUP);
             generateGetInstanceField(fieldSymbol);
         }
 
-        //Visit assignement
-        visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, true, false);
+        //Visit assignment
+        visitAssignement(assignmentExpression, fieldSymbol.getType(), isResultNeeded, true, false);
 
         //Generate instructions
         generatePutInstanceField(fieldSymbol);
     }
 
     /**
-     * Visits the given assignement expression as a qualified name field.
-     * @param assignementExpression the assignement expression
+     * Visits the given assignment expression as a qualified name field.
+     * @param assignmentExpression the assignment expression
      * @param qualifiedName the qualified name
      * @param isResultNeeded whether the result value is needed
      */
-    private void visitQualifiedNameAssignement(AssignementExpression assignementExpression, QualifiedName qualifiedName, boolean isResultNeeded) {
+    private void visitQualifiedNameAssignement(AssignmentExpression assignmentExpression, QualifiedName qualifiedName, boolean isResultNeeded) {
         Expression member = (Expression) qualifiedName.getQualifiedName();
 
         Type memberType = member.getExpressionType();
@@ -1831,8 +1831,8 @@ public class CodeGenerator implements NodeVisitor {
         ClassSymbol classSymbol = ((Object) memberType).getClassSymbol();
         FieldSymbol fieldSymbol = classSymbol.findField(qualifiedName.getName(), this.classSymbol);
 
-        //Load field if augmented assignement
-        if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT) {
+        //Load field if augmented assignment
+        if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT) {
             if(fieldSymbol.isStatic()) {
                 generateGetStaticField(fieldSymbol);
             } else {
@@ -1841,34 +1841,34 @@ public class CodeGenerator implements NodeVisitor {
             }
         }
 
-        //Visit assignement
-        visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
+        //Visit assignment
+        visitAssignement(assignmentExpression, fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
 
         //Generate instructions
         generatePutField(fieldSymbol);
     }
 
     /**
-     * Visits the given assignement expression as an array access.
-     * @param assignementExpression the assignement expression
+     * Visits the given assignment expression as an array access.
+     * @param assignmentExpression the assignment expression
      * @param arrayAccess the array access
      * @param isResultNeeded whether the result value is needed
      */
-    private void visitArrayAccessAssignement(AssignementExpression assignementExpression, ArrayAccess arrayAccess, boolean isResultNeeded) {
+    private void visitArrayAccessAssignement(AssignmentExpression assignmentExpression, ArrayAccess arrayAccess, boolean isResultNeeded) {
         //Visit array and access expression
         arrayAccess.getArray().accept(this);
         arrayAccess.getAccessExpression().accept(this);
 
-        Expression expression = (Expression) assignementExpression.getExpression();
+        Expression expression = (Expression) assignmentExpression.getExpression();
 
-        //Load array if augmented assignement
-        if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT) {
+        //Load array if augmented assignment
+        if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT) {
             addInstruction(DUP2);
             addInstruction(Instruction.forLoadingFromArray(expression.getExpressionType()));
         }
 
-        //Visit assignement
-        visitAssignement(assignementExpression, expression.getExpressionType(), isResultNeeded, false, true);
+        //Visit assignment
+        visitAssignement(assignmentExpression, expression.getExpressionType(), isResultNeeded, false, true);
 
         //Generate instructions
         addInstruction(Instruction.forStoringInArray(expression.getExpressionType()));
@@ -2115,33 +2115,33 @@ public class CodeGenerator implements NodeVisitor {
     }
 
     /**
-     * Generates the instruction for the given assignement expression according to the given primitive.
-     * @param assignementExpression the assignement expression
+     * Generates the instruction for the given assignment expression according to the given primitive.
+     * @param assignmentExpression the assignment expression
      * @param primitive the primitive
      */
-    private void generateAssignementOperation(AssignementExpression assignementExpression, Primitive primitive) {
-        switch(assignementExpression.getKind()) {
-            case ASSIGNEMENT_ADDITION ->
+    private void generateAssignementOperation(AssignmentExpression assignmentExpression, Primitive primitive) {
+        switch(assignmentExpression.getKind()) {
+            case ASSIGNMENT_ADDITION ->
                     addInstruction(Instruction.forAdditionOperation(primitive));
-            case ASSIGNEMENT_SUBTRACTION ->
+            case ASSIGNMENT_SUBTRACTION ->
                     addInstruction(Instruction.forSubtractionOperation(primitive));
-            case ASSIGNEMENT_MULTIPLICATION ->
+            case ASSIGNMENT_MULTIPLICATION ->
                     addInstruction(Instruction.forMultiplicationOperation(primitive));
-            case ASSIGNEMENT_DIVISION ->
+            case ASSIGNMENT_DIVISION ->
                     addInstruction(Instruction.forDivisionOperation(primitive));
-            case ASSIGNEMENT_MODULO ->
+            case ASSIGNMENT_MODULO ->
                     addInstruction(Instruction.forModuloOperation(primitive));
-            case ASSIGNEMENT_BITWISE_AND ->
+            case ASSIGNMENT_BITWISE_AND ->
                     addInstruction(Instruction.forBitwiseAndOperation(primitive));
-            case ASSIGNEMENT_BITWISE_XOR ->
+            case ASSIGNMENT_BITWISE_XOR ->
                     addInstruction(Instruction.forBitwiseXorOperation(primitive));
-            case ASSIGNEMENT_BITWISE_OR ->
+            case ASSIGNMENT_BITWISE_OR ->
                     addInstruction(Instruction.forBitwiseOrOperation(primitive));
-            case ASSIGNEMENT_SHIFT_LEFT ->
+            case ASSIGNMENT_SHIFT_LEFT ->
                     addInstruction(Instruction.forShiftLeftOperation(primitive));
-            case ASSIGNEMENT_SHIFT_RIGHT ->
+            case ASSIGNMENT_SHIFT_RIGHT ->
                     addInstruction(Instruction.forShiftRightOperation(primitive));
-            case ASSIGNEMENT_SHIFT_RIGHT_ARITHMETIC ->
+            case ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC ->
                     addInstruction(Instruction.forShiftRightArithmeticOperation(primitive));
         }
     }

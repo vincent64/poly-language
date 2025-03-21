@@ -1,6 +1,6 @@
 package poly.compiler.analyzer.content;
 
-import poly.compiler.parser.tree.expression.AssignementExpression;
+import poly.compiler.parser.tree.expression.AssignmentExpression;
 import poly.compiler.parser.tree.expression.BinaryExpression;
 import poly.compiler.parser.tree.expression.UnaryExpression;
 import poly.compiler.tokenizer.content.Operator;
@@ -73,23 +73,23 @@ public class OperatorMethod {
     }
 
     /**
-     * Returns the method name for the given assignement kind.
-     * @param assignementKind the assignement kind
+     * Returns the method name for the given assignment kind.
+     * @param assignmentKind the assignment kind
      * @return the operator overload method name
      */
-    public static String getNameFromAssignementExpression(AssignementExpression.Kind assignementKind) {
-        return switch(assignementKind) {
-            case ASSIGNEMENT_ADDITION -> Kind.ASSIGN_ADD.getMethodName();
-            case ASSIGNEMENT_SUBTRACTION -> Kind.ASSIGN_SUB.getMethodName();
-            case ASSIGNEMENT_MULTIPLICATION -> Kind.ASSIGN_MUL.getMethodName();
-            case ASSIGNEMENT_DIVISION -> Kind.ASSIGN_DIV.getMethodName();
-            case ASSIGNEMENT_MODULO -> Kind.ASSIGN_MOD.getMethodName();
-            case ASSIGNEMENT_BITWISE_AND -> Kind.ASSIGN_BITWISE_AND.getMethodName();
-            case ASSIGNEMENT_BITWISE_XOR -> Kind.ASSIGN_BITWISE_XOR.getMethodName();
-            case ASSIGNEMENT_BITWISE_OR -> Kind.ASSIGN_BITWISE_OR.getMethodName();
-            case ASSIGNEMENT_SHIFT_LEFT -> Kind.ASSIGN_SHIFT_LEFT.getMethodName();
-            case ASSIGNEMENT_SHIFT_RIGHT -> Kind.ASSIGN_SHIFT_RIGHT.getMethodName();
-            case ASSIGNEMENT_SHIFT_RIGHT_ARITHMETIC -> Kind.ASSIGN_SHIFT_RIGHT_ARITHMETIC.getMethodName();
+    public static String getNameFromAssignmentExpression(AssignmentExpression.Kind assignmentKind) {
+        return switch(assignmentKind) {
+            case ASSIGNMENT_ADDITION -> Kind.ASSIGN_ADD.getMethodName();
+            case ASSIGNMENT_SUBTRACTION -> Kind.ASSIGN_SUB.getMethodName();
+            case ASSIGNMENT_MULTIPLICATION -> Kind.ASSIGN_MUL.getMethodName();
+            case ASSIGNMENT_DIVISION -> Kind.ASSIGN_DIV.getMethodName();
+            case ASSIGNMENT_MODULO -> Kind.ASSIGN_MOD.getMethodName();
+            case ASSIGNMENT_BITWISE_AND -> Kind.ASSIGN_BITWISE_AND.getMethodName();
+            case ASSIGNMENT_BITWISE_XOR -> Kind.ASSIGN_BITWISE_XOR.getMethodName();
+            case ASSIGNMENT_BITWISE_OR -> Kind.ASSIGN_BITWISE_OR.getMethodName();
+            case ASSIGNMENT_SHIFT_LEFT -> Kind.ASSIGN_SHIFT_LEFT.getMethodName();
+            case ASSIGNMENT_SHIFT_RIGHT -> Kind.ASSIGN_SHIFT_RIGHT.getMethodName();
+            case ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC -> Kind.ASSIGN_SHIFT_RIGHT_ARITHMETIC.getMethodName();
             default -> null;
         };
     }
@@ -132,7 +132,7 @@ public class OperatorMethod {
         SHIFT_RIGHT(Operator.SHIFT_RIGHT, Name.SHIFT_RIGHT),
         SHIFT_RIGHT_ARITHMETIC(Operator.SHIFT_RIGHT_ARITHMETIC, Name.SHIFT_RIGHT_ARITHMETIC),
 
-        //Assignement operations
+        //Assignment operations
         ASSIGN_ADD(Operator.ASSIGN_ADD, Name.ASSIGN_ADD),
         ASSIGN_SUB(Operator.ASSIGN_SUB, Name.ASSIGN_SUB),
         ASSIGN_MUL(Operator.ASSIGN_MUL, Name.ASSIGN_MUL),
@@ -210,7 +210,7 @@ public class OperatorMethod {
         public static final String SHIFT_RIGHT = "$shiftRight";
         public static final String SHIFT_RIGHT_ARITHMETIC = "$shiftRightArithmetic";
 
-        //Assignement operators
+        //Assignment operators
         public static final String ASSIGN_ADD = "$assignAdd";
         public static final String ASSIGN_SUB = "$assignSub";
         public static final String ASSIGN_MUL = "$assignMul";

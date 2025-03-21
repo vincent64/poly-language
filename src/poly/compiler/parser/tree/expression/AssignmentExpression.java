@@ -6,17 +6,17 @@ import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
 
 /**
- * The AssignementExpression class. This class represents an assignement-expression,
- * and contains the assignement kind, the variable being assigned and the
- * assignement expression.
+ * The AssignmentExpression class. This class represents an assignment-expression,
+ * and contains the assignment kind, the variable being assigned and the
+ * assignment expression.
  * @author Vincent Philippe (@vincent64)
  */
-public class AssignementExpression extends Expression {
+public class AssignmentExpression extends Expression {
     private Kind kind;
     private Node variable;
     private Node expression;
 
-    public AssignementExpression(Meta meta) {
+    public AssignmentExpression(Meta meta) {
         super(meta);
     }
 
@@ -46,17 +46,17 @@ public class AssignementExpression extends Expression {
 
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visitVariableAssignement(this);
+        visitor.visitAssignmentExpression(this);
     }
 
     @Override
     public Node accept(NodeModifier modifier) {
-        return modifier.visitVariableAssignement(this);
+        return modifier.visitAssignmentExpression(this);
     }
 
     @Override
     public String toString() {
-        NodeStringifier string = new NodeStringifier("AssignementExpression",
+        NodeStringifier string = new NodeStringifier("AssignmentExpression",
                 "kind=" + kind);
         string.addString("Variable:");
         string.addNode(variable);
@@ -67,21 +67,21 @@ public class AssignementExpression extends Expression {
     }
 
     /**
-     * The AssignementExpression.Kind enum. This enum contains every kind of
-     * assignement expression there exists.
+     * The AssignmentExpression.Kind enum. This enum contains every kind of
+     * assignment expression there exists.
      */
     public enum Kind {
-        ASSIGNEMENT,
-        ASSIGNEMENT_ADDITION,
-        ASSIGNEMENT_SUBTRACTION,
-        ASSIGNEMENT_MULTIPLICATION,
-        ASSIGNEMENT_DIVISION,
-        ASSIGNEMENT_MODULO,
-        ASSIGNEMENT_BITWISE_AND,
-        ASSIGNEMENT_BITWISE_XOR,
-        ASSIGNEMENT_BITWISE_OR,
-        ASSIGNEMENT_SHIFT_LEFT,
-        ASSIGNEMENT_SHIFT_RIGHT,
-        ASSIGNEMENT_SHIFT_RIGHT_ARITHMETIC
+        ASSIGNMENT,
+        ASSIGNMENT_ADDITION,
+        ASSIGNMENT_SUBTRACTION,
+        ASSIGNMENT_MULTIPLICATION,
+        ASSIGNMENT_DIVISION,
+        ASSIGNMENT_MODULO,
+        ASSIGNMENT_BITWISE_AND,
+        ASSIGNMENT_BITWISE_XOR,
+        ASSIGNMENT_BITWISE_OR,
+        ASSIGNMENT_SHIFT_LEFT,
+        ASSIGNMENT_SHIFT_RIGHT,
+        ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC
     }
 }

@@ -1221,12 +1221,12 @@ public class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitVariableAssignement(AssignementExpression assignementExpression) {
+    public Node visitAssignmentExpression(AssignmentExpression assignmentExpression) {
         //Visit variable
-        assignementExpression.setVariable(assignementExpression.getVariable().accept(this));
+        assignmentExpression.setVariable(assignmentExpression.getVariable().accept(this));
 
-        Expression variableExpression = (Expression) assignementExpression.getVariable();
-        Expression expression = (Expression) assignementExpression.getExpression();
+        Expression variableExpression = (Expression) assignmentExpression.getVariable();
+        Expression expression = (Expression) assignmentExpression.getExpression();
 
         //Make sure the variable is a variable expression
         if(!isVariableExpression(variableExpression))
@@ -1237,14 +1237,14 @@ public class Analyzer implements NodeModifier {
 
         Type variableType = variableExpression.getExpressionType();
 
-        //Analyze simple assignement
-        if(assignementExpression.getKind() == AssignementExpression.Kind.ASSIGNEMENT) {
+        //Analyze simple assignment
+        if(assignmentExpression.getKind() == AssignmentExpression.Kind.ASSIGNMENT) {
             //Infer type if possible
             inferType(expression, variableType);
 
-            //Visit assignement expression
-            assignementExpression.setExpression(assignementExpression.getExpression().accept(this));
-            expression = (Expression) assignementExpression.getExpression();
+            //Visit assignment expression
+            assignmentExpression.setExpression(assignmentExpression.getExpression().accept(this));
+            expression = (Expression) assignmentExpression.getExpression();
 
             //Make sure the type is not a primitive if the expression is null
             if(isNullExpression(expression)) {
@@ -1252,7 +1252,7 @@ public class Analyzer implements NodeModifier {
                     new AnalyzingError.TypeConversion(expression,
                             expression.getExpressionType(), variableType);
 
-                return assignementExpression;
+                return assignmentExpression;
             }
 
             //Make sure the expression type is assignable to the variable type
@@ -1261,63 +1261,63 @@ public class Analyzer implements NodeModifier {
                         expression.getExpressionType(), variableType);
 
             //Define resulting type
-            assignementExpression.setExpressionType(variableType);
+            assignmentExpression.setExpressionType(variableType);
         }
 
-        //Analyze augmented assignement
+        //Analyze augmented assignment
         else {
-            //Visit assignement expression
-            assignementExpression.setExpression(assignementExpression.getExpression().accept(this));
-            expression = (Expression) assignementExpression.getExpression();
+            //Visit assignment expression
+            assignmentExpression.setExpression(assignmentExpression.getExpression().accept(this));
+            expression = (Expression) assignmentExpression.getExpression();
 
             Type expressionType = expression.getExpressionType();
 
             //Make sure the variable is not an array
             if(variableType instanceof Array)
-                new AnalyzingError.InvalidAssignement(assignementExpression);
+                new AnalyzingError.InvalidAssignment(assignmentExpression);
 
-            //Analyze primitive assignement
+            //Analyze primitive assignment
             if(variableType instanceof Primitive primitive) {
-                switch(assignementExpression.getKind()) {
-                    case ASSIGNEMENT_ADDITION, ASSIGNEMENT_SUBTRACTION, ASSIGNEMENT_MULTIPLICATION,
-                            ASSIGNEMENT_DIVISION, ASSIGNEMENT_MODULO -> {
+                switch(assignmentExpression.getKind()) {
+                    case ASSIGNMENT_ADDITION, ASSIGNMENT_SUBTRACTION, ASSIGNMENT_MULTIPLICATION,
+                         ASSIGNMENT_DIVISION, ASSIGNMENT_MODULO -> {
                         //Make sure the type is numerical
                         if(!primitive.isNumericalType())
-                            new AnalyzingError.InvalidAssignement(assignementExpression);
+                            new AnalyzingError.InvalidAssignment(assignmentExpression);
 
                         //Make sure the types are equal
                         if(!variableType.equals(expressionType))
-                            new AnalyzingError.TypeConversion(assignementExpression,
+                            new AnalyzingError.TypeConversion(assignmentExpression,
                                     expressionType, variableType);
 
                         //Define resulting type
-                        assignementExpression.setExpressionType(variableType);
+                        assignmentExpression.setExpressionType(variableType);
                     }
 
-                    case ASSIGNEMENT_BITWISE_AND, ASSIGNEMENT_BITWISE_XOR, ASSIGNEMENT_BITWISE_OR,
-                            ASSIGNEMENT_SHIFT_LEFT, ASSIGNEMENT_SHIFT_RIGHT, ASSIGNEMENT_SHIFT_RIGHT_ARITHMETIC -> {
+                    case ASSIGNMENT_BITWISE_AND, ASSIGNMENT_BITWISE_XOR, ASSIGNMENT_BITWISE_OR,
+                         ASSIGNMENT_SHIFT_LEFT, ASSIGNMENT_SHIFT_RIGHT, ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC -> {
                         //Make sure the type is integer
                         if(!primitive.isIntegerType())
-                            new AnalyzingError.InvalidAssignement(assignementExpression);
+                            new AnalyzingError.InvalidAssignment(assignmentExpression);
 
                         //Make sure the types are equal
                         if(!variableType.equals(expressionType))
-                            new AnalyzingError.TypeConversion(assignementExpression,
+                            new AnalyzingError.TypeConversion(assignmentExpression,
                                     expressionType, variableType);
 
                         //Define resulting type
-                        assignementExpression.setExpressionType(variableType);
+                        assignmentExpression.setExpressionType(variableType);
                     }
                 }
             }
 
-            //Analyze object assignement
+            //Analyze object assignment
             else if(variableType instanceof Object) {
-                return visitAssignementOperationOverload(assignementExpression);
+                return visitAssignmentOperationOverload(assignmentExpression);
             }
         }
 
-        return assignementExpression;
+        return assignmentExpression;
     }
 
     @Override
@@ -1620,13 +1620,13 @@ public class Analyzer implements NodeModifier {
     }
 
     /**
-     * Visits the given assignement expression as an operation overload and returns the transformed node.
-     * @param assignementExpression the assignement expression
+     * Visits the given assignment expression as an operation overload and returns the transformed node.
+     * @param assignmentExpression the assignment expression
      * @return the transformed node
      */
-    private Node visitAssignementOperationOverload(AssignementExpression assignementExpression) {
-        Expression variableExpression = (Expression) assignementExpression.getVariable();
-        Expression expression = (Expression) assignementExpression.getExpression();
+    private Node visitAssignmentOperationOverload(AssignmentExpression assignmentExpression) {
+        Expression variableExpression = (Expression) assignmentExpression.getVariable();
+        Expression expression = (Expression) assignmentExpression.getExpression();
 
         Type expressionType = expression.getExpressionType();
         Object object = (Object) variableExpression.getExpressionType();
@@ -1634,21 +1634,21 @@ public class Analyzer implements NodeModifier {
 
         //Make sure the expression is not null
         if(isNullExpression(variableExpression))
-            new AnalyzingError.InvalidAssignement(assignementExpression);
+            new AnalyzingError.InvalidAssignment(assignmentExpression);
 
-        //Get assignement overload name from expression
-        String methodName = OperatorMethod.getNameFromAssignementExpression(assignementExpression.getKind());
+        //Get assignment overload name from expression
+        String methodName = OperatorMethod.getNameFromAssignmentExpression(assignmentExpression.getKind());
 
         Type[] argumentTypes = new Type[] { expressionType };
 
-        //Find assignement overload method
-        MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, assignementExpression);
+        //Find assignment overload method
+        MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, assignmentExpression);
 
-        //Make sure the object supports the assignement
+        //Make sure the object supports the assignment
         if(methodSymbol == null)
-            new AnalyzingError.InvalidAssignement(assignementExpression);
+            new AnalyzingError.InvalidAssignment(assignmentExpression);
 
-        return transformOperationOverload(assignementExpression, variableExpression, expression, methodName);
+        return transformOperationOverload(assignmentExpression, variableExpression, expression, methodName);
     }
 
     /**
@@ -1925,7 +1925,7 @@ public class Analyzer implements NodeModifier {
             if(variable != null) {
                 //Make sure the variable isn't already assigned if constant
                 if(variable.isConstant() && variable.isAssigned())
-                    new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+                    new AnalyzingError.InvalidConstantAssignment(variableExpression, simpleName.getName());
 
             } else {
                 //Find field in current class
@@ -1933,7 +1933,7 @@ public class Analyzer implements NodeModifier {
 
                 //Make sure the field is not assigned outside constructor if constant
                 if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
-                    new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+                    new AnalyzingError.InvalidConstantAssignment(variableExpression, simpleName.getName());
             }
         }
 
@@ -1944,14 +1944,14 @@ public class Analyzer implements NodeModifier {
 
             //Make sure the variable is not the array size
             if(type.getKind() == Type.Kind.ARRAY)
-                new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+                new AnalyzingError.InvalidConstantAssignment(variableExpression, simpleName.getName());
 
             ClassSymbol classSymbol = ((Object) type).getClassSymbol();
             FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), this.classSymbol);
 
             //Make sure the field is not assigned outside constructor if constant
             if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
-                new AnalyzingError.InvalidConstantAssignement(variableExpression, simpleName.getName());
+                new AnalyzingError.InvalidConstantAssignment(variableExpression, simpleName.getName());
         }
 
         //Analyze qualified name variable
@@ -1966,14 +1966,14 @@ public class Analyzer implements NodeModifier {
 
             //Make sure the variable is not the array size
             if(type.getKind() == Type.Kind.ARRAY)
-                new AnalyzingError.InvalidConstantAssignement(variableExpression, qualifiedName.getName());
+                new AnalyzingError.InvalidConstantAssignment(variableExpression, qualifiedName.getName());
 
             ClassSymbol classSymbol = ((Object) type).getClassSymbol();
             FieldSymbol fieldSymbol = classSymbol.findField(qualifiedName.getName(), this.classSymbol);
 
             //Make sure the field is not assigned outside constructor if constant
             if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
-                new AnalyzingError.InvalidConstantAssignement(variableExpression, qualifiedName.getName());
+                new AnalyzingError.InvalidConstantAssignment(variableExpression, qualifiedName.getName());
         }
     }
 
@@ -2042,7 +2042,7 @@ public class Analyzer implements NodeModifier {
      */
     private boolean isExpressionStatement(Node node) {
         return node instanceof MethodCall
-                || node instanceof AssignementExpression
+                || node instanceof AssignmentExpression
                 || node instanceof ClassCreation
                 || (node instanceof MemberAccess memberAccess
                     && memberAccess.getAccessor() instanceof MethodCall)

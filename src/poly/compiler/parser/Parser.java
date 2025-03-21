@@ -764,7 +764,7 @@ public class Parser {
         if(isMatching(EXPRESSION_PROD))
             return parseProdExpression();
 
-        return parseExpressionAssignement();
+        return parseExpressionAssignment();
     }
 
     private Node parseIfExpression() {
@@ -848,41 +848,41 @@ public class Parser {
         return node;
     }
 
-    private Node parseExpressionAssignement() {
+    private Node parseExpressionAssignment() {
         Node node = parseExpressionNullCoalescing();
 
-        //Parse assignement expression
+        //Parse assignment expression
         if(isAssignOperator(currentToken)) {
-            AssignementExpression assignementExpression = new AssignementExpression(Node.Meta.fromLeadingToken(currentToken));
+            AssignmentExpression assignmentExpression = new AssignmentExpression(Node.Meta.fromLeadingToken(currentToken));
 
             if(matches(Symbol.EQUAL))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT);
             if(matches(ASSIGN_ADD))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_ADDITION);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_ADDITION);
             if(matches(ASSIGN_SUB))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SUBTRACTION);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SUBTRACTION);
             if(matches(ASSIGN_MUL))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_MULTIPLICATION);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_MULTIPLICATION);
             if(matches(ASSIGN_DIV))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_DIVISION);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_DIVISION);
             if(matches(ASSIGN_MOD))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_MODULO);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_MODULO);
             if(matches(ASSIGN_BITWISE_AND))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_BITWISE_AND);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_BITWISE_AND);
             if(matches(ASSIGN_BITWISE_XOR))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_BITWISE_XOR);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_BITWISE_XOR);
             if(matches(ASSIGN_BITWISE_OR))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_BITWISE_OR);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_BITWISE_OR);
             if(matches(ASSIGN_SHIFT_LEFT))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SHIFT_LEFT);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SHIFT_LEFT);
             if(matches(ASSIGN_SHIFT_RIGHT))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SHIFT_RIGHT);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SHIFT_RIGHT);
             if(matches(ASSIGN_SHIFT_RIGHT_ARITHMETIC))
-                assignementExpression.setKind(AssignementExpression.Kind.ASSIGNEMENT_SHIFT_RIGHT_ARITHMETIC);
+                assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC);
 
-            assignementExpression.setVariable(node);
-            assignementExpression.setExpression(parseExpression());
-            node = assignementExpression;
+            assignmentExpression.setVariable(node);
+            assignmentExpression.setExpression(parseExpression());
+            node = assignmentExpression;
         }
 
         return node;
