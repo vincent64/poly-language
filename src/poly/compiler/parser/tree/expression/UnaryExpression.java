@@ -83,6 +83,14 @@ public class UnaryExpression extends Expression {
             return this == PRE_DECREMENT || this == POST_DECREMENT;
         }
 
+        public boolean isPreIncrementDecrement() {
+            return this == PRE_INCREMENT || this == PRE_DECREMENT;
+        }
+
+        public boolean isPostIncrementDecrement() {
+            return this == POST_INCREMENT || this == POST_DECREMENT;
+        }
+
         @Override
         public String toString() {
             return name;
