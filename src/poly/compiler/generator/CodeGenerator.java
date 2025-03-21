@@ -1758,19 +1758,24 @@ public class CodeGenerator implements NodeVisitor {
             FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), classSymbol);
 
             //Generate instructions
-            addInstruction(ALOAD_0);
+            if(!fieldSymbol.isStatic())
+                addInstruction(ALOAD_0);
 
             //Load field if augmented assignement
             if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT) {
-                addInstruction(DUP);
-                generateGetField(fieldSymbol);
+                if(fieldSymbol.isStatic()) {
+                    generateGetStaticField(fieldSymbol);
+                } else {
+                    addInstruction(DUP);
+                    generateGetInstanceField(fieldSymbol);
+                }
             }
 
             //Visit assignement
             visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, false);
 
             //Generate instructions
-            generatePutInstanceField(fieldSymbol);
+            generatePutField(fieldSymbol);
         }
     }
 
