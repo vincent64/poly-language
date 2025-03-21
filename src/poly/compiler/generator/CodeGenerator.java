@@ -1878,17 +1878,16 @@ public class CodeGenerator implements NodeVisitor {
      * @param unaryExpression the unary expression
      * @param primitive the increment primitive
      * @param isResultNeeded whether the result value is needed
-     * @param isDoubleStackDepth whether the stack depth is two values deep (for array increment)
+     * @param isSingleDepth whether the stack depth is one value deep (for instance increment)
+     * @param isDoubleDepth whether the stack depth is two values deep (for array increment)
      */
     private void visitIncrement(UnaryExpression unaryExpression, Primitive primitive,
-                                boolean isResultNeeded, boolean isDoubleStackDepth) {
+                                boolean isResultNeeded, boolean isSingleDepth, boolean isDoubleDepth) {
         //Duplicate value before increment
-        if(isResultNeeded) {
-            if(unaryExpression.getKind() == UnaryExpression.Kind.POST_INCREMENT
-                    || unaryExpression.getKind() == UnaryExpression.Kind.POST_DECREMENT)
-                addInstruction(primitive.isWideType()
-                        ? isDoubleStackDepth ? DUP2_X2 : DUP_X2
-                        : isDoubleStackDepth ? DUP_X2 : DUP_X1);
+        if(isResultNeeded && unaryExpression.getKind().isPostIncrementDecrement()) {
+            addInstruction(primitive.isWideType()
+                    ? isDoubleDepth ? DUP2_X2 : isSingleDepth ? DUP2_X1 : DUP2
+                    : isDoubleDepth ? DUP_X2 : isSingleDepth ? DUP_X1 : DUP);
         }
 
         //Generate instructions
@@ -1900,12 +1899,10 @@ public class CodeGenerator implements NodeVisitor {
                 : Instruction.forSubtractionOperation(primitive));
 
         //Duplicate result after increment
-        if(isResultNeeded) {
-            if(unaryExpression.getKind() == UnaryExpression.Kind.PRE_INCREMENT
-                    || unaryExpression.getKind() == UnaryExpression.Kind.PRE_DECREMENT)
-                addInstruction(primitive.isWideType()
-                        ? isDoubleStackDepth ? DUP2_X2 : DUP_X2
-                        : isDoubleStackDepth ? DUP_X2 : DUP_X1);
+        if(isResultNeeded && unaryExpression.getKind().isPreIncrementDecrement()) {
+            addInstruction(primitive.isWideType()
+                    ? isDoubleDepth ? DUP2_X2 : isSingleDepth ? DUP2_X1 : DUP2
+                    : isDoubleDepth ? DUP_X2 : isSingleDepth ? DUP_X1 : DUP);
         }
     }
 
@@ -1926,7 +1923,7 @@ public class CodeGenerator implements NodeVisitor {
             addInstruction(Instruction.forLoading(variable));
 
             //Visit increment
-            visitIncrement(unaryExpression, primitive, isResultNeeded, false);
+            visitIncrement(unaryExpression, primitive, isResultNeeded, false, false);
 
             //Generate instruction
             addInstruction(Instruction.forStoring(variable));
@@ -1946,7 +1943,7 @@ public class CodeGenerator implements NodeVisitor {
             }
 
             //Visit increment
-            visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, false);
+            visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
 
             //Generate instructions
             generatePutField(fieldSymbol);
@@ -1975,7 +1972,7 @@ public class CodeGenerator implements NodeVisitor {
         generateGetInstanceField(fieldSymbol);
 
         //Visit increment
-        visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, false);
+        visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, true, false);
 
         //Generate instructions
         generatePutInstanceField(fieldSymbol);
@@ -2011,7 +2008,7 @@ public class CodeGenerator implements NodeVisitor {
         }
 
         //Visit increment
-        visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, false);
+        visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
 
         //Generate instructions
         generatePutField(fieldSymbol);
@@ -2035,7 +2032,7 @@ public class CodeGenerator implements NodeVisitor {
         addInstruction(Instruction.forLoadingFromArray(expression.getExpressionType()));
 
         //Visit increment
-        visitIncrement(unaryExpression, (Primitive) expression.getExpressionType(), isResultNeeded, true);
+        visitIncrement(unaryExpression, (Primitive) expression.getExpressionType(), isResultNeeded, false, true);
 
         //Generate instructions
         addInstruction(Instruction.forStoringInArray(expression.getExpressionType()));
