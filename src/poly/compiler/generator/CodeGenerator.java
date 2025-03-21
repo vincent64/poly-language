@@ -1712,10 +1712,11 @@ public class CodeGenerator implements NodeVisitor {
      * @param assignementExpression the assignement expression
      * @param type the assignement type
      * @param isResultNeeded whether the result value is needed
-     * @param isDoubleStackDepth whether the stack depth is two values deep (for array assignement)
+     * @param isSingleDepth whether the stack depth is one value deep (for instance assignement)
+     * @param isDoubleDepth whether the stack depth is two values deep (for array assignement)
      */
     private void visitAssignement(AssignementExpression assignementExpression, Type type,
-                                  boolean isResultNeeded, boolean isDoubleStackDepth) {
+                                  boolean isResultNeeded, boolean isSingleDepth, boolean isDoubleDepth) {
         //Visit assignement expression
         visitExpression((Expression) assignementExpression.getExpression());
 
@@ -1726,8 +1727,8 @@ public class CodeGenerator implements NodeVisitor {
         //Duplicate result after assignement
         if(isResultNeeded) {
             addInstruction(type instanceof Primitive primitive && primitive.isWideType()
-                    ? isDoubleStackDepth ? DUP2_X2 : DUP2
-                    : isDoubleStackDepth ? DUP_X2 : DUP);
+                    ? isDoubleDepth ? DUP2_X2 : isSingleDepth ? DUP2_X1 : DUP2
+                    : isDoubleDepth ? DUP_X2 : isSingleDepth ? DUP_X1 : DUP);
         }
     }
 
@@ -1747,7 +1748,7 @@ public class CodeGenerator implements NodeVisitor {
                 addInstruction(Instruction.forLoading(variable));
 
             //Visit assignement
-            visitAssignement(assignementExpression, variable.getType(), isResultNeeded, false);
+            visitAssignement(assignementExpression, variable.getType(), isResultNeeded, false, false);
 
             //Generate instructions
             addInstruction(Instruction.forStoring(variable));
@@ -1772,7 +1773,7 @@ public class CodeGenerator implements NodeVisitor {
             }
 
             //Visit assignement
-            visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, false);
+            visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
 
             //Generate instructions
             generatePutField(fieldSymbol);
@@ -1803,7 +1804,7 @@ public class CodeGenerator implements NodeVisitor {
         }
 
         //Visit assignement
-        visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, false);
+        visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, true, false);
 
         //Generate instructions
         generatePutInstanceField(fieldSymbol);
@@ -1841,7 +1842,7 @@ public class CodeGenerator implements NodeVisitor {
         }
 
         //Visit assignement
-        visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, false);
+        visitAssignement(assignementExpression, fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
 
         //Generate instructions
         generatePutField(fieldSymbol);
@@ -1867,7 +1868,7 @@ public class CodeGenerator implements NodeVisitor {
         }
 
         //Visit assignement
-        visitAssignement(assignementExpression, expression.getExpressionType(), isResultNeeded, true);
+        visitAssignement(assignementExpression, expression.getExpressionType(), isResultNeeded, false, true);
 
         //Generate instructions
         addInstruction(Instruction.forStoringInArray(expression.getExpressionType()));
