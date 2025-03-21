@@ -7,6 +7,7 @@ import poly.compiler.resolver.symbol.Symbol;
 import poly.compiler.tokenizer.Token;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Debug class. This class is a tool that provides the ability to print the code
@@ -36,10 +37,11 @@ public class Debug {
      * Prints the given library files as a list of class qualified names.
      * @param libraryFiles the library files
      */
-    public static void printLibraryFiles(List<LibraryFile> libraryFiles) {
+    public static void printLibraryFiles(Map<?, LibraryFile> libraryFiles) {
         if(DEBUG) {
             System.out.println("\nLIBRARY FILES -----------------------------------------------------------------------");
-            for(LibraryFile libraryFile : libraryFiles)
+            System.out.println("Total library files: " + libraryFiles.size());
+            for(LibraryFile libraryFile : libraryFiles.values())
                 System.out.println(libraryFile.getClassName().toInternalQualifiedName());
         }
     }
