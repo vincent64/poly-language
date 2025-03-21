@@ -1832,7 +1832,6 @@ public class CodeGenerator implements NodeVisitor {
 
         //Load field if augmented assignement
         if(assignementExpression.getKind() != AssignementExpression.Kind.ASSIGNEMENT) {
-            //Generate instructions
             if(fieldSymbol.isStatic()) {
                 generateGetStaticField(fieldSymbol);
             } else {
@@ -1888,8 +1887,8 @@ public class CodeGenerator implements NodeVisitor {
             if(unaryExpression.getKind() == UnaryExpression.Kind.POST_INCREMENT
                     || unaryExpression.getKind() == UnaryExpression.Kind.POST_DECREMENT)
                 addInstruction(primitive.isWideType()
-                        ? isDoubleStackDepth ? DUP2_X2 : DUP2
-                        : isDoubleStackDepth ? DUP_X2 : DUP);
+                        ? isDoubleStackDepth ? DUP2_X2 : DUP_X2
+                        : isDoubleStackDepth ? DUP_X2 : DUP_X1);
         }
 
         //Generate instructions
@@ -1905,8 +1904,8 @@ public class CodeGenerator implements NodeVisitor {
             if(unaryExpression.getKind() == UnaryExpression.Kind.PRE_INCREMENT
                     || unaryExpression.getKind() == UnaryExpression.Kind.PRE_DECREMENT)
                 addInstruction(primitive.isWideType()
-                        ? isDoubleStackDepth ? DUP2_X2 : DUP2
-                        : isDoubleStackDepth ? DUP_X2 : DUP);
+                        ? isDoubleStackDepth ? DUP2_X2 : DUP_X2
+                        : isDoubleStackDepth ? DUP_X2 : DUP_X1);
         }
     }
 
@@ -1942,6 +1941,7 @@ public class CodeGenerator implements NodeVisitor {
                 generateGetStaticField(fieldSymbol);
             } else {
                 addInstruction(ALOAD_0);
+                addInstruction(DUP);
                 generateGetInstanceField(fieldSymbol);
             }
 
@@ -1949,9 +1949,7 @@ public class CodeGenerator implements NodeVisitor {
             visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, false);
 
             //Generate instructions
-            addInstruction(ALOAD_0);
-            addInstruction(SWAP);
-            generatePutInstanceField(fieldSymbol);
+            generatePutField(fieldSymbol);
         }
     }
 
@@ -1973,6 +1971,7 @@ public class CodeGenerator implements NodeVisitor {
         FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), this.classSymbol);
 
         //Load field
+        addInstruction(DUP);
         generateGetInstanceField(fieldSymbol);
 
         //Visit increment
