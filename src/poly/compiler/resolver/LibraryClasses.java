@@ -10,8 +10,7 @@ import poly.compiler.resolver.symbol.PackageSymbol;
 import poly.compiler.resolver.symbol.Symbol;
 import poly.compiler.util.ClassName;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * The LibraryClasses class. This class contains every symbol from the libraries.
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class LibraryClasses {
     private static final PackageSymbol rootSymbol = new PackageSymbol("");
-    private static final List<LibraryFile> libraryFiles = new ArrayList<>();
+    private static final Map<String, LibraryFile> libraryFiles = new HashMap<>();
 
     private LibraryClasses() { }
 
@@ -28,18 +27,21 @@ public class LibraryClasses {
      */
     public static void loadLibraries() {
         //Load Java runtime library
-        libraryFiles.addAll(LibraryReader.loadJavaLibraryFiles());
+        for(LibraryFile libraryFile : LibraryReader.loadJavaLibraryFiles())
+            libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile);
 
         //Load Poly standard library
         if(Parameters.getPolylibPath() != null) {
             LibraryReader polyLibraryReader = LibraryReader.fromPolyLibrary(Parameters.getPolylibPath());
-            libraryFiles.addAll(polyLibraryReader.getLibraryFiles());
+            for(LibraryFile libraryFile : polyLibraryReader.getLibraryFiles())
+                libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile);
         }
 
         //Load third-party libraries
         if(Parameters.getLibraryPath() != null) {
             LibraryReader libraryReader = LibraryReader.fromLibrary(Parameters.getLibraryPath());
-            libraryFiles.addAll(libraryReader.getLibraryFiles());
+            for(LibraryFile libraryFile : libraryReader.getLibraryFiles())
+                libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile);
         }
 
         //Print the libraries for debugging
@@ -91,12 +93,7 @@ public class LibraryClasses {
      * @return the library file (null if not found)
      */
     private static LibraryFile findLibraryFile(ClassName className) {
-        for(LibraryFile libraryFile : libraryFiles) {
-            if(libraryFile.getClassName().isSimilar(className))
-                return libraryFile;
-        }
-
-        return null;
+        return libraryFiles.get(className.toQualifiedName());
     }
 
     /**
