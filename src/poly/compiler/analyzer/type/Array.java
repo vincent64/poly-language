@@ -32,8 +32,7 @@ public class Array extends Type {
     @Override
     public boolean equals(java.lang.Object object) {
         if(object instanceof Object array)
-            return array.getClassSymbol().getClassInternalQualifiedName()
-                    .equals(ClassName.OBJECT.toInternalQualifiedName());
+            return array.getClassSymbol().getClassName().equals(ClassName.OBJECT);
 
         if(!(object instanceof Array array))
             return false;
