@@ -1618,6 +1618,10 @@ public final class Analyzer implements NodeModifier {
         Object object = (Object) arrayExpression.getExpressionType();
         ClassSymbol classSymbol = object.getClassSymbol();
 
+        //Transform string character access
+        if(classSymbol.getClassName().equals(ClassName.STRING))
+            return transformer.transformStringCharacterAccess(arrayAccess);
+
         Type[] parameterTypes = { accessExpression.getExpressionType() };
 
         //Find access overload method
