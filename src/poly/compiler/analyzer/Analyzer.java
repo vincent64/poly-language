@@ -1557,7 +1557,7 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidUnaryOperation(unaryExpression);
 
-        return transformOperationOverload(unaryExpression, expression, null, methodName);
+        return transformer.transformOperationOverload(unaryExpression, expression, null, methodName);
     }
 
     /**
@@ -1596,7 +1596,7 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidBinaryOperation(binaryExpression);
 
-        return transformOperationOverload(binaryExpression, first, second, methodName);
+        return transformer.transformOperationOverload(binaryExpression, first, second, methodName);
     }
 
     /**
@@ -1620,7 +1620,7 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidArrayAccess(arrayAccess);
 
-        return transformOperationOverload(arrayAccess, arrayExpression, accessExpression, OperatorMethod.Name.ARRAY_ACCESS);
+        return transformer.transformOperationOverload(arrayAccess, arrayExpression, accessExpression, OperatorMethod.Name.ARRAY_ACCESS);
     }
 
     /**
@@ -1652,7 +1652,7 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidAssignment(assignmentExpression);
 
-        return transformOperationOverload(assignmentExpression, variableExpression, expression, methodName);
+        return transformer.transformOperationOverload(assignmentExpression, variableExpression, expression, methodName);
     }
 
     /**
@@ -1782,7 +1782,7 @@ public final class Analyzer implements NodeModifier {
             second = memberAccess;
         }
 
-        return transformOperationOverload(binaryExpression, first, second, "concat");
+        return transformer.transformOperationOverload(binaryExpression, first, second, "concat");
     }
 
     /**
@@ -2108,35 +2108,6 @@ public final class Analyzer implements NodeModifier {
      */
     private boolean isVoidExpression(Expression expression) {
         return expression.getExpressionType() instanceof Void;
-    }
-
-    /**
-     * Transforms the given node to an operation overload method call with the given method name,
-     * argument expression and the member expression.
-     * @param node the operation node
-     * @param expression the member expression
-     * @param argumentExpression the argument expression
-     * @param methodName the operation overload method name
-     * @return the transformed node
-     */
-    private Node transformOperationOverload(Node node, Expression expression, Expression argumentExpression, String methodName) {
-        //Transform operation to method call
-        MethodCall methodCall = new MethodCall(node.getMeta());
-        methodCall.setMethodName(methodName);
-
-        //Add argument expression to arguments list
-        ArgumentList argumentList = new ArgumentList(node.getMeta());
-        if(argumentExpression != null)
-            argumentList.addArgument(argumentExpression);
-
-        methodCall.setArgumentList(argumentList);
-
-        //Transform operation to member access
-        MemberAccess memberAccess = new MemberAccess(node.getMeta());
-        memberAccess.setMember(expression);
-        memberAccess.setAccessor(methodCall);
-
-        return memberAccess.accept(this);
     }
 
     /**
