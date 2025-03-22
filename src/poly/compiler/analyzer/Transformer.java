@@ -117,7 +117,7 @@ public final class Transformer {
         Expression second = (Expression) binaryExpression.getSecond();
         Type secondType = second.getExpressionType();
 
-        //Make sure the second expression type is an integer
+        //Make sure the second expression is an integer
         if(!(secondType instanceof Primitive primitive)
                 || primitive.getPrimitiveKind() != Primitive.Kind.INTEGER)
             new AnalyzingError.TypeConversion(binaryExpression, secondType, new Primitive(Primitive.Kind.INTEGER));
@@ -135,7 +135,7 @@ public final class Transformer {
         Expression access = (Expression) arrayAccess.getAccessExpression();
         Type accessType = access.getExpressionType();
 
-        //Make sure the second expression type is an integer
+        //Make sure the access expression is an integer
         if(!(accessType instanceof Primitive primitive)
                 || primitive.getPrimitiveKind() != Primitive.Kind.INTEGER)
             new AnalyzingError.TypeConversion(arrayAccess, accessType, new Primitive(Primitive.Kind.INTEGER));
