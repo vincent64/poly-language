@@ -124,4 +124,22 @@ public final class Transformer {
 
         return transformOperationOverload(binaryExpression, first, second, "repeat");
     }
+
+    /**
+     * Transforms the given array access node to a string character access method call node.
+     * @param arrayAccess the array access node
+     * @return the transformed node
+     */
+    Node transformStringCharacterAccess(ArrayAccess arrayAccess) {
+        Expression array = (Expression) arrayAccess.getArray();
+        Expression access = (Expression) arrayAccess.getAccessExpression();
+        Type accessType = access.getExpressionType();
+
+        //Make sure the second expression type is an integer
+        if(!(accessType instanceof Primitive primitive)
+                || primitive.getPrimitiveKind() != Primitive.Kind.INTEGER)
+            new AnalyzingError.TypeConversion(arrayAccess, accessType, new Primitive(Primitive.Kind.INTEGER));
+
+        return transformOperationOverload(arrayAccess, array, access, "charAt");
+    }
 }
