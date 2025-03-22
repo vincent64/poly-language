@@ -8,7 +8,7 @@ import poly.compiler.parser.tree.NodeModifier;
  * optimize operations with faster instructions, and much more.
  * @author Vincent Philippe (@vincent64)
  */
-public class Optimizer implements NodeModifier {
+public final class Optimizer implements NodeModifier {
     private Optimizer() {
         //TODO
     }

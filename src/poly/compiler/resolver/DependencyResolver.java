@@ -20,7 +20,7 @@ import java.util.Set;
  * This class represents the third and last step of the resolving process.
  * @author Vincent Philippe (@vincent64)
  */
-public class DependencyResolver {
+public final class DependencyResolver {
     private final ClassDefinition classDefinition;
 
     private DependencyResolver(ClassDefinition classDefinition) {

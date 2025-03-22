@@ -20,7 +20,7 @@ import java.util.List;
  * This class represents the first step of the resolving process.
  * @author Vincent Philippe (@vincent64)
  */
-public class Resolver {
+public final class Resolver {
     private final ContentNode contentNode;
     private final PackageName packageName;
     private final List<ClassDefinition> classDefinitions;

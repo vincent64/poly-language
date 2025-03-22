@@ -7,7 +7,7 @@ import poly.compiler.resolver.symbol.ClassSymbol;
  * class symbol of the object instance.
  * @author Vincent Philippe (@vincent64)
  */
-public class Object extends Type {
+public final class Object extends Type {
     /** The null reference object. */
     public static final Object NULL_REFERENCE = new Object(null);
     private final ClassSymbol classSymbol;

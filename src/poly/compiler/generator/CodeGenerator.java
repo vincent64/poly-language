@@ -39,7 +39,7 @@ import static poly.compiler.output.jvm.Instructions.*;
  * keep track of the instructions, program counter, local variables and operand stack, and much more.
  * @author Vincent Philippe (@vincent64)
  */
-public class CodeGenerator implements NodeVisitor {
+public final class CodeGenerator implements NodeVisitor {
     private final ImportTable importTable;
     private final ConstantPool constantPool;
     private final List<Instruction> instructions;

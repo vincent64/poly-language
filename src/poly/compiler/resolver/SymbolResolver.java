@@ -29,7 +29,7 @@ import java.util.List;
  * This class represents the second step of the resolving process.
  * @author Vincent Philippe (@vincent64)
  */
-public class SymbolResolver {
+public final class SymbolResolver {
     private final ClassDefinition classDefinition;
     private final ImportTable importTable;
 

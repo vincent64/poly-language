@@ -21,7 +21,7 @@ import java.util.List;
  * bytecode content from the method declarations.
  * @author Vincent Philippe (@vincent64)
  */
-public class Generator {
+public final class Generator {
     private final ClassDefinition classDefinition;
     private final ImportTable importTable;
     private final ClassFile classFile;

@@ -21,7 +21,7 @@ import java.util.List;
  * Note: The tokenizer will currently ignore any docstring comments.
  * @author Vincent Philippe (@vincent64)
  */
-public class Tokenizer {
+public final class Tokenizer {
     private final String fileName;
     private final List<Token> tokens;
     private final char[] content;

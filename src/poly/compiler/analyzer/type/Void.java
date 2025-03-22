@@ -4,7 +4,7 @@ package poly.compiler.analyzer.type;
  * The Void class. This class represents a void type.
  * @author Vincent Philippe (@vincent64)
  */
-public class Void extends Type {
+public final class Void extends Type {
     /**
      * Constructs a void type.
      */

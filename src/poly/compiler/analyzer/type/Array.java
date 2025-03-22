@@ -7,7 +7,7 @@ import poly.compiler.util.ClassName;
  * type of the array.
  * @author Vincent Philippe (@vincent64)
  */
-public class Array extends Type {
+public final class Array extends Type {
     /** The array size attribute name. */
     public static final String SIZE = "size";
     private final Type type;

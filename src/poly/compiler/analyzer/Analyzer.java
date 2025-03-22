@@ -35,7 +35,7 @@ import poly.compiler.warning.AnalyzingWarning;
  * a second traversal of the AST will be performed by the Optimizer class to optimize it.
  * @author Vincent Philippe (@vincent64)
  */
-public class Analyzer implements NodeModifier {
+public final class Analyzer implements NodeModifier {
     private final ImportTable importTable;
     private final ClassDeclaration classDeclaration;
     private final ClassSymbol classSymbol;

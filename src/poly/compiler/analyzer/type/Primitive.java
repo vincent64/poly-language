@@ -4,7 +4,7 @@ package poly.compiler.analyzer.type;
  * The Primitive class. This class represents a primitive type.
  * @author Vincent Philippe (@vincent64)
  */
-public class Primitive extends Type {
+public final class Primitive extends Type {
     private final Kind kind;
 
     /**

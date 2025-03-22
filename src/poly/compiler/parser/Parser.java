@@ -34,7 +34,7 @@ import static poly.compiler.util.Character.isSameString;
  * language's grammar, not every syntactic error are detected during this phase.
  * @author Vincent Philippe (@vincent64)
  */
-public class Parser {
+public final class Parser {
     private final Token[] tokens;
     private Token currentToken;
     private int currentTokenIndex;
