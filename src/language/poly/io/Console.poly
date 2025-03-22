@@ -55,6 +55,13 @@ class+ # Console {
         System.out.println(String.valueOf(value));
     }
 
+    ¦ Prints the given character in the console, and adds a new line.
+    ¦ @param value the character
+    ¦
+    fn+ void println(char value) {
+        System.out.println(String.valueOf(value));
+    }
+
     ¦ Prints a new line in the console.
     ¦
     fn+ void println() {
@@ -107,6 +114,13 @@ class+ # Console {
     ¦ @param value the boolean value
     ¦
     fn+ void print(bool value) {
+        System.out.print(String.valueOf(value));
+    }
+
+    ¦ Prints the given character in the console.
+    ¦ @param value the character
+    ¦
+    fn+ void print(char value) {
         System.out.print(String.valueOf(value));
     }
 
