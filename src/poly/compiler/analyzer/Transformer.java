@@ -1,12 +1,14 @@
 package poly.compiler.analyzer;
 
+import poly.compiler.analyzer.type.Object;
+import poly.compiler.analyzer.type.Primitive;
+import poly.compiler.analyzer.type.Type;
+import poly.compiler.error.AnalyzingError;
 import poly.compiler.parser.tree.Node;
-import poly.compiler.parser.tree.expression.ClassCreation;
-import poly.compiler.parser.tree.expression.Expression;
-import poly.compiler.parser.tree.expression.MemberAccess;
-import poly.compiler.parser.tree.expression.MethodCall;
+import poly.compiler.parser.tree.expression.*;
 import poly.compiler.parser.tree.variable.ArgumentList;
 import poly.compiler.resolver.symbol.ClassSymbol;
+import poly.compiler.util.ClassName;
 
 /**
  * The Transformer class. This class is used by the Analyzer class to transform
@@ -71,5 +73,37 @@ public final class Transformer {
         innerClassCreation.setType(classCreation.getType());
 
         return innerClassCreation;
+    }
+
+    /**
+     * Transforms the given binary expression node to a string concatenation method call node.
+     * @param binaryExpression the binary expression node
+     * @return the transformed node
+     */
+    Node transformStringConcatenation(BinaryExpression binaryExpression) {
+        Expression first = (Expression) binaryExpression.getFirst();
+        Expression second = (Expression) binaryExpression.getSecond();
+        Type secondType = second.getExpressionType();
+
+        //Add implicit string conversion
+        if(!(secondType instanceof Object object)
+                || !object.getClassSymbol().getClassInternalQualifiedName()
+                .equals(ClassName.STRING.toInternalQualifiedName())) {
+            //Generate method call
+            ArgumentList argumentList = new ArgumentList(binaryExpression.getMeta());
+            argumentList.addArgument(second);
+            MethodCall methodCall = new MethodCall(binaryExpression.getMeta());
+            methodCall.setMethodName("valueOf");
+            methodCall.setArgumentList(argumentList);
+
+            //Generate member access
+            MemberAccess memberAccess = new MemberAccess(binaryExpression.getMeta());
+            memberAccess.setMember(QualifiedName.fromClassName(ClassName.STRING));
+            memberAccess.setAccessor(methodCall);
+            binaryExpression.setSecond(memberAccess);
+            second = memberAccess;
+        }
+
+        return transformOperationOverload(binaryExpression, first, second, "concat");
     }
 }

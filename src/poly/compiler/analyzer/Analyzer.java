@@ -1575,10 +1575,10 @@ public final class Analyzer implements NodeModifier {
         if(isNullExpression(first))
             new AnalyzingError.InvalidBinaryOperation(binaryExpression);
 
-        //Visit string concatenation
+        //Transform string concatenation
         if(binaryExpression.getKind() == BinaryExpression.Kind.OPERATION_ADDITION
-                && object.getClassSymbol().getClassInternalQualifiedName().equals(ClassName.STRING.toInternalQualifiedName()))
-            return visitStringConcatenation(binaryExpression);
+                && object.getClassSymbol().getClassName().equals(ClassName.STRING))
+            return transformer.transformStringConcatenation(binaryExpression);
 
         //Get operation overload name from expression
         String methodName = OperatorMethod.getNameFromBinaryExpression(binaryExpression.getKind());
@@ -1750,39 +1750,6 @@ public final class Analyzer implements NodeModifier {
         memberAccess.setAccessor(methodInvocation);
 
         return memberAccess.accept(this);
-    }
-
-    /**
-     * Visits the given binary expression node as a string concatenation and returns the transformed node.
-     * @param binaryExpression the binary expression
-     * @return the transformed node
-     */
-    private Node visitStringConcatenation(BinaryExpression binaryExpression) {
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
-
-        Type secondType = second.getExpressionType();
-
-        //Add implicit string conversion
-        if(!(secondType instanceof Object object)
-                || !object.getClassSymbol().getClassInternalQualifiedName()
-                    .equals(ClassName.STRING.toInternalQualifiedName())) {
-            //Generate method call
-            ArgumentList argumentList = new ArgumentList(binaryExpression.getMeta());
-            argumentList.addArgument(second);
-            MethodCall methodCall = new MethodCall(binaryExpression.getMeta());
-            methodCall.setMethodName("valueOf");
-            methodCall.setArgumentList(argumentList);
-
-            //Generate member access
-            MemberAccess memberAccess = new MemberAccess(binaryExpression.getMeta());
-            memberAccess.setMember(QualifiedName.fromClassName(ClassName.STRING));
-            memberAccess.setAccessor(methodCall);
-            binaryExpression.setSecond(memberAccess);
-            second = memberAccess;
-        }
-
-        return transformer.transformOperationOverload(binaryExpression, first, second, "concat");
     }
 
     /**
