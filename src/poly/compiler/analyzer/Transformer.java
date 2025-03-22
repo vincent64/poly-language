@@ -1,6 +1,7 @@
 package poly.compiler.analyzer;
 
 import poly.compiler.parser.tree.Node;
+import poly.compiler.parser.tree.expression.ClassCreation;
 import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.parser.tree.expression.MemberAccess;
 import poly.compiler.parser.tree.expression.MethodCall;
@@ -47,5 +48,28 @@ public final class Transformer {
         memberAccess.setAccessor(methodCall);
 
         return memberAccess.accept(analyzer);
+    }
+
+    /**
+     * Transforms the given member access class creation node to an inner class creation node.
+     * @param memberAccess the member access node
+     * @param classCreation the class creation node
+     * @return the transformed node
+     */
+    Node transformInnerClassCreation(MemberAccess memberAccess, ClassCreation classCreation) {
+        //Add member expression to arguments list
+        ArgumentList argumentList = new ArgumentList(classCreation.getMeta());
+        argumentList.addArgument(memberAccess.getMember());
+
+        //Add arguments to arguments list
+        for(Node node : ((ArgumentList) classCreation.getArgumentList()).getArguments())
+            argumentList.addArgument(node);
+
+        //Transform class creation
+        ClassCreation innerClassCreation = new ClassCreation(classCreation.getMeta());
+        innerClassCreation.setArgumentList(argumentList);
+        innerClassCreation.setType(classCreation.getType());
+
+        return innerClassCreation;
     }
 }

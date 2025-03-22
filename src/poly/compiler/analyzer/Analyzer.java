@@ -1076,7 +1076,7 @@ public final class Analyzer implements NodeModifier {
             //Visit argument list
             classCreation.setArgumentList(classCreation.getArgumentList().accept(this));
 
-            classCreation = (ClassCreation) transformInnerClassCreation(memberAccess, classCreation);
+            classCreation = (ClassCreation) transformer.transformInnerClassCreation(memberAccess, classCreation);
 
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) classCreation.getArgumentList());
 
@@ -2108,28 +2108,5 @@ public final class Analyzer implements NodeModifier {
      */
     private boolean isVoidExpression(Expression expression) {
         return expression.getExpressionType() instanceof Void;
-    }
-
-    /**
-     * Transforms the given member access class creation node to an inner class creation node.
-     * @param memberAccess the member access node
-     * @param classCreation the class creation node
-     * @return the transformed node
-     */
-    private Node transformInnerClassCreation(MemberAccess memberAccess, ClassCreation classCreation) {
-        //Transform arguments list and add member expression as first argument
-        ArgumentList argumentList = new ArgumentList(classCreation.getMeta());
-        argumentList.addArgument(memberAccess.getMember());
-
-        //Add arguments to arguments list
-        for(Node node : ((ArgumentList) classCreation.getArgumentList()).getArguments())
-            argumentList.addArgument(node);
-
-        //Transform class creation
-        ClassCreation innerClassCreation = new ClassCreation(classCreation.getMeta());
-        innerClassCreation.setArgumentList(argumentList);
-        innerClassCreation.setType(classCreation.getType());
-
-        return innerClassCreation;
     }
 }
