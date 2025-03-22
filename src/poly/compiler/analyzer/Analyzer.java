@@ -36,6 +36,7 @@ import poly.compiler.warning.AnalyzingWarning;
  * @author Vincent Philippe (@vincent64)
  */
 public final class Analyzer implements NodeModifier {
+    private final Transformer transformer;
     private final ImportTable importTable;
     private final ClassDeclaration classDeclaration;
     private final ClassSymbol classSymbol;
@@ -51,6 +52,9 @@ public final class Analyzer implements NodeModifier {
         classDeclaration = classDefinition.getClassDeclaration();
         classSymbol = classDefinition.getClassSymbol();
         isInitialized = true;
+
+        //Initialize transformer
+        transformer = new Transformer(this, classSymbol);
 
         //Initialize variables table
         variableTable = new VariableTable();
