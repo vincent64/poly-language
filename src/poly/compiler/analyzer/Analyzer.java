@@ -1570,15 +1570,22 @@ public final class Analyzer implements NodeModifier {
         Expression second = (Expression) binaryExpression.getSecond();
 
         Object object = (Object) first.getExpressionType();
+        ClassSymbol classSymbol = object.getClassSymbol();
 
         //Make sure the first expression is not null
         if(isNullExpression(first))
             new AnalyzingError.InvalidBinaryOperation(binaryExpression);
 
-        //Transform string concatenation
-        if(binaryExpression.getKind() == BinaryExpression.Kind.OPERATION_ADDITION
-                && object.getClassSymbol().getClassName().equals(ClassName.STRING))
-            return transformer.transformStringConcatenation(binaryExpression);
+        //Transform string binary operation
+        if(classSymbol.getClassName().equals(ClassName.STRING)) {
+            //Transform string concatenation
+            if(binaryExpression.getKind() == BinaryExpression.Kind.OPERATION_ADDITION)
+                return transformer.transformStringConcatenation(binaryExpression);
+
+            //Transform string repeating
+            if(binaryExpression.getKind() == BinaryExpression.Kind.OPERATION_MULTIPLICATION)
+                return transformer.transformStringRepeating(binaryExpression);
+        }
 
         //Get operation overload name from expression
         String methodName = OperatorMethod.getNameFromBinaryExpression(binaryExpression.getKind());
@@ -1589,8 +1596,8 @@ public final class Analyzer implements NodeModifier {
 
         Type[] parameterTypes = { second.getExpressionType() };
 
-        //Find the operator overload method
-        MethodSymbol methodSymbol = object.getClassSymbol().findMethod(methodName, parameterTypes, classSymbol, binaryExpression);
+        //Find operator overload method
+        MethodSymbol methodSymbol = classSymbol.findMethod(methodName, parameterTypes, this.classSymbol, binaryExpression);
 
         //Make sure the object supports the operation
         if(methodSymbol == null)
