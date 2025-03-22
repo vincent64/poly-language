@@ -106,4 +106,22 @@ public final class Transformer {
 
         return transformOperationOverload(binaryExpression, first, second, "concat");
     }
+
+    /**
+     * Transforms the given binary expression node to a string repeating method call node.
+     * @param binaryExpression the binary expression node
+     * @return the transformed node
+     */
+    Node transformStringRepeating(BinaryExpression binaryExpression) {
+        Expression first = (Expression) binaryExpression.getFirst();
+        Expression second = (Expression) binaryExpression.getSecond();
+        Type secondType = second.getExpressionType();
+
+        //Make sure the second expression type is an integer
+        if(!(secondType instanceof Primitive primitive)
+                || primitive.getPrimitiveKind() != Primitive.Kind.INTEGER)
+            new AnalyzingError.TypeConversion(binaryExpression, secondType, new Primitive(Primitive.Kind.INTEGER));
+
+        return transformOperationOverload(binaryExpression, first, second, "repeat");
+    }
 }
