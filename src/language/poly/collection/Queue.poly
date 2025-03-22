@@ -25,14 +25,4 @@ interface+ Queue(Deque) {
     ¦ @returns the first object
     ¦
     fn Object peek();
-
-    ¦ Returns the queue size.
-    ¦ @returns the size
-    ¦
-    fn int size();
-
-    ¦ Returns whether the queue is empty.
-    ¦ @returns true if the queue is empty
-    ¦
-    fn bool isEmpty();
 }

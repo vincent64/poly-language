@@ -25,14 +25,4 @@ interface+ Stack(Deque) {
     ¦ @returns the topmost object
     ¦
     fn Object peek();
-
-    ¦ Returns the stack size.
-    ¦ @returns the size
-    ¦
-    fn int size();
-
-    ¦ Returns whether the stack is empty.
-    ¦ @returns true if the stack is empty
-    ¦
-    fn bool isEmpty();
 }

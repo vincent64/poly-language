@@ -25,14 +25,4 @@ interface+ Deque {
     ¦ @returns the first object
     ¦
     fn Object peek();
-
-    ¦ Returns the deque size.
-    ¦ @returns the size
-    ¦
-    fn int size();
-
-    ¦ Returns whether the deque is empty.
-    ¦ @returns true if the deque is empty
-    ¦
-    fn bool isEmpty();
 }
