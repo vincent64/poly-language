@@ -1,1 +1,49 @@
-//TODO
+¦ The LinkedStack class represents a stack implemented as linked nodes.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.2
+¦
+class+ const LinkedStack : Stack {
+    - Node top = null;
+    - int size;
+
+    fn+ constructor() { }
+
+    fn+ void push(Object object) {
+        top = new(top, object);
+        size++;
+    }
+
+    fn+ Object pop() {
+        Object previous = top.object;
+        top = top.prev;
+        size--;
+
+        return previous;
+    }
+
+    fn+ Object peek() {
+        return top.object;
+    }
+
+    fn+ void clear() {
+        size = 0;
+        top = null;
+    }
+
+    fn+ int size() {
+        return size;
+    }
+
+    ¦ The LinkedStack.Node class represents a node in the linked stack.
+    ¦ It contains a pointer to the previous node in the stack.
+    ¦
+    class- Node {
+        - Node prev;
+        - Object object;
+
+        fn+ constructor(Node prev, Object object) {
+            this.prev = prev;
+            this.object = object;
+        }
+    }
+}
