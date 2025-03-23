@@ -99,6 +99,7 @@ class+ const LinkedList : List {
     }
 
     ¦ The LinkedList.Node class represents a node in the linked list.
+    ¦ It contains a pointer to the next node in the list.
     ¦
     class- Node {
         - Node next;
