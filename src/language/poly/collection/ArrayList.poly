@@ -5,8 +5,8 @@ import java.lang.System;
 ¦ @version 0.1
 ¦
 class+ const ArrayList : List {
-    - const int CAPACITY = 16;
-    - Object[] array = new[CAPACITY];
+    - const int INITIAL_CAPACITY = 8;
+    - Object[] array = new[INITIAL_CAPACITY];
     - int size;
 
     fn+ constructor() { }
@@ -62,7 +62,7 @@ class+ const ArrayList : List {
 
     fn+ void clear() {
         size = 0;
-        array = new[CAPACITY];
+        array = new[INITIAL_CAPACITY];
     }
 
     fn+ int size() {
@@ -75,9 +75,9 @@ class+ const ArrayList : List {
 
     fn- void allocate() {
         while(size >= array.size) {
-            Object[] newArray = new[array.size + CAPACITY];
-            System.arraycopy(array, 0, newArray, 0, size);
-            array = newArray;
+            Object[] new_array = new[array.size * 2];
+            System.arraycopy(array, 0, new_array, 0, size);
+            array = new_array;
         }
     }
 }
