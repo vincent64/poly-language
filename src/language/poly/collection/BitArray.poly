@@ -9,14 +9,16 @@ class+ BitArray {
     - const int size;
 
     ¦ Constructs a bit array with the given size.
-    ¦ @param size the array size
+    ¦ @param size the array size (size > 0)
     ¦
     fn+ constructor(const int size) {
+        assert(size > 0);
         this.size = size;
-        array = new[(size / long.bits) + 1];
+        array = new[(size - 1) / long.bits + 1];
     }
 
-    fn- constructor(long[] array) {
+    fn- constructor(const int size, long[] array) {
+        this.size = size;
         this.array = array;
     }
 
@@ -32,7 +34,7 @@ class+ BitArray {
         int array_index = index / long.bits;
 
         //Compute bit
-        long bit = (if(value) 1L else 0L) << (long.bits - bit_index);
+        long bit = (if(value) 1L else 0L) << bit_index;
         array[array_index] |= bit;
     }
 
@@ -47,7 +49,8 @@ class+ BitArray {
 
         //Compute bit
         long bit = (array[array_index] >> bit_index) & 1;
-        return bit == 0L;
+
+        return bit == 1L;
     }
 
     ¦ Resets the bit array and set every bit to zero (false).
@@ -74,7 +77,7 @@ class+ BitArray {
         for(int i = 0; i < array.size; i++)
             array[i] = ~array[i];
 
-        return new(array);
+        return new(size, array);
     }
 
     op+ bool access(int index) {
