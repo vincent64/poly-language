@@ -4,7 +4,7 @@
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
 ¦
-interface+ Deque {
+interface+ Deque(Collection) {
 
     ¦ Pushes the given object to the deque.
     ¦ @param the object
