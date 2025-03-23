@@ -7,12 +7,6 @@
 ¦
 interface+ Collection {
 
-    ¦ Returns whether the given object is inside the collection.
-    ¦ @param obj the object
-    ¦ @returns true if the collection contains the object
-    ¦
-    fn bool contains(Object object);
-
     ¦ Removes every element from the collection.
     ¦
     fn void clear();

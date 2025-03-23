@@ -65,6 +65,12 @@ interface+ List(Collection) {
         return remove(size() - 1);
     }
 
+    ¦ Returns whether the given object is inside the list.
+    ¦ @param obj the object
+    ¦ @returns true if the list contains the object
+    ¦
+    fn bool contains(Object object);
+
     ¦ Returns the object at the given index in the list.
     ¦ @param index the index
     ¦ @returns the object
