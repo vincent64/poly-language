@@ -194,9 +194,6 @@ public final class CodeGenerator implements NodeVisitor {
 
         Type variableType = getTypeFromNode(variableDeclaration.getType());
 
-        //Add variable to variable table
-        Variable variable = variableTable.addVariable(variableType, variableDeclaration.getName(), variableDeclaration.isConstant());
-
         Expression expression = (Expression) variableDeclaration.getInitializationExpression();
 
         if(expression != null) {
@@ -208,6 +205,9 @@ public final class CodeGenerator implements NodeVisitor {
                     ? Instruction.forConstantZero(primitive)
                     : new Instruction(ACONST_NULL));
         }
+
+        //Add variable to variable table
+        Variable variable = variableTable.addVariable(variableType, variableDeclaration.getName(), variableDeclaration.isConstant());
 
         //Generate instructions
         addInstruction(Instruction.forStoring(variable));
