@@ -1200,6 +1200,10 @@ public final class Analyzer implements NodeModifier {
         Expression arrayExpression = (Expression) arrayAccess.getArray();
         Expression accessExpression = (Expression) arrayAccess.getAccessExpression();
 
+        //Make sure the array expression is not void or null
+        if(isVoidExpression(arrayExpression) || isNullExpression(arrayExpression))
+            new AnalyzingError.ExpectedArrayType(arrayAccess);
+
         //Make sure the access expression is an integer
         if(!(accessExpression.getExpressionType() instanceof Primitive primitive)
                 || primitive.getPrimitiveKind() != Primitive.Kind.INTEGER)
