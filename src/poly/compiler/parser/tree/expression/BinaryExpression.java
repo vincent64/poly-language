@@ -102,6 +102,10 @@ public class BinaryExpression extends Expression {
             this.name = name;
         }
 
+        public boolean isShift() {
+            return this == BITWISE_SHIFT_LEFT || this == BITWISE_SHIFT_RIGHT || this == BITWISE_SHIFT_RIGHT_ARITHMETIC;
+        }
+
         @Override
         public String toString() {
             return name;
