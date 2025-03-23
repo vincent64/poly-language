@@ -807,8 +807,12 @@ public final class CodeGenerator implements NodeVisitor {
         binaryExpression.getSecond().accept(this);
 
         //Promote primitive if not equal to result type
-        if(!primitive2.equals(operationType))
-            promotePrimitive(primitive2, operationType);
+        if(!binaryExpression.getKind().isShift()) {
+            if(!primitive2.equals(operationType))
+                promotePrimitive(primitive2, operationType);
+        } else if(primitive2.getPrimitiveKind() == Primitive.Kind.LONG) {
+            addInstruction(L2I);
+        }
 
         //Generate instructions
         switch(binaryExpression.getKind()) {
