@@ -20,7 +20,7 @@ interface+ Stack(Deque) {
     ¦ @param the object count
     ¦ @returns the topmost objects list
     fn List pop(int count) {
-        assert(0 <= count && count < size());
+        assert(0 <= count && count <= size());
 
         List list = new ArrayList();
         for(int i = 0; i < count; i++)
