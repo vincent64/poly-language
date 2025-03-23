@@ -1,1 +1,48 @@
-//TODO
+import java.lang.System;
+
+¦ The ArrayStack class represents a stack implemented as an array.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.2
+¦
+class+ const ArrayStack : Stack {
+    - const int INITIAL_CAPACITY = 8;
+    - Object[] array = new[INITIAL_CAPACITY];
+    - int size;
+
+    fn+ constructor() { }
+
+    fn+ void push(Object object) {
+        allocate();
+        array[size++] = object;
+    }
+
+    fn+ Object pop() {
+        //Retrieve and pop element
+        Object object = array[size - 1];
+        array[--size] = null;
+
+        return object;
+    }
+
+    fn+ Object peek() {
+        assert(!isEmpty());
+        return array[size - 1];
+    }
+
+    fn+ void clear() {
+        size = 0;
+        array = new[INITIAL_CAPACITY];
+    }
+
+    fn+ int size() {
+        return size;
+    }
+
+    fn- void allocate() {
+        while(size >= array.size) {
+            Object[] new_array = new[array.size * 2];
+            System.arraycopy(array, 0, new_array, 0, size);
+            array = new_array;
+        }
+    }
+}
