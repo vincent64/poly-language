@@ -46,8 +46,8 @@ public final class SymbolResolver {
      * Resolves the class definition symbols and import table.
      */
     public void resolve() {
-        //Make sure importations are valid
-        importTable.check();
+        //Resolve the importations in the table
+        importTable.resolve();
 
         //Resolve the class symbols
         resolveSymbols();

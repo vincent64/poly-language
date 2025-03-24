@@ -6,6 +6,7 @@ import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.statement.ImportStatement;
 import poly.compiler.resolver.Classes;
 import poly.compiler.resolver.symbol.ClassSymbol;
+import poly.compiler.util.ClassName;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,10 +34,11 @@ public class ImportTable {
     }
 
     /**
-     * Checks the importations table and make sure they are valid.
+     * Resolves the importations table and make sure they are valid.
      */
-    public void check() {
-        Set<String> importedClasses = new HashSet<>();
+    public void resolve() {
+        Set<ClassName> classNames = new HashSet<>();
+        Set<String> importNames = new HashSet<>();
 
         for(Import importation : importations.keySet()) {
             ClassSymbol classSymbol = Classes.findClass(importation.getClassName());
@@ -46,9 +48,14 @@ public class ImportTable {
                 new ResolvingError.UnresolvableImportation(importation.getImportStatement(), importation.getLastName());
 
             //Make sure there is no ambiguous importations
-            if(!importedClasses.add(importation.getLastName()))
+            if(!importNames.add(importation.getLastName()))
                 new ResolvingError.AmbiguousImportation(importation.getImportStatement(), importation.getLastName());
 
+            //Make sure there is no duplicate importations
+            if(!classNames.add(classSymbol.getClassName()))
+                new ResolvingError.DuplicateImportation(importation.getImportStatement(), classSymbol.getClassName());
+
+            //Update the importation entry
             importations.replace(importation, classSymbol);
         }
     }
