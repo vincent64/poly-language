@@ -11,6 +11,7 @@ import poly.compiler.util.ClassName;
 public class Import {
     private final ImportStatement importStatement;
     private final ClassName className;
+    private final String aliasName;
 
     /**
      * Constructs an importation from the given import statement.
@@ -21,6 +22,7 @@ public class Import {
 
         //Get class name from package name
         className = ClassName.fromNodeQualifiedName(importStatement.getPackageName());
+        aliasName = importStatement.getAliasName();
     }
 
     /**
@@ -52,6 +54,6 @@ public class Import {
      * @return the last name
      */
     public String getLastName() {
-        return className.getLast();
+        return aliasName == null ? className.getLast() : aliasName;
     }
 }
