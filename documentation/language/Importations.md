@@ -52,6 +52,18 @@ class+ MyClass {
 ```
 
 
+### Alias name
+An alias name is a name replacing the imported class' name that you can use in your code file.
+You may use an alias name if the imported class' name is too long, too descriptive or simply not to your liking.
+
+To define an alias name for an imported class, the alias name must be preceded by a colon and the qualified name, as follows :
+```poly
+import Matrix : poly.math.FloatMatrix;
+```
+
+> When defining an alias name, it is not possible to reference the class using its original name in the code file.
+
+
 ### Implicit importation
 The `Object` class and the `String` class are implicitly imported in every source code file.
 
