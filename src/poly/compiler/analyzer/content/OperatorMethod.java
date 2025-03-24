@@ -27,6 +27,20 @@ public class OperatorMethod {
     }
 
     /**
+     * Returns the operator for the given method name.
+     * @param name the method name
+     * @return the operator overload operator
+     */
+    public static String getOperatorFromName(String name) {
+        for(Kind kind : Kind.values()) {
+            if(name.equals(kind.methodName))
+                return String.valueOf(kind.getOperator());
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the method name for the given binary expression kind.
      * @param expressionKind the binary expression kind
      * @return the operator overload method name
