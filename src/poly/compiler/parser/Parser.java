@@ -178,6 +178,13 @@ public final class Parser {
         //Match import keyword
         match(IMPORT);
 
+        //Parse import alias name
+        if(isMatchingType(Token.Type.IDENTIFIER) && Character.isSameString(peekToken().getContent(), COLON)) {
+            node.setAliasName(currentToken);
+            nextToken();
+            match(COLON);
+        }
+
         //Parse import package name
         node.setPackageName(parseQualifiedName());
 
