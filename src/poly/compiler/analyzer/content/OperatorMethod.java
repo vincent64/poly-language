@@ -12,6 +12,8 @@ import poly.compiler.util.Character;
  * @author Vincent Philippe (@vincent64)
  */
 public class OperatorMethod {
+    private OperatorMethod() { }
+
     /**
      * Returns the method name for the given operator.
      * @param operator the operator
@@ -191,6 +193,8 @@ public class OperatorMethod {
      * of every operator overload methods.
      */
     public static class Name {
+        private Name() { }
+
         //Mathematical operators
         public static final String ADD = "$add";
         public static final String SUB = "$sub";
