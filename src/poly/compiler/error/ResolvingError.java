@@ -3,6 +3,7 @@ package poly.compiler.error;
 import poly.compiler.parser.tree.Node;
 import poly.compiler.resolver.symbol.ClassSymbol;
 import poly.compiler.resolver.symbol.MethodSymbol;
+import poly.compiler.util.ClassName;
 import poly.compiler.util.MethodStringifier;
 
 /**
@@ -185,6 +186,14 @@ public abstract class ResolvingError extends Error {
         }
     }
 
+    public static class DuplicateImportation extends ResolvingError {
+        private static final String MESSAGE = "Duplicate class '%s' importations";
+
+        public DuplicateImportation(Node node, ClassName className) {
+            super(node, MESSAGE.formatted(className));
+        }
+    }
+
     public static class UnresolvableImportation extends ResolvingError {
         private static final String MESSAGE = "Cannot resolve importation symbol with name '%s'";
 
@@ -237,6 +246,14 @@ public abstract class ResolvingError extends Error {
         private static final String MESSAGE = "Static class cannot contain constructor";
 
         public InvalidStaticConstructor(Node node) {
+            super(node, MESSAGE);
+        }
+    }
+
+    public static class InvalidStaticSuperclass extends ResolvingError {
+        private static final String MESSAGE = "Static class cannot have superclass";
+
+        public InvalidStaticSuperclass(Node node) {
             super(node, MESSAGE);
         }
     }
