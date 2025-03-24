@@ -108,8 +108,9 @@ public class LibraryReader {
                 paths.filter(path -> path.toString().endsWith(ClassWriter.CLASS_EXTENSION))
                         .forEach(path -> {
                             //Parse library class name from path name
+                            path = fileSystem.getPath("modules", "java.base").relativize(path);
                             String pathName = path.toString();
-                            String fileName = pathName.substring(18, pathName.length() - 6);
+                            String fileName = pathName.substring(0, pathName.length() - ClassWriter.CLASS_EXTENSION.length());
                             ClassName className = ClassName.fromStringQualifiedName(fileName);
 
                             //Add library to the library files list
