@@ -3,6 +3,7 @@ package poly.compiler.parser.tree.statement;
 import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.tokenizer.Token;
 import poly.compiler.util.NodeStringifier;
 
 /**
@@ -12,6 +13,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class ImportStatement extends Node {
     private Node packageName;
+    private String aliasName;
 
     public ImportStatement(Meta meta) {
         super(meta);
@@ -21,8 +23,16 @@ public class ImportStatement extends Node {
         packageName = node;
     }
 
+    public void setAliasName(Token token) {
+        aliasName = String.valueOf(token.getContent());
+    }
+
     public Node getPackageName() {
         return packageName;
+    }
+
+    public String getAliasName() {
+        return aliasName;
     }
 
     @Override
@@ -40,6 +50,7 @@ public class ImportStatement extends Node {
         NodeStringifier string = new NodeStringifier("ImportStatement");
         string.addString("Package name:");
         string.addNode(packageName);
+        string.addString("Alias name: " + aliasName);
 
         return string.toString();
     }
