@@ -1,5 +1,6 @@
 package poly.compiler.util;
 
+import poly.compiler.analyzer.content.OperatorMethod;
 import poly.compiler.analyzer.type.Type;
 import poly.compiler.resolver.symbol.MethodSymbol;
 
@@ -18,7 +19,10 @@ public class MethodStringifier {
      * @return the stringified method
      */
     public static String stringify(String name, Type[] parameterTypes) {
-        return name + stringify(parameterTypes);
+        //Get operator overload operator if possible
+        String operatorName = OperatorMethod.getOperatorFromName(name);
+
+        return (operatorName == null ? name : operatorName) + stringify(parameterTypes);
     }
 
     /**
