@@ -426,6 +426,14 @@ public final class ClassSymbol extends Symbol {
     }
 
     /**
+     * Returns whether the current class is a nested class inside another class.
+     * @return true if the class is a nested class
+     */
+    public boolean isNested() {
+        return ownerSymbol instanceof ClassSymbol;
+    }
+
+    /**
      * Returns the class' class name.
      * @return the class name
      */
