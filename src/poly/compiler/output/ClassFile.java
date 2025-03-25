@@ -182,6 +182,10 @@ public class ClassFile implements Byteable {
         if(methodSymbol.isStatic())
             accessFlag |= Instructions.MethodAccessFlag.STATIC;
 
+        //Set final method flag
+        if(methodSymbol.isConstant())
+            accessFlag |= Instructions.MethodAccessFlag.FINAL;
+
         //Set empty method abstract flag
         if(methodSymbol.isEmpty())
             accessFlag |= Instructions.MethodAccessFlag.ABSTRACT;
