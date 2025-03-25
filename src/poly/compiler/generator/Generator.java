@@ -61,6 +61,10 @@ public final class Generator {
         //Generate nested classes attributes
         generateNestedClasses(classSymbol);
 
+        //Generate inner class attribute
+        if(classSymbol.isNested())
+            generateNestedClass(classSymbol);
+
         //Generate outer class attribute
         if(classSymbol.getOwnerSymbol() instanceof ClassSymbol outerClassSymbol)
             classFile.addAttribute(new NestHostAttribute(classFile.getConstantPool(), outerClassSymbol));
@@ -123,5 +127,23 @@ public final class Generator {
         //Add the attributes to the class file
         classFile.addAttribute(innerClassesAttribute);
         classFile.addAttribute(nestMembersAttribute);
+    }
+
+    /**
+     * Generates the attribute for the given nested class symbol.
+     * @param classSymbol the class symbol
+     */
+    private void generateNestedClass(ClassSymbol classSymbol) {
+        ConstantPool constantPool = classFile.getConstantPool();
+        InnerClassesAttribute attribute = new InnerClassesAttribute(constantPool);
+
+        //Add inner class
+        attribute.addInnerClass(classSymbol.getAccessModifier().getClassAccessFlag(),
+                (short) constantPool.addUTF8Constant(classSymbol.getName()),
+                (short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()),
+                (short) constantPool.addClassConstant(((ClassSymbol) classSymbol.getOwnerSymbol()).getClassInternalQualifiedName()));
+
+        //Add the attribute to the class file
+        classFile.addAttribute(attribute);
     }
 }
