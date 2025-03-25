@@ -110,14 +110,7 @@ public class ClassReader {
      */
     private void resolveSuperclass(ConstantPool constantPool, ClassSymbol classSymbol, short superclassIndex) {
         if(superclassIndex != 0) {
-            //Get superclass constant
-            Constant superclassConstant = constantPool.getConstant(superclassIndex);
-            short nameIndex = ByteArray.getShortFromByteArray(superclassConstant.getContent());
-            //Get superclass name constant
-            Constant nameConstant = constantPool.getConstant(nameIndex);
-            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
-
-            ClassName superclassName = ClassName.fromStringQualifiedName(qualifiedName);
+            ClassName superclassName = resolveClassName(constantPool, superclassIndex);
 
             //Find or load superclass symbol in library
             ClassSymbol superclassSymbol = LibraryClasses.findClass(superclassName);
@@ -135,19 +128,29 @@ public class ClassReader {
      */
     private void resolveInterfaces(ConstantPool constantPool, ClassSymbol classSymbol, List<Short> interfaceIndies) {
         for(short interfaceIndex : interfaceIndies) {
-            //Get interface constant
-            Constant interfaceConstant = constantPool.getConstant(interfaceIndex);
-            short nameIndex = ByteArray.getShortFromByteArray(interfaceConstant.getContent());
-            //Get interface name constant
-            Constant nameConstant = constantPool.getConstant(nameIndex);
-            String qualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
-
-            ClassName interfaceName = ClassName.fromStringQualifiedName(qualifiedName);
+            ClassName interfaceName = resolveClassName(constantPool, interfaceIndex);
 
             //Find or load interface symbol in library
             ClassSymbol interfaceSymbol = LibraryClasses.findClass(interfaceName);
             classSymbol.getInterfaceSymbols().add(interfaceSymbol);
         }
+    }
+
+    /**
+     * Resolves and returns the class name from the given class constant index.
+     * @param constantPool the constant pool
+     * @param index the index
+     * @return the class name
+     */
+    private ClassName resolveClassName(ConstantPool constantPool, short index) {
+        //Get name index from constant
+        Constant constant = constantPool.getConstant(index);
+        short nameIndex = ByteArray.getShortFromByteArray(constant.getContent());
+
+        //Get name constant
+        Constant nameConstant = constantPool.getConstant(nameIndex);
+
+        return ClassName.fromStringQualifiedName(new String(nameConstant.getContent(), StandardCharsets.UTF_8));
     }
 
     /**
