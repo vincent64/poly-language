@@ -1,1 +1,64 @@
-//TODO
+import java.lang.System;
+
+¦ The ArrayQueue class represents a queue implemented as an array.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.2
+¦
+class+ const ArrayQueue : Queue {
+    - const int INITIAL_CAPACITY = 8;
+    - Object[] array = new[INITIAL_CAPACITY];
+    - int firstIndex;
+    - int lastIndex;
+    - int size;
+
+    fn+ constructor() { }
+
+    fn+ void push(Object object) {
+        allocate();
+        array[lastIndex++] = object;
+        lastIndex %= array.size;
+        size++;
+    }
+
+    fn+ Object pop() {
+        assert(!isEmpty());
+
+        //Retrieve and pop element
+        Object object = array[firstIndex];
+        array[firstIndex++] = null;
+        firstIndex %= array.size;
+        size--;
+
+        return object;
+    }
+
+    fn+ Object peek() {
+        assert(!isEmpty());
+        return array[firstIndex];
+    }
+
+    fn+ void clear() {
+        size = 0;
+        array = new[INITIAL_CAPACITY];
+    }
+
+    fn+ int size() {
+        return size;
+    }
+
+    fn- void allocate() while(size >= array.size) {
+        Object[] new_array = new[array.size * 2];
+
+        //Copy the array by parts according to indices
+        if(lastIndex > firstIndex) {
+            System.arraycopy(array, firstIndex, new_array, 0, size);
+        } else {
+            System.arraycopy(array, firstIndex, new_array, 0, array.size - firstIndex);
+            System.arraycopy(array, 0, new_array, array.size - firstIndex, lastIndex);
+        }
+
+        firstIndex = 0;
+        lastIndex = firstIndex + size;
+        array = new_array;
+    }
+}
