@@ -1,1 +1,59 @@
-//TODO
+¦ The LinkedQueue class represents a queue implemented as linked nodes.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.2
+¦
+class+ const LinkedQueue : Queue {
+    - Node first = null;
+    - Node last = null;
+    - int size;
+
+    fn+ constructor() { }
+
+    fn+ void push(Object object) {
+        if(isEmpty()) {
+            first = last = new(last, object);
+        } else {
+            last = last.prev = new(last.prev, object);
+        }
+        size++;
+    }
+
+    fn+ Object pop() {
+        assert(!isEmpty());
+
+        //Retrieve and pop element
+        Object previous = first.object;
+        first = first.prev;
+        size--;
+
+        return previous;
+    }
+
+    fn+ Object peek() {
+        assert(!isEmpty());
+        return first.object;
+    }
+
+    fn+ void clear() {
+        size = 0;
+        first = null;
+        last = null;
+    }
+
+    fn+ int size() {
+        return size;
+    }
+
+    ¦ The LinkedQueue.Node class represents a node in the linked queue.
+    ¦ It contains a pointer to the previous node in the queue.
+    ¦
+    class- Node {
+        - Node prev;
+        - Object object;
+
+        fn+ constructor(Node prev, Object object) {
+            this.prev = prev;
+            this.object = object;
+        }
+    }
+}
