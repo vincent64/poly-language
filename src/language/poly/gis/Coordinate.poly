@@ -73,17 +73,30 @@ class+ const Coordinate : Equatable {
         return longitude;
     }
 
+    ¦ Returns whether the current coordinate is equal to the given coordinate.
+    ¦ @returns true if the coordinates are equal
+    ¦
+    op+ bool ==(Coordinate that) {
+        return this.latitude == that.latitude && this.longitude == that.longitude;
+    }
+
+    ¦ Returns whether the current coordinate is not equal to the given coordinate.
+    ¦ @returns true if the coordinates are not equal
+    ¦
+    op+ bool !=(Coordinate that) {
+        return this.latitude != that.latitude || this.longitude != that.longitude;
+    }
+
     op+ bool ==(Object object) {
         if(object !=: Coordinate) return false;
-        Coordinate that = object:Coordinate;
-
-        return latitude == that.latitude && longitude == that.longitude;
+        return this == object:Coordinate;
     }
 
     op+ bool !=(Object object) {
-        if(object !=: Coordinate) return false;
-        Coordinate that = object:Coordinate;
+        return !(this == object);
+    }
 
-        return latitude != that.latitude || longitude != that.longitude;
+    fn+ bool equals(Object object) {
+        return this == object;
     }
 }
