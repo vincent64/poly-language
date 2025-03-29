@@ -181,7 +181,7 @@ public final class SymbolResolver {
                 methodSymbol = methodSymbol.asStatic();
 
             //Set method as constant if class is constant
-            if(classSymbol.isConstant())
+            if(classSymbol.isConstant() && !methodSymbol.isConstructor())
                 methodSymbol = methodSymbol.asConstant();
 
             //Generate implicit main method
