@@ -19,7 +19,16 @@ interface+ Queue(Deque) {
     ¦ Pops the n first objects off the queue and returns them in a list.
     ¦ @param the object count
     ¦ @returns the first objects list
-    fn List pop(int count);
+    ¦
+    fn List pop(int count) {
+        assert(0 <= count && count <= size());
+
+        List list = new ArrayList();
+        for(int i = 0; i < count; i++)
+            list.add(pop());
+
+        return list;
+    }
 
     ¦ Returns the first object.
     ¦ @returns the first object
