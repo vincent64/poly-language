@@ -17,6 +17,8 @@ class+ const ArrayStack : Stack {
     }
 
     fn+ Object pop() {
+        assert(!isEmpty());
+
         //Retrieve and pop element
         Object object = array[size - 1];
         array[--size] = null;
