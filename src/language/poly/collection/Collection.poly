@@ -1,7 +1,6 @@
 ¦ The Collection interface describes an abstract collection of objects.
-¦ It contains methods to get the size of the collection, whether it is empty,
-¦ to check if it contains a specific object and clear the collection.
-¦ Implementations of this interface includes lists, sets and maps.
+¦ It contains methods to get the size of the collection, check whether it is empty and clear the collection.
+¦ Implementations of this interface includes lists, sets, maps, deque, and more.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
 ¦
