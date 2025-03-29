@@ -2033,10 +2033,8 @@ public final class Analyzer implements NodeModifier {
                 || (node instanceof MemberAccess memberAccess
                     && memberAccess.getAccessor() instanceof MethodCall)
                 || (node instanceof UnaryExpression unaryExpression
-                    && (unaryExpression.getKind() == UnaryExpression.Kind.PRE_INCREMENT
-                    || unaryExpression.getKind() == UnaryExpression.Kind.POST_INCREMENT
-                    || unaryExpression.getKind() == UnaryExpression.Kind.PRE_DECREMENT
-                    || unaryExpression.getKind() == UnaryExpression.Kind.POST_DECREMENT));
+                    && (unaryExpression.getKind().isIncrement()
+                    || unaryExpression.getKind().isDecrement()));
     }
 
     /**
