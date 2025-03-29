@@ -19,6 +19,7 @@ interface+ Stack(Deque) {
     ¦ Pops the n topmost objects off the stack and returns them in a list.
     ¦ @param the object count
     ¦ @returns the topmost objects list
+    ¦
     fn List pop(int count) {
         assert(0 <= count && count <= size());
 
