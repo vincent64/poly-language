@@ -7,7 +7,7 @@ It does not refer to the Poly standard library.
 
 
 ## Sections
-### [Primitive types](primitives/Primitives.md)
+### [Primitives](primitives/Primitives.md)
 ### [Classes](objects/Objects.md)
 ### [Statements](statements/Statements.md)
 ### [Expressions](expressions/Expressions.md)
@@ -16,8 +16,9 @@ It does not refer to the Poly standard library.
 
 ## Subsections
 #### [Identifiers](Identifiers.md)
+#### [Type](Type.md)
+#### [Variable](Variable.md)
 #### [Comments](Comments.md)
 #### [Docstring](Docstring.md)
-#### [Type](Type.md)
 #### [Importations](Importations.md)
 #### [Reserved keywords](Reserved-keywords.md)

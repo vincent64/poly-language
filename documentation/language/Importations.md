@@ -85,4 +85,4 @@ class+ MyClass {
 
 
 ## Related
-### [Classes](classes/Classes.md)
+### [Class](objects/Class.md)

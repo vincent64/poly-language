@@ -46,4 +46,4 @@ Matrix matrix = new(...):Matrix;
 
 ## Related
 ### [Type casting](Type-casting.md)
-### [Classes](../classes/Classes.md)
+### [Class](../objects/Class.md)

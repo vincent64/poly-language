@@ -52,6 +52,6 @@ If the superclass of a class does not have a constructor with no arguments, it i
 
 
 ## Related
-### [Interfaces](Interfaces.md)
+### [Interface](Interface.md)
 ### [Class](Class.md)
 ### [Nested/inner class](Nested-inner-class.md)

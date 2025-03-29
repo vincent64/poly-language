@@ -25,7 +25,7 @@ While a static and constant integer field could be declared this way :
 + # const int CONSTANT_VALUE;
 ```
 
-A field can also be initialized.
+A field can also be initialized. For more information, visit the [variable](../Variable.md) documentation.
 
 
 ## Access & behavior
