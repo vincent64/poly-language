@@ -27,6 +27,38 @@ public class InnerClass implements Byteable {
         this.outerClassIndex = outerClassIndex;
     }
 
+    /**
+     * Returns the inner class access flag.
+     * @return the access flag
+     */
+    public short getAccessFlag() {
+        return accessFlag;
+    }
+
+    /**
+     * Returns the inner class name index.
+     * @return the name index
+     */
+    public short getNameIndex() {
+        return nameIndex;
+    }
+
+    /**
+     * Returns the inner class index.
+     * @return the class index
+     */
+    public short getClassIndex() {
+        return classIndex;
+    }
+
+    /**
+     * Returns the outer class index.
+     * @return the class index
+     */
+    public short getOuterClassIndex() {
+        return outerClassIndex;
+    }
+
     @Override
     public byte[] getBytes() {
         ByteArray byteArray = new ByteArray();
