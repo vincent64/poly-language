@@ -25,7 +25,7 @@ import java.util.List;
  * @author Vincent Philippe (@vincent64)
  */
 public final class InnerClassesAttribute extends Attribute {
-    private static final String NAME = "InnerClasses";
+    public static final String NAME = "InnerClasses";
     private final List<InnerClass> innerClasses;
 
     /**
