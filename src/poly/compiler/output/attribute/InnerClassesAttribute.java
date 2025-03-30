@@ -50,6 +50,14 @@ public final class InnerClassesAttribute extends Attribute {
         innerClasses.add(new InnerClass(accessFlag, nameIndex, classIndex, outerClassIndex));
     }
 
+    /**
+     * Returns the list of inner classes.
+     * @return the inner classes list
+     */
+    public List<InnerClass> getInnerClasses() {
+        return List.copyOf(innerClasses);
+    }
+
     @Override
     public byte[] getBytes() {
         ByteArray byteArray = new ByteArray();
