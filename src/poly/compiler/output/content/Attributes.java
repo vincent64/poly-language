@@ -43,6 +43,14 @@ public class Attributes implements Byteable {
     }
 
     /**
+     * Returns the list of attributes.
+     * @return the attributes list
+     */
+    public List<Attribute> getAttributes() {
+        return List.copyOf(attributes);
+    }
+
+    /**
      * Returns the amount of attributes.
      * @return the attribute count
      */
