@@ -184,15 +184,21 @@ public class ClassReader {
     }
 
     /**
-     * Reads and adds the given amount of methods to the given class file.
-     * @param classFile the class file
+     * Reads and returns the given amount of methods.
      * @param methodCount the method count
+     * @return the methods
      */
-    private void readMethods(ClassFile classFile, short methodCount) {
+    private Methods readMethods(short methodCount) {
+        Methods methods = new Methods();
+
         for(int i = 0; i < methodCount; i++) {
-            classFile.addMethod(readShort(), readShort(), readShort());
+            methods.addMethod(readShort(), readShort(), readShort());
             skipAttributes(readShort());
         }
+
+        return methods;
+    }
+
     }
 
     /**
