@@ -3,6 +3,7 @@ package poly.compiler.output;
 import poly.compiler.file.CodeReader;
 import poly.compiler.output.attribute.Attribute;
 import poly.compiler.output.attribute.CodeAttribute;
+import poly.compiler.output.attribute.InnerClassesAttribute;
 import poly.compiler.output.attribute.SourceFileAttribute;
 import poly.compiler.output.content.*;
 import poly.compiler.output.jvm.Instructions;
@@ -104,25 +105,26 @@ public class ClassFile implements Byteable {
 
     /**
      * Constructs a class file from the given access flag, class index, superclass index,
-     * constant pool and interfaces.
+     * constant pool, interfaces, fields, methods and attributes.
      * @param accessFlag the access flag
      * @param classIndex the class index
      * @param superclassIndex the superclass index
      * @param constantPool the constant pool
      * @param interfaces the interfaces
+     * @param fields the fields
+     * @param methods the methods
+     * @param attributes the attributes
      */
-    public ClassFile(short accessFlag, short classIndex, short superclassIndex,
-                     ConstantPool constantPool, Interfaces interfaces) {
+    public ClassFile(short accessFlag, short classIndex, short superclassIndex, ConstantPool constantPool,
+                     Interfaces interfaces, Fields fields, Methods methods, Attributes attributes) {
         this.accessFlag = accessFlag;
         this.classIndex = classIndex;
         this.superclassIndex = superclassIndex;
         this.constantPool = constantPool;
         this.interfaces = interfaces;
-
-        //Initialize class file content
-        fields = new Fields();
-        methods = new Methods();
-        attributes = new Attributes();
+        this.fields = fields;
+        this.methods = methods;
+        this.attributes = attributes;
 
         //Get class constant
         Constant classConstant = constantPool.getConstant(classIndex);
