@@ -200,6 +200,27 @@ public class ClassReader {
     }
 
     }
+    /**
+     * Reads and returns the given amount of inner class for the inner classes attribute.
+     * @param constantPool the constant pool
+     * @param classCount the inner class count
+     * @return the inner classes attribute
+     */
+    private InnerClassesAttribute readInnerClasses(ConstantPool constantPool, short classCount) {
+        InnerClassesAttribute innerClassesAttribute = new InnerClassesAttribute(constantPool);
+
+        for(int i = 0; i < classCount; i++) {
+            short classIndex = readShort();
+            short outerClassIndex = readShort();
+            short nameIndex = readShort();
+            short accessFlag = readShort();
+
+            //Add inner class
+            innerClassesAttribute.addInnerClass(accessFlag, nameIndex, classIndex, outerClassIndex);
+        }
+
+        return innerClassesAttribute;
+    }
 
     /**
      * Skips the given amount of attributes.
