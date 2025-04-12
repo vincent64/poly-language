@@ -1,6 +1,7 @@
 package poly.compiler.file;
 
 import poly.compiler.output.ClassFile;
+import poly.compiler.output.attribute.InnerClassesAttribute;
 import poly.compiler.output.content.*;
 import poly.compiler.output.jvm.Instructions;
 import poly.compiler.resolver.LibraryClasses;
@@ -199,7 +200,32 @@ public class ClassReader {
         return methods;
     }
 
+    /**
+     * Reads and returns the given amount of attributes.
+     * @param constantPool the constant pool
+     * @param attributeCount the attribute count
+     * @return the attributes
+     */
+    private Attributes readAttributes(ConstantPool constantPool, short attributeCount) {
+        Attributes attributes = new Attributes();
+
+        for(int i = 0; i < attributeCount; i++) {
+            Constant nameConstant = constantPool.getConstant(readShort());
+            String name = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+
+            //Add inner class attribute
+            if(name.equals(InnerClassesAttribute.NAME)) {
+                skipBytes(4);
+                attributes.addAttribute(readInnerClasses(constantPool, readShort()));
+            }
+
+            //Skip attributes
+            else skipBytes(readInt());
+        }
+
+        return attributes;
     }
+
     /**
      * Reads and returns the given amount of inner class for the inner classes attribute.
      * @param constantPool the constant pool
