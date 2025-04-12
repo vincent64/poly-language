@@ -52,16 +52,12 @@ public class ClassReader {
         //Get superclass index in constant pool
         short superclassIndex = readShort();
 
-        //Read interfaces
-        Interfaces interfaces = readInterfaces(readShort());
-
         //Initialize class file
-        ClassFile classFile = new ClassFile(accessFlag, classIndex, superclassIndex, constantPool, interfaces);
-
-        //Read fields
-        readFields(classFile, readShort());
-        //Read methods
-        readMethods(classFile, readShort());
+        ClassFile classFile = new ClassFile(accessFlag, classIndex, superclassIndex, constantPool,
+                readInterfaces(readShort()),
+                readFields(readShort()),
+                readMethods(readShort()),
+                readAttributes(constantPool, readShort()));
 
         ClassName className = ClassName.fromStringQualifiedName(classFile.getClassQualifiedName());
 
