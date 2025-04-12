@@ -168,15 +168,19 @@ public class ClassReader {
     }
 
     /**
-     * Reads and adds the given amount of fields to the given class file.
-     * @param classFile the class file
+     * Reads and returns the given amount of fields.
      * @param count the field count
+     * @return the fields
      */
-    private void readFields(ClassFile classFile, short count) {
+    private Fields readFields(short count) {
+        Fields fields = new Fields();
+
         for(int i = 0; i < count; i++) {
-            classFile.addField(readShort(), readShort(), readShort());
+            fields.addField(readShort(), readShort(), readShort());
             skipAttributes(readShort());
         }
+
+        return fields;
     }
 
     /**
