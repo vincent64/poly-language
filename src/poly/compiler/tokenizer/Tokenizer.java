@@ -54,23 +54,18 @@ public final class Tokenizer {
 
         //Set line and character numbering
         lineNumber = 1;
-        characterNumber = 0;
+        characterNumber = 1;
         tokenLineNumber = lineNumber;
         tokenCharacterNumber = characterNumber;
 
         //Set the previous character to be the first
-        char previousChar = content[0];
+        char previousChar = 0;
 
         //Set escaping rules
-        boolean isComment = false;
-        boolean isLongComment = false;
-        boolean isDocstring = false;
-        boolean isString = false;
-        boolean isChar = false;
-        boolean isEscaped = false;
+        Escape escape = Escape.NONE;
 
         //Define current alphabet type
-        Alphabet.Type currentAlphabetType = Alphabet.getTypeFromMainCharacter(previousChar);
+        Alphabet.Type currentAlphabetType = Alphabet.Type.EMPTY;
 
         //Set the current token starting index
         int tokenStartIndex = 0;
@@ -84,86 +79,81 @@ public final class Tokenizer {
                 characterNumber = 1;
 
                 //Reset single-line comment
-                if(isComment || isDocstring) {
+                if(escape == Escape.COMMENT || escape == Escape.DOCSTRING) {
                     tokenStartIndex = i + 1;
                     currentAlphabetType = Alphabet.Type.EMPTY;
-                    isComment = false;
-                    isDocstring = false;
+                    escape = Escape.NONE;
                 }
             } else characterNumber++;
 
             //Detect start of single-line comment
-            if(currentChar == '/' && previousChar == '/' && !isString)
-                isComment = true;
+            if(currentChar == '/' && previousChar == '/' && escape == Escape.NONE)
+                escape = Escape.COMMENT;
 
             //Detect start of multiple-line comment
-            if(currentChar == '*' && previousChar == '/' && !isString)
-                isLongComment = true;
+            if(currentChar == '*' && previousChar == '/' && escape == Escape.NONE)
+                escape = Escape.LONG_COMMENT;
 
             //Detect start of docstring comment
-            if(currentChar == '¦')
-                isDocstring = true;
+            if(currentChar == '¦' && escape == Escape.NONE)
+                escape = Escape.DOCSTRING;
 
             //Reset multiple-line comment
-            if(currentChar == '/' && previousChar == '*' && isLongComment) {
+            if(currentChar == '/' && previousChar == '*' && escape == Escape.LONG_COMMENT) {
                 tokenStartIndex = i + 1;
                 currentAlphabetType = Alphabet.Type.EMPTY;
-                isLongComment = false;
+                escape = Escape.NONE;
                 continue;
             }
 
             //Skip tokenization if inside a comment
-            if(isComment || isLongComment || isDocstring) {
+            if(escape.isComment()) {
                 previousChar = currentChar;
                 continue;
             }
 
-            //Detect string escape
-            if(isString || isChar)
-                isEscaped = previousChar == '\\' && !isEscaped;
-
             //Detect start and end of string literal
-            if(currentChar == '"' && !isChar) {
-                if(!isString) {
+            if(currentChar == '"') {
+                if(escape == Escape.NONE) {
                     if(currentAlphabetType != Alphabet.Type.EMPTY)
                         createToken(tokenStartIndex, i);
 
-                    isString = true;
+                    escape = Escape.STRING;
                     tokenStartIndex = i;
-                } else if(!isEscaped) {
+                } else if(escape == Escape.STRING && previousChar != '\\') {
                     //Create new token for string literal
                     createToken(tokenStartIndex, i + 1);
 
                     //Reset start index and alphabet type
                     tokenStartIndex = i + 1;
                     currentAlphabetType = Alphabet.Type.EMPTY;
-                    isString = false;
+                    escape = Escape.NONE;
                     continue;
                 }
             }
 
             //Detect start and end of char literal
-            if(currentChar == '\'' && !isString) {
-                if(!isChar) {
+            if(currentChar == '\'') {
+                if(escape == Escape.NONE) {
                     if(currentAlphabetType != Alphabet.Type.EMPTY)
                         createToken(tokenStartIndex, i);
 
-                    isChar = true;
+                    escape = Escape.CHARACTER;
                     tokenStartIndex = i;
-                } else if(!isEscaped) {
+                } else if(escape == Escape.CHARACTER && previousChar != '\\') {
                     //Create new token for char literal
                     createToken(tokenStartIndex, i + 1);
 
                     //Reset start index and alphabet type
                     tokenStartIndex = i + 1;
                     currentAlphabetType = Alphabet.Type.EMPTY;
-                    isChar = false;
+                    escape = Escape.NONE;
                     continue;
                 }
             }
 
             //Skip tokenization if inside a string or char literal
-            if(isString || isChar) {
+            if(escape == Escape.STRING || escape == Escape.CHARACTER) {
                 previousChar = currentChar;
                 continue;
             }
