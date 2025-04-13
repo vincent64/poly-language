@@ -1,13 +1,12 @@
-package poly.compiler.content;
+package poly.compiler.util;
 
-import poly.compiler.util.ByteArray;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ByteArrayTest {
     @Test
-    void generalUsageWorks() {
+    void testGeneralUsage() {
         ByteArray byteArray = new ByteArray(64);
         byteArray.add(new byte[] {
                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -23,7 +22,7 @@ public class ByteArrayTest {
     }
 
     @Test
-    void arrayOverflowWorks() {
+    void testArrayOverflow() {
         ByteArray byteArray = new ByteArray(16);
 
         for(int i = 0; i < 24; i++)
@@ -39,7 +38,7 @@ public class ByteArrayTest {
     }
 
     @Test
-    void arrayHugeOverflowWorks() {
+    void testArrayHugeOverflow() {
         ByteArray byteArray = new ByteArray(64);
         byteArray.add(new byte[2064]);
 
