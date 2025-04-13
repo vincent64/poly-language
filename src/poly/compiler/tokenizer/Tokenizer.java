@@ -300,4 +300,16 @@ public final class Tokenizer {
         if(!tokens.isEmpty() && Character.isSameString(tokens.getFirst().getContent(), Symbol.CLOSING_CURLY_BRACKET))
             Collections.reverse(tokens);
     }
+
+    /**
+     * The Tokenizer.Escape enum. This enum contains every kind
+     * of token escape there exists.
+     */
+    private enum Escape {
+        NONE, CHARACTER, STRING, COMMENT, LONG_COMMENT, DOCSTRING;
+
+        boolean isComment() {
+            return this == COMMENT || this == LONG_COMMENT || this == DOCSTRING;
+        }
+    }
 }
