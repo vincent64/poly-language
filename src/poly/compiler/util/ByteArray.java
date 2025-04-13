@@ -8,7 +8,7 @@ package poly.compiler.util;
  * @author Vincent Philippe (@vincent64)
  */
 public class ByteArray {
-    private static final int CHUNK_SIZE = 64;
+    private static final int CHUNK_SIZE = 32;
     private byte[] array;
     private int size;
 
@@ -32,17 +32,11 @@ public class ByteArray {
      * @param array the array of bytes
      */
     public void add(byte[] array) {
-        if(size + array.length > this.array.length) {
-            increaseArraySize();
+        allocate(array.length);
 
-            //Add the given array
-            add(array);
-        } else {
-            //Add the given array to the main array
-            System.arraycopy(array, 0, this.array, size, array.length);
-            //Increase size count
-            size += array.length;
-        }
+        //Add the given array to the main array and increase size
+        System.arraycopy(array, 0, this.array, size, array.length);
+        size += array.length;
     }
 
     /**
@@ -50,7 +44,7 @@ public class ByteArray {
      * @param value the byte
      */
     public void add(byte value) {
-        if(size + 1 > array.length) increaseArraySize();
+        allocate(1);
 
         //Add the given value to the main array
         array[size++] = value;
@@ -76,13 +70,19 @@ public class ByteArray {
         add((byte) (value & 0xFF));
     }
 
-    private void increaseArraySize() {
-        //Initialize new array which is bigger
-        byte[] newArray = new byte[array.length + CHUNK_SIZE];
+    /**
+     * Allocates more array size if adding the given bytes count
+     * would produce an array overflow.
+     * @param count the bytes count
+     */
+    private void allocate(int count) {
+        while(size + count >= array.length) {
+            byte[] newArray = new byte[array.length * 2];
 
-        //Copy previous array into the new one
-        System.arraycopy(array, 0, newArray, 0, array.length);
-        array = newArray;
+            //Copy and replace the array
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
+        }
     }
 
     /**
