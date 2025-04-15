@@ -330,7 +330,7 @@ public final class Parser {
             }
         }
 
-        //Parse method arguments
+        //Parse method parameters
         match(OPENING_PARENTHESIS);
         node.setParameterList(parseParameterList());
         match(CLOSING_PARENTHESIS);
@@ -541,21 +541,21 @@ public final class Parser {
     private Node parseForStatement() {
         ForStatement node = new ForStatement(Node.Meta.fromLeadingToken(currentToken));
 
-        //Match for keyword and parenthesis
+        //Match for keyword and opening parenthesis
         match(STATEMENT_FOR);
         match(OPENING_PARENTHESIS);
 
-        //Parse variable initialiation
-        node.setVariableInitialization(parseStatement());
+        //Parse statement
+        node.setStatement(parseStatement());
 
-        //Parse condition expression
+        //Parse condition expression and semicolon
         node.setCondition(parseExpression());
         match(SEMICOLON);
 
-        //Parse variable incrementation
+        //Parse expression as statement
         ExpressionStatement expressionStatement = new ExpressionStatement(Node.Meta.fromLeadingToken(currentToken));
         expressionStatement.setExpression(parseExpression());
-        node.setIncrementExpression(expressionStatement);
+        node.setExpression(expressionStatement);
 
         //Match closing parenthesis
         match(CLOSING_PARENTHESIS);
@@ -600,7 +600,7 @@ public final class Parser {
         node.setCondition(parseExpression());
         match(CLOSING_PARENTHESIS);
 
-        //Match semicolon
+        //Match semicolon at the end
         match(SEMICOLON);
 
         return node;
@@ -641,7 +641,7 @@ public final class Parser {
         while(isMatching(STATEMENT_CASE))
             node.addCase(parseCase());
 
-        //Match closing curly bracket
+        //Match closing bracket
         match(CLOSING_CURLY_BRACKET);
 
         return node;
@@ -800,7 +800,7 @@ public final class Parser {
     private Node parseSumExpression() {
         SumExpression node = new SumExpression(Node.Meta.fromLeadingToken(currentToken));
 
-        //Match sum keyword and parenthesis
+        //Match sum keyword and opening parenthesis
         match(EXPRESSION_SUM);
         match(OPENING_PARENTHESIS);
 
@@ -829,7 +829,7 @@ public final class Parser {
     private Node parseProdExpression() {
         ProdExpression node = new ProdExpression(Node.Meta.fromLeadingToken(currentToken));
 
-        //Match prod keyword and parenthesis
+        //Match prod keyword and opening parenthesis
         match(EXPRESSION_PROD);
         match(OPENING_PARENTHESIS);
 
@@ -898,7 +898,7 @@ public final class Parser {
     private Node parseExpressionNullCoalescing() {
         Node node = parseExpressionLogicalOr();
 
-        //Parse Elvis operator expression
+        //Parse null coalescing operator expression
         if(matches(NULL_COALESCING)) {
             BinaryExpression binaryExpression = new BinaryExpression(Node.Meta.fromLeadingToken(currentToken));
             binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_NULL);
@@ -1343,7 +1343,7 @@ public final class Parser {
         node.setMethodName(currentToken);
         nextToken();
 
-        //Match argument list
+        //Parse arguments list
         match(OPENING_PARENTHESIS);
         node.setArgumentList(parseArgumentList());
         match(CLOSING_PARENTHESIS);
@@ -1523,7 +1523,7 @@ public final class Parser {
         if(isMatching(CLOSING_PARENTHESIS))
             return node;
 
-        //Parse arguments list
+        //Parse arguments
         do {
             node.addArgument(parseExpression());
         } while(matches(COMMA));
