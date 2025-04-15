@@ -43,13 +43,11 @@ match
 new
 null
 nullifier
-object
 op
 outer
 prod
 return
 short
-string
 sum
 super
 switch
