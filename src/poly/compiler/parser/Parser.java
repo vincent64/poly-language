@@ -71,7 +71,7 @@ public final class Parser {
      */
     private void nextToken() {
         //Throw error if the code ended unexpectedly
-        if(isLastToken()) new ParsingError.UnexpectedEndOfCode(currentToken);
+        if(isPastLastToken()) new ParsingError.UnexpectedEndOfCode(currentToken);
 
         //Update current token
         currentToken = tokens[++currentTokenIndex];
@@ -85,16 +85,16 @@ public final class Parser {
      */
     private Token peekToken() {
         //Throw error if the next token is out of bounds
-        if(isLastToken()) new ParsingError.UnexpectedEndOfCode(currentToken);
+        if(isPastLastToken()) new ParsingError.UnexpectedEndOfCode(currentToken);
 
         return tokens[currentTokenIndex + 1];
     }
 
     /**
-     * Returns whether the current token is the last one in the list.
-     * @return true if the current token is the last one
+     * Returns whether the current token is the past the last token in the list
+     * @return true if the current token is past the last one
      */
-    private boolean isLastToken() {
+    private boolean isPastLastToken() {
         return currentTokenIndex >= tokens.length - 1;
     }
 
@@ -113,7 +113,7 @@ public final class Parser {
             new ParsingError.UnexpectedToken(currentToken);
         }
 
-        if(!isLastToken()) nextToken();
+        if(!isPastLastToken()) nextToken();
         else currentTokenIndex++;
     }
 
@@ -123,7 +123,7 @@ public final class Parser {
      * @return true if the current token is matching the content
      */
     private boolean isMatching(char[] content) {
-        return !isLastToken() && isSameString(currentToken.getContent(), content);
+        return !isPastLastToken() && isSameString(currentToken.getContent(), content);
     }
 
     /**
