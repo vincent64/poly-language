@@ -308,7 +308,7 @@ public final class Parser {
         if(matches(VAR_CONST)) node.setConstant();
 
         //Check if method is a constructor
-        if(matches(METHOD_CONSTRUCTOR)) {
+        if(matches(METHOD_CONSTRUCTOR) && !node.isOperator()) {
             node.setConstructor();
         } else {
             //Parse method return type
