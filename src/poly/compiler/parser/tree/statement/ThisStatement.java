@@ -9,7 +9,7 @@ import poly.compiler.util.NodeStringifier;
  * The ThisStatement class. This class represents a this-constructor call statement.
  * @author Vincent Philippe (@vincent64)
  */
-public class ThisStatement extends Node {
+public class ThisStatement extends Statement {
     private Node argumentList;
 
     public ThisStatement(Meta meta) {

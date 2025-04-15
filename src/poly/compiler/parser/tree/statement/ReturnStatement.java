@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * the return expression.
  * @author Vincent Philippe (@vincent64)
  */
-public class ReturnStatement extends Node {
+public class ReturnStatement extends Statement {
     private Node expression;
 
     public ReturnStatement(Meta meta) {

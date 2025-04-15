@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * main expression and the cases to execute.
  * @author Vincent Philippe (@vincent64)
  */
-public class SwitchStatement extends Node {
+public class SwitchStatement extends Statement {
     private Node expression;
     private Node[] cases;
 

@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * main condition, the statement block inside it, and an optional else condition and statements block.
  * @author Vincent Philippe (@vincent64)
  */
-public class IfStatement extends Node {
+public class IfStatement extends Statement {
     private Node condition;
     private Node statementBlock;
     private Node elseStatementBlock;

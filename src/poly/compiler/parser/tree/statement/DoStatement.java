@@ -11,7 +11,7 @@ import poly.compiler.util.NodeStringifier;
  * to be executed for each iteration.
  * @author Vincent Philippe (@vincent64)
  */
-public class DoStatement extends Node {
+public class DoStatement extends Statement {
     private Node condition;
     private Node statementBlock;
 

@@ -8,7 +8,7 @@ import poly.compiler.parser.tree.NodeVisitor;
  * The ContinueStatement class. This class represents a continue-statement.
  * @author Vincent Philippe (@vincent64)
  */
-public class ContinueStatement extends Node {
+public class ContinueStatement extends Statement {
     public ContinueStatement(Meta meta) {
         super(meta);
     }

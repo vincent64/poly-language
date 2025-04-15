@@ -11,7 +11,7 @@ import poly.compiler.util.NodeStringifier;
  * containing the package name to be imported.
  * @author Vincent Philippe (@vincent64)
  */
-public class ImportStatement extends Node {
+public class ImportStatement extends Statement {
     private Node packageName;
     private String aliasName;
 

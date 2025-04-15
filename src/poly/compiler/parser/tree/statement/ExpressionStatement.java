@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * as a standalone statement. It only contains the expression of the statement.
  * @author Vincent Philippe (@vincent64)
  */
-public class ExpressionStatement extends Node {
+public class ExpressionStatement extends Statement {
     private Node expression;
 
     public ExpressionStatement(Meta meta) {

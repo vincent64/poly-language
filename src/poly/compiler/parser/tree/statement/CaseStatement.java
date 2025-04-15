@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * or a match-statement. It contains the case expression and its statements block.
  * @author Vincent Philippe (@vincent64)
  */
-public class CaseStatement extends Node {
+public class CaseStatement extends Statement {
     private Node expression;
     private Node statementBlock;
 

@@ -11,7 +11,7 @@ import poly.compiler.util.NodeStringifier;
  * This class does not represent a foreach-statement.
  * @author Vincent Philippe (@vincent64)
  */
-public class ForStatement extends Node {
+public class ForStatement extends Statement {
     private Node variableInitialization;
     private Node condition;
     private Node incrementExpression;

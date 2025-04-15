@@ -9,7 +9,7 @@ import poly.compiler.util.NodeStringifier;
  * The SuperStatement class. This class represents a super-constructor call statement.
  * @author Vincent Philippe (@vincent64)
  */
-public class SuperStatement extends Node {
+public class SuperStatement extends Statement {
     private Node argumentList;
 
     public SuperStatement(Meta meta) {

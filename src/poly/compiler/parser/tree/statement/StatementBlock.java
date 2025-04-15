@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * There may be zero, one or multiple statements in the statement block.
  * @author Vincent Philippe (@vincent64)
  */
-public class StatementBlock extends Node {
+public class StatementBlock extends Statement {
     private Node[] statements;
 
     public StatementBlock(Meta meta) {

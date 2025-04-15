@@ -11,7 +11,7 @@ import poly.compiler.util.NodeStringifier;
  * statement doesn't have a general expression, only cases.
  * @author Vincent Philippe (@vincent64)
  */
-public class MatchStatement extends Node {
+public class MatchStatement extends Statement {
     private Node[] cases;
 
     public MatchStatement(Meta meta) {

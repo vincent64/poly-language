@@ -10,7 +10,7 @@ import poly.compiler.util.NodeStringifier;
  * boolean expression that must evaluate to true in order to avoid throwing an exception.
  * @author Vincent Philippe (@vincent64)
  */
-public class AssertStatement extends Node {
+public class AssertStatement extends Statement {
     private Node condition;
 
     public AssertStatement(Meta meta) {

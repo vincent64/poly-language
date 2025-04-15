@@ -11,7 +11,7 @@ import poly.compiler.util.NodeStringifier;
  * to be executed for each iteration.
  * @author Vincent Philippe (@vincent64)
  */
-public class WhileStatement extends Node {
+public class WhileStatement extends Statement {
     private Node condition;
     private Node statementBlock;
 

@@ -8,7 +8,7 @@ import poly.compiler.parser.tree.NodeVisitor;
  * The BreakStatement class. This class represents a break-statement.
  * @author Vincent Philippe (@vincent64)
  */
-public class BreakStatement extends Node {
+public class BreakStatement extends Statement {
     public BreakStatement(Meta meta) {
         super(meta);
     }
