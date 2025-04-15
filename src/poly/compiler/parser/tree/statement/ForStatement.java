@@ -12,41 +12,41 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class ForStatement extends Statement {
-    private Node variableInitialization;
+    private Node statement;
     private Node condition;
-    private Node incrementExpression;
+    private Node expression;
     private Node statementBlock;
 
     public ForStatement(Meta meta) {
         super(meta);
     }
 
-    public void setVariableInitialization(Node node) {
-        variableInitialization = node;
+    public void setStatement(Node node) {
+        statement = node;
     }
 
     public void setCondition(Node node) {
         condition = node;
     }
 
-    public void setIncrementExpression(Node node) {
-        incrementExpression = node;
+    public void setExpression(Node node) {
+        expression = node;
     }
 
     public void setStatementBlock(Node node) {
         statementBlock = node;
     }
 
-    public Node getVariableInitialization() {
-        return variableInitialization;
+    public Node getStatement() {
+        return statement;
     }
 
     public Node getCondition() {
         return condition;
     }
 
-    public Node getIncrementExpression() {
-        return incrementExpression;
+    public Node getExpression() {
+        return expression;
     }
 
     public Node getStatementBlock() {
@@ -66,12 +66,12 @@ public class ForStatement extends Statement {
     @Override
     public String toString() {
         NodeStringifier string = new NodeStringifier("ForStatement");
-        string.addString("Variable initialization:");
-        string.addNode(variableInitialization);
+        string.addString("Statement:");
+        string.addNode(statement);
         string.addString("Condition:");
         string.addNode(condition);
-        string.addString("Increment expression:");
-        string.addNode(incrementExpression);
+        string.addString("Expression:");
+        string.addNode(expression);
         string.addString("Body:");
         string.addNode(statementBlock);
 

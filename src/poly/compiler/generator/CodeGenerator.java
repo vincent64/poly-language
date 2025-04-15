@@ -274,7 +274,7 @@ public final class CodeGenerator implements NodeVisitor {
         int previousVariableCount = variableTable.getVariableCount();
 
         //Visit variable initialization
-        forStatement.getVariableInitialization().accept(this);
+        forStatement.getStatement().accept(this);
 
         Branching branching = new Branching();
 
@@ -298,7 +298,7 @@ public final class CodeGenerator implements NodeVisitor {
         branching.resolveJumps(instructions, programCounter);
 
         //Visit increment expression
-        forStatement.getIncrementExpression().accept(this);
+        forStatement.getExpression().accept(this);
 
         addInstruction(Instruction.forUnconditionalJump(jumpOffset - programCounter));
 

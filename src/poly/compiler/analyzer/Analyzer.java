@@ -279,9 +279,9 @@ public final class Analyzer implements NodeModifier {
         int previousVariableCount = variableTable.getVariableCount();
 
         //Visit expressions and statement
-        forStatement.setVariableInitialization(forStatement.getVariableInitialization().accept(this));
+        forStatement.setStatement(forStatement.getStatement().accept(this));
         forStatement.setCondition(forStatement.getCondition().accept(this));
-        forStatement.setIncrementExpression(forStatement.getIncrementExpression().accept(this));
+        forStatement.setExpression(forStatement.getExpression().accept(this));
 
         //Make sure the condition is a boolean expression
         matchBooleanExpression(forStatement.getCondition());
