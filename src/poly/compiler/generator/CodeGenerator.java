@@ -194,7 +194,7 @@ public final class CodeGenerator implements NodeVisitor {
 
         Type variableType = getTypeFromNode(variableDeclaration.getType());
 
-        Expression expression = (Expression) variableDeclaration.getInitializationExpression();
+        Expression expression = variableDeclaration.getInitializationExpression();
 
         if(expression != null) {
             //Visit initialization expression
@@ -239,7 +239,7 @@ public final class CodeGenerator implements NodeVisitor {
         Branching branching = new Branching();
 
         //Visit condition expression
-        visitCondition((Expression) ifStatement.getCondition(), branching);
+        visitCondition(ifStatement.getCondition(), branching);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -282,7 +282,7 @@ public final class CodeGenerator implements NodeVisitor {
         generateStackMapFrame();
 
         //Visit condition expression
-        visitCondition((Expression) forStatement.getCondition(), branching);
+        visitCondition(forStatement.getCondition(), branching);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -321,7 +321,7 @@ public final class CodeGenerator implements NodeVisitor {
         generateStackMapFrame();
 
         //Visit condition expression
-        visitCondition((Expression) whileStatement.getCondition(), branching);
+        visitCondition(whileStatement.getCondition(), branching);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -362,7 +362,7 @@ public final class CodeGenerator implements NodeVisitor {
         branching.resolveJumps(instructions, programCounter);
 
         //Visit condition expression
-        visitCondition((Expression) doStatement.getCondition(), branching, true);
+        visitCondition(doStatement.getCondition(), branching, true);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -456,7 +456,7 @@ public final class CodeGenerator implements NodeVisitor {
             CaseStatement caseStatement = (CaseStatement) node;
 
             //Visit condition expression
-            visitCondition((Expression) caseStatement.getExpression(), branching);
+            visitCondition(caseStatement.getExpression(), branching);
 
             //Resolve jumps to true-clause
             generateStackMapFrame();
@@ -489,7 +489,7 @@ public final class CodeGenerator implements NodeVisitor {
         Branching branching = new Branching();
 
         //Visit condition expression
-        visitCondition((Expression) assertStatement.getCondition(), branching, true, true);
+        visitCondition(assertStatement.getCondition(), branching, true, true);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -533,7 +533,7 @@ public final class CodeGenerator implements NodeVisitor {
             return;
         }
 
-        Expression expression = (Expression) returnStatement.getExpression();
+        Expression expression = returnStatement.getExpression();
 
         //Visit return expression
         visitExpression(expression);
@@ -628,7 +628,7 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitExpressionStatement(ExpressionStatement expressionStatement) {
         addLineNumber(expressionStatement);
 
-        Expression expression = (Expression) expressionStatement.getExpression();
+        Expression expression = expressionStatement.getExpression();
 
         //Visit assignment expression
         if(expression instanceof AssignmentExpression assignmentExpression) {
@@ -733,7 +733,7 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitUnaryExpression(UnaryExpression unaryExpression) {
         addLineNumber(unaryExpression);
 
-        Expression expression = (Expression) unaryExpression.getExpression();
+        Expression expression = unaryExpression.getExpression();
 
         //Visit increment expression
         if(unaryExpression.getKind().isIncrement() || unaryExpression.getKind().isDecrement()) {
@@ -788,8 +788,8 @@ public final class CodeGenerator implements NodeVisitor {
             return;
         }
 
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
+        Expression first = binaryExpression.getFirst();
+        Expression second = binaryExpression.getSecond();
 
         Primitive primitive1 = (Primitive) first.getExpressionType();
         Primitive primitive2 = (Primitive) second.getExpressionType();
@@ -864,7 +864,7 @@ public final class CodeGenerator implements NodeVisitor {
         //Visit cast expression
         castExpression.getExpression().accept(this);
 
-        Expression expression = (Expression) castExpression.getExpression();
+        Expression expression = castExpression.getExpression();
 
         Type expressionType = expression.getExpressionType();
         Type castType = castExpression.getExpressionType();
@@ -1247,14 +1247,14 @@ public final class CodeGenerator implements NodeVisitor {
         Branching branching = new Branching();
 
         //Visit condition expression
-        visitCondition((Expression) ifExpression.getCondition(), branching);
+        visitCondition(ifExpression.getCondition(), branching);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
         branching.resolveTrueJump(instructions, programCounter);
 
         //Visit expression
-        visitExpression((Expression) ifExpression.getExpression());
+        visitExpression(ifExpression.getExpression());
 
         operandStack.pop(1);
         branching.addJumpIndex(instructions.size(), programCounter);
@@ -1265,7 +1265,7 @@ public final class CodeGenerator implements NodeVisitor {
         branching.resolveFalseJump(instructions, programCounter);
 
         //Visit else expression
-        visitExpression((Expression) ifExpression.getElseExpression());
+        visitExpression(ifExpression.getElseExpression());
 
         generateStackMapFrame();
         branching.resolveJumps(instructions, programCounter);
@@ -1392,8 +1392,8 @@ public final class CodeGenerator implements NodeVisitor {
     @Override
     public void visitArgumentList(ArgumentList argumentList) {
         //Visit every argument
-        for(Node node : argumentList.getArguments())
-            visitExpression((Expression) node);
+        for(Expression expression : argumentList.getArguments())
+            visitExpression(expression);
     }
 
     @Override
@@ -1502,14 +1502,14 @@ public final class CodeGenerator implements NodeVisitor {
         if(expression instanceof BinaryExpression binaryExpression) {
             //Generate logical AND expression
             if(binaryExpression.getKind() == BinaryExpression.Kind.LOGICAL_AND) {
-                visitCondition((Expression) binaryExpression.getFirst(), branching, false, isInverted);
-                visitCondition((Expression) binaryExpression.getSecond(), branching, jumpOnTrue, isInverted);
+                visitCondition(binaryExpression.getFirst(), branching, false, isInverted);
+                visitCondition(binaryExpression.getSecond(), branching, jumpOnTrue, isInverted);
             }
 
             //Generate logical OR expression
             else if(binaryExpression.getKind() == BinaryExpression.Kind.LOGICAL_OR) {
-                visitCondition((Expression) binaryExpression.getFirst(), branching, true, isInverted);
-                visitCondition((Expression) binaryExpression.getSecond(), branching, jumpOnTrue, isInverted);
+                visitCondition(binaryExpression.getFirst(), branching, true, isInverted);
+                visitCondition(binaryExpression.getSecond(), branching, jumpOnTrue, isInverted);
             }
 
             //Generate type equality
@@ -1532,7 +1532,7 @@ public final class CodeGenerator implements NodeVisitor {
 
         //Visit unary expression
         else if(expression instanceof UnaryExpression unaryExpression) {
-            visitCondition((Expression) unaryExpression.getExpression(), branching, !jumpOnTrue, !isInverted);
+            visitCondition(unaryExpression.getExpression(), branching, !jumpOnTrue, !isInverted);
         }
 
         //Visit boolean expression
@@ -1556,8 +1556,8 @@ public final class CodeGenerator implements NodeVisitor {
      * @param isInverted whether the condition is inverted
      */
     private void visitComparison(BinaryExpression binaryExpression, Branching branching, boolean jumpOnTrue, boolean isInverted) {
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
+        Expression first = binaryExpression.getFirst();
+        Expression second = binaryExpression.getSecond();
 
         Primitive primitive1 = (Primitive) first.getExpressionType();
         Primitive primitive2 = (Primitive) second.getExpressionType();
@@ -1722,7 +1722,7 @@ public final class CodeGenerator implements NodeVisitor {
     private void visitAssignement(AssignmentExpression assignmentExpression, Type type,
                                   boolean isResultNeeded, boolean isSingleDepth, boolean isDoubleDepth) {
         //Visit assignment expression
-        visitExpression((Expression) assignmentExpression.getExpression());
+        visitExpression(assignmentExpression.getExpression());
 
         //Perform augmented assignment operation
         if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT)
@@ -1863,7 +1863,7 @@ public final class CodeGenerator implements NodeVisitor {
         arrayAccess.getArray().accept(this);
         arrayAccess.getAccessExpression().accept(this);
 
-        Expression expression = (Expression) assignmentExpression.getExpression();
+        Expression expression = assignmentExpression.getExpression();
 
         //Load array if augmented assignment
         if(assignmentExpression.getKind() != AssignmentExpression.Kind.ASSIGNMENT) {
@@ -2030,7 +2030,7 @@ public final class CodeGenerator implements NodeVisitor {
         arrayAccess.getArray().accept(this);
         arrayAccess.getAccessExpression().accept(this);
 
-        Expression expression = (Expression) unaryExpression.getExpression();
+        Expression expression = unaryExpression.getExpression();
 
         //Load array
         addInstruction(DUP2);
