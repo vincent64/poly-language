@@ -1,6 +1,7 @@
 package poly.compiler.parser.tree;
 
 import poly.compiler.output.content.AccessModifier;
+import poly.compiler.parser.tree.statement.Statement;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.util.NodeStringifier;
 
@@ -11,7 +12,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class FieldDeclaration extends Node {
     private AccessModifier accessModifier = AccessModifier.DEFAULT;
-    private Node variable;
+    private Statement variable;
     private boolean isStatic;
 
     /**
@@ -34,7 +35,7 @@ public class FieldDeclaration extends Node {
      * Sets the field variable declaration node.
      * @param node the variable declaration node
      */
-    public void setVariable(Node node) {
+    public void setVariable(Statement node) {
         variable = node;
     }
 
@@ -57,7 +58,7 @@ public class FieldDeclaration extends Node {
      * Returns the variable declaration node.
      * @return the variable declaration
      */
-    public Node getVariable() {
+    public Statement getVariable() {
         return variable;
     }
 
