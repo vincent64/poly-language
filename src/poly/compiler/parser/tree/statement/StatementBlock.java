@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.statement;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
@@ -11,24 +10,24 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class StatementBlock extends Statement {
-    private Node[] statements;
+    private Statement[] statements;
 
     public StatementBlock(Meta meta) {
         super(meta);
 
         //Initialize statements array
-        statements = new Node[0];
+        statements = new Statement[0];
     }
 
-    public void addStatement(Node node) {
-        statements = Node.add(statements, node);
+    public void addStatement(Statement node) {
+        statements = (Statement[]) add(statements, node);
     }
 
-    public void addFirstStatement(Node node) {
-        statements = Node.addFirst(statements, node);
+    public void addFirstStatement(Statement node) {
+        statements = (Statement[]) addFirst(statements, node);
     }
 
-    public Node[] getStatements() {
+    public Statement[] getStatements() {
         return statements;
     }
 
@@ -38,7 +37,7 @@ public class StatementBlock extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitStatementBlock(this);
     }
 

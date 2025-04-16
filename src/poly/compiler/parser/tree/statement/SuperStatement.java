@@ -30,7 +30,7 @@ public class SuperStatement extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitSuperStatement(this);
     }
 

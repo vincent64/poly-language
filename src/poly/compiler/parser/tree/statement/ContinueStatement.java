@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.statement;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 
@@ -19,7 +18,7 @@ public class ContinueStatement extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitContinueStatement(this);
     }
 

@@ -3,6 +3,7 @@ package poly.compiler.parser.tree.statement;
 import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.util.NodeStringifier;
 
 /**
@@ -11,29 +12,29 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class SwitchStatement extends Statement {
-    private Node expression;
-    private Node[] cases;
+    private Expression expression;
+    private Statement[] cases;
 
     public SwitchStatement(Meta meta) {
         super(meta);
 
         //Initialize cases array
-        cases = new Node[0];
+        cases = new Statement[0];
     }
 
-    public void setExpression(Node node) {
+    public void setExpression(Expression node) {
         expression = node;
     }
 
     public void addCase(Node node) {
-        cases = add(cases, node);
+        cases = (Statement[]) add(cases, node);
     }
 
-    public Node getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
-    public Node[] getCases() {
+    public Statement[] getCases() {
         return cases;
     }
 
@@ -43,7 +44,7 @@ public class SwitchStatement extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitSwitchStatement(this);
     }
 

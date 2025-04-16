@@ -30,7 +30,7 @@ public class ThisStatement extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitThisStatement(this);
     }
 

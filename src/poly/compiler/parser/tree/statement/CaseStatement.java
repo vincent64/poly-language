@@ -1,8 +1,8 @@
 package poly.compiler.parser.tree.statement;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.util.NodeStringifier;
 
 /**
@@ -11,26 +11,26 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class CaseStatement extends Statement {
-    private Node expression;
-    private Node statementBlock;
+    private Expression expression;
+    private Statement statementBlock;
 
     public CaseStatement(Meta meta) {
         super(meta);
     }
 
-    public void setExpression(Node node) {
+    public void setExpression(Expression node) {
         expression = node;
     }
 
-    public void setStatementBlock(Node node) {
+    public void setStatementBlock(Statement node) {
         statementBlock = node;
     }
 
-    public Node getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
-    public Node getStatementBlock() {
+    public Statement getStatementBlock() {
         return statementBlock;
     }
 
@@ -40,7 +40,7 @@ public class CaseStatement extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitCaseStatement(this);
     }
 

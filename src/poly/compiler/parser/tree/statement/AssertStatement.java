@@ -1,8 +1,8 @@
 package poly.compiler.parser.tree.statement;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.util.NodeStringifier;
 
 /**
@@ -11,17 +11,17 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class AssertStatement extends Statement {
-    private Node condition;
+    private Expression condition;
 
     public AssertStatement(Meta meta) {
         super(meta);
     }
 
-    public void setCondition(Node node) {
+    public void setCondition(Expression node) {
         condition = node;
     }
 
-    public Node getCondition() {
+    public Expression getCondition() {
         return condition;
     }
 
@@ -31,7 +31,7 @@ public class AssertStatement extends Statement {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitAssertStatement(this);
     }
 
