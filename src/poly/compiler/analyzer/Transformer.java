@@ -33,7 +33,7 @@ public final class Transformer {
      * @param methodName the operation overload method name
      * @return the transformed node
      */
-    Node transformOperationOverload(Node node, Expression expression, Expression argumentExpression, String methodName) {
+    Expression transformOperationOverload(Node node, Expression expression, Expression argumentExpression, String methodName) {
         //Generate operation method call
         MethodCall methodCall = new MethodCall(node.getMeta());
         methodCall.setMethodName(methodName);
@@ -58,14 +58,14 @@ public final class Transformer {
      * @param classCreation the class creation node
      * @return the transformed node
      */
-    Node transformInnerClassCreation(MemberAccess memberAccess, ClassCreation classCreation) {
+    Expression transformInnerClassCreation(MemberAccess memberAccess, ClassCreation classCreation) {
         //Add member expression to arguments list
         ArgumentList argumentList = new ArgumentList(classCreation.getMeta());
         argumentList.addArgument(memberAccess.getMember());
 
         //Add arguments to arguments list
-        for(Node node : ((ArgumentList) classCreation.getArgumentList()).getArguments())
-            argumentList.addArgument(node);
+        for(Expression expression : ((ArgumentList) classCreation.getArgumentList()).getArguments())
+            argumentList.addArgument(expression);
 
         //Transform class creation
         ClassCreation innerClassCreation = new ClassCreation(classCreation.getMeta());
@@ -80,9 +80,9 @@ public final class Transformer {
      * @param binaryExpression the binary expression node
      * @return the transformed node
      */
-    Node transformStringConcatenation(BinaryExpression binaryExpression) {
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
+    Expression transformStringConcatenation(BinaryExpression binaryExpression) {
+        Expression first = binaryExpression.getFirst();
+        Expression second = binaryExpression.getSecond();
         Type secondType = second.getExpressionType();
 
         //Add implicit string conversion
@@ -112,9 +112,9 @@ public final class Transformer {
      * @param binaryExpression the binary expression node
      * @return the transformed node
      */
-    Node transformStringRepeating(BinaryExpression binaryExpression) {
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
+    Expression transformStringRepeating(BinaryExpression binaryExpression) {
+        Expression first = binaryExpression.getFirst();
+        Expression second = binaryExpression.getSecond();
         Type secondType = second.getExpressionType();
 
         //Make sure the second expression is an integer
@@ -130,9 +130,9 @@ public final class Transformer {
      * @param arrayAccess the array access node
      * @return the transformed node
      */
-    Node transformStringCharacterAccess(ArrayAccess arrayAccess) {
-        Expression array = (Expression) arrayAccess.getArray();
-        Expression access = (Expression) arrayAccess.getAccessExpression();
+    Expression transformStringCharacterAccess(ArrayAccess arrayAccess) {
+        Expression array = arrayAccess.getArray();
+        Expression access = arrayAccess.getAccessExpression();
         Type accessType = access.getExpressionType();
 
         //Make sure the access expression is an integer
