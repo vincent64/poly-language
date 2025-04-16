@@ -3,6 +3,7 @@ package poly.compiler.parser.tree;
 import poly.compiler.analyzer.content.OperatorMethod;
 import poly.compiler.analyzer.content.SpecialMethod;
 import poly.compiler.output.content.AccessModifier;
+import poly.compiler.parser.tree.statement.Statement;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.util.NodeStringifier;
 
@@ -17,7 +18,7 @@ public class MethodDeclaration extends Node {
     private String name;
     private Node returnType;
     private Node parameterList;
-    private Node statementBlock;
+    private Statement statementBlock;
     private boolean isStatic, isConstant;
     private boolean isConstructor, isStaticConstructor, isOperator;
     private boolean isEmpty;
@@ -68,7 +69,7 @@ public class MethodDeclaration extends Node {
      * Sets the method declaration statements block node.
      * @param node the statements block node
      */
-    public void setStatementBlock(Node node) {
+    public void setStatementBlock(Statement node) {
         statementBlock = node;
     }
 
@@ -154,7 +155,7 @@ public class MethodDeclaration extends Node {
      * Returns the method declaration statements block node.
      * @return the method statements block node
      */
-    public Node getStatementBlock() {
+    public Statement getStatementBlock() {
         return statementBlock;
     }
 
