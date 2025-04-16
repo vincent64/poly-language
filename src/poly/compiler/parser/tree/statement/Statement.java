@@ -1,6 +1,7 @@
 package poly.compiler.parser.tree.statement;
 
 import poly.compiler.parser.tree.Node;
+import poly.compiler.parser.tree.NodeModifier;
 
 /**
  * The Statement abstract class. This class represents a statement node, and extends from Node.
@@ -14,4 +15,11 @@ public abstract class Statement extends Node {
     public Statement(Meta meta) {
         super(meta);
     }
+
+    /**
+     * Accepts the visit of the given node modifier and returns the statement.
+     * @param modifier the node modifier
+     * @return the statement
+     */
+    public abstract Statement accept(NodeModifier modifier);
 }
