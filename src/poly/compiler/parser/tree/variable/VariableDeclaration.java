@@ -3,6 +3,8 @@ package poly.compiler.parser.tree.variable;
 import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.parser.tree.expression.Expression;
+import poly.compiler.parser.tree.statement.Statement;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.util.NodeStringifier;
 
@@ -12,11 +14,11 @@ import poly.compiler.util.NodeStringifier;
  * initialization expression.
  * @author Vincent Philippe (@vincent64)
  */
-public class VariableDeclaration extends Node {
+public class VariableDeclaration extends Statement {
     private Node type;
     private String name;
     private boolean isConstant;
-    private Node initializationExpression;
+    private Expression initializationExpression;
 
     public VariableDeclaration(Meta meta) {
         super(meta);
@@ -34,7 +36,7 @@ public class VariableDeclaration extends Node {
         isConstant = true;
     }
 
-    public void setInitializationExpression(Node node) {
+    public void setInitializationExpression(Expression node) {
         initializationExpression = node;
     }
 
@@ -50,7 +52,7 @@ public class VariableDeclaration extends Node {
         return isConstant;
     }
 
-    public Node getInitializationExpression() {
+    public Expression getInitializationExpression() {
         return initializationExpression;
     }
 
@@ -60,7 +62,7 @@ public class VariableDeclaration extends Node {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Statement accept(NodeModifier modifier) {
         return modifier.visitVariableDeclaration(this);
     }
 
