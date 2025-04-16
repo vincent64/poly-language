@@ -2,6 +2,7 @@ package poly.compiler.parser.tree.expression;
 
 import poly.compiler.analyzer.type.Type;
 import poly.compiler.parser.tree.Node;
+import poly.compiler.parser.tree.NodeModifier;
 
 /**
  * The Expression abstract class. This class represents an expression node, and extends from Node.
@@ -35,4 +36,11 @@ public abstract class Expression extends Node {
     public Type getExpressionType() {
         return type;
     }
+
+    /**
+     * Accepts the visit of the given node modifier and returns the expression.
+     * @param modifier the node modifier
+     * @return the expression
+     */
+    public abstract Expression accept(NodeModifier modifier);
 }
