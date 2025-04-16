@@ -3,6 +3,7 @@ package poly.compiler.parser.tree.variable;
 import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.util.NodeStringifier;
 
 /**
@@ -11,20 +12,20 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class ArgumentList extends Node {
-    private Node[] arguments;
+    private Expression[] arguments;
 
     public ArgumentList(Meta meta) {
         super(meta);
 
         //Initialize arguments array
-        arguments = new Node[0];
+        arguments = new Expression[0];
     }
 
-    public void addArgument(Node node) {
-        arguments = add(arguments, node);
+    public void addArgument(Expression node) {
+        arguments = (Expression[]) add(arguments, node);
     }
 
-    public Node[] getArguments() {
+    public Expression[] getArguments() {
         return arguments;
     }
 
