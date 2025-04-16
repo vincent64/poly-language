@@ -164,7 +164,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitVariableDeclaration(VariableDeclaration variableDeclaration) {
+    public Statement visitVariableDeclaration(VariableDeclaration variableDeclaration) {
         //Make sure the variable name is not already used
         if(variableTable.isAlreadyDefined(variableDeclaration.getName()))
             new AnalyzingError.DuplicateVariable(variableDeclaration);
@@ -181,7 +181,7 @@ public final class Analyzer implements NodeModifier {
                 && !object.getClassSymbol().isAccessibleFrom(classSymbol))
             new AnalyzingError.UnresolvableClass(type, type.toString());
 
-        Expression expression = (Expression) variableDeclaration.getInitializationExpression();
+        Expression expression = variableDeclaration.getInitializationExpression();
 
         if(expression != null) {
             //Infer type if possible
@@ -189,7 +189,7 @@ public final class Analyzer implements NodeModifier {
 
             //Visit initialization expression
             variableDeclaration.setInitializationExpression(expression.accept(this));
-            expression = (Expression) variableDeclaration.getInitializationExpression();
+            expression = variableDeclaration.getInitializationExpression();
 
             //Make sure the type is not a primitive if the expression is null
             if(isNullExpression(expression)) {
@@ -223,7 +223,7 @@ public final class Analyzer implements NodeModifier {
     // Analyze statements
 
     @Override
-    public Node visitStatementBlock(StatementBlock statementBlock) {
+    public Statement visitStatementBlock(StatementBlock statementBlock) {
         //Get the amount of previous local variables
         int previousVariableCount = variableTable.getVariableCount();
 
@@ -256,7 +256,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitIfStatement(IfStatement ifStatement) {
+    public Statement visitIfStatement(IfStatement ifStatement) {
         //Visit condition expression
         ifStatement.setCondition(ifStatement.getCondition().accept(this));
 
@@ -274,7 +274,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitForStatement(ForStatement forStatement) {
+    public Statement visitForStatement(ForStatement forStatement) {
         //Get the amount of previous local variables
         int previousVariableCount = variableTable.getVariableCount();
 
@@ -298,7 +298,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitWhileStatement(WhileStatement whileStatement) {
+    public Statement visitWhileStatement(WhileStatement whileStatement) {
         //Visit condition expression
         whileStatement.setCondition(whileStatement.getCondition().accept(this));
 
@@ -314,7 +314,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitDoStatement(DoStatement doStatement) {
+    public Statement visitDoStatement(DoStatement doStatement) {
         //Visit condition expression
         doStatement.setCondition(doStatement.getCondition().accept(this));
 
@@ -330,11 +330,11 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitSwitchStatement(SwitchStatement switchStatement) {
+    public Statement visitSwitchStatement(SwitchStatement switchStatement) {
         //Visit expression
         switchStatement.setExpression(switchStatement.getExpression().accept(this));
 
-        Expression expression = (Expression) switchStatement.getExpression();
+        Expression expression = switchStatement.getExpression();
 
         //Make sure the expression is a variable expression
         if(!isVariableExpression(expression))
@@ -352,7 +352,7 @@ public final class Analyzer implements NodeModifier {
             cases[i] = cases[i].accept(this);
 
             CaseStatement caseStatement = (CaseStatement) cases[i];
-            Expression caseExpression = (Expression) caseStatement.getExpression();
+            Expression caseExpression = caseStatement.getExpression();
 
             if(!(caseExpression instanceof Literal))
                 new AnalyzingError.ExpectedLiteralExpression(caseExpression);
@@ -367,7 +367,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitMatchStatement(MatchStatement matchStatement) {
+    public Statement visitMatchStatement(MatchStatement matchStatement) {
         Node[] cases = matchStatement.getCases();
 
         //Visit every case statement
@@ -383,7 +383,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitAssertStatement(AssertStatement assertStatement) {
+    public Statement visitAssertStatement(AssertStatement assertStatement) {
         //Visit condition expression
         assertStatement.setCondition(assertStatement.getCondition().accept(this));
 
@@ -400,8 +400,8 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitReturnStatement(ReturnStatement returnStatement) {
-        Expression expression = (Expression) returnStatement.getExpression();
+    public Statement visitReturnStatement(ReturnStatement returnStatement) {
+        Expression expression = returnStatement.getExpression();
 
         //Make sure the return statement returns nothing when not expected
         if(expression != null && currentMethod.getReturnType() == null)
@@ -420,7 +420,7 @@ public final class Analyzer implements NodeModifier {
             //Visit return expression
             returnStatement.setExpression(returnStatement.getExpression().accept(this));
 
-            expression = (Expression) returnStatement.getExpression();
+            expression = returnStatement.getExpression();
 
             Type expressionType = expression.getExpressionType();
 
@@ -443,7 +443,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitBreakStatement(BreakStatement breakStatement) {
+    public Statement visitBreakStatement(BreakStatement breakStatement) {
         //Make sure the statement is used inside a loop
         if(currentLoopLevel == 0)
             new AnalyzingError.BreakOutsideLoop(breakStatement);
@@ -452,7 +452,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitContinueStatement(ContinueStatement continueStatement) {
+    public Statement visitContinueStatement(ContinueStatement continueStatement) {
         //Make sure the statement is used inside a loop
         if(currentLoopLevel == 0)
             new AnalyzingError.ContinueOutsideLoop(continueStatement);
@@ -461,7 +461,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitThisStatement(ThisStatement thisStatement) {
+    public Statement visitThisStatement(ThisStatement thisStatement) {
         //Make sure the statement is used inside a constructor
         if(!currentMethod.isConstructor())
             new AnalyzingError.InvalidConstructorCall(thisStatement);
@@ -485,7 +485,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitSuperStatement(SuperStatement superStatement) {
+    public Statement visitSuperStatement(SuperStatement superStatement) {
         //Make sure the statement is used inside a constructor
         if(!currentMethod.isConstructor())
             new AnalyzingError.InvalidConstructorCall(superStatement);
@@ -514,11 +514,11 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitExpressionStatement(ExpressionStatement expressionStatement) {
+    public Statement visitExpressionStatement(ExpressionStatement expressionStatement) {
         //Visit expression
         expressionStatement.setExpression(expressionStatement.getExpression().accept(this));
 
-        Expression expression = (Expression) expressionStatement.getExpression();
+        Expression expression = expressionStatement.getExpression();
 
         //Make sure the expression is a valid statement
         if(!isExpressionStatement(expression))
@@ -532,7 +532,7 @@ public final class Analyzer implements NodeModifier {
     // Analyze expressions
 
     @Override
-    public Node visitLiteral(Literal literal) {
+    public Expression visitLiteral(Literal literal) {
         //Define literal expression type
         if(literal instanceof Literal.Boolean)
             literal.setExpressionType(new Primitive(Primitive.Kind.BOOLEAN));
@@ -562,11 +562,11 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitUnaryExpression(UnaryExpression unaryExpression) {
+    public Expression visitUnaryExpression(UnaryExpression unaryExpression) {
         //Visit the expression
         unaryExpression.setExpression(unaryExpression.getExpression().accept(this));
 
-        Expression expression = (Expression) unaryExpression.getExpression();
+        Expression expression = unaryExpression.getExpression();
 
         //Make sure the expression is not void
         if(isVoidExpression(expression))
@@ -635,15 +635,15 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitBinaryExpression(BinaryExpression binaryExpression) {
+    public Expression visitBinaryExpression(BinaryExpression binaryExpression) {
         //Analyze type equality operation
         if(binaryExpression.getKind() == BinaryExpression.Kind.TYPE_EQUAL
                 || binaryExpression.getKind() == BinaryExpression.Kind.TYPE_NOT_EQUAL) {
             //Visit the first expression only
             binaryExpression.setFirst(binaryExpression.getFirst().accept(this));
 
-            Expression first = (Expression) binaryExpression.getFirst();
-            Expression second = (Expression) binaryExpression.getSecond();
+            Expression first = binaryExpression.getFirst();
+            Expression second = binaryExpression.getSecond();
 
             //Make sure the type to check is an object
             if(first.getExpressionType().getKind() != Type.Kind.OBJECT)
@@ -665,8 +665,8 @@ public final class Analyzer implements NodeModifier {
         binaryExpression.setFirst(binaryExpression.getFirst().accept(this));
         binaryExpression.setSecond(binaryExpression.getSecond().accept(this));
 
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
+        Expression first = binaryExpression.getFirst();
+        Expression second = binaryExpression.getSecond();
 
         //Make sure the expressions are not void
         if(isVoidExpression(first) || isVoidExpression(second))
@@ -792,11 +792,11 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitCastExpression(CastExpression castExpression) {
+    public Expression visitCastExpression(CastExpression castExpression) {
         //Visit cast expression
         castExpression.setExpression(castExpression.getExpression().accept(this));
 
-        Expression expression = (Expression) castExpression.getExpression();
+        Expression expression = castExpression.getExpression();
 
         //Make sure the expression is not void
         if(isVoidExpression(expression))
@@ -855,7 +855,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitSimpleName(SimpleName simpleName) {
+    public Expression visitSimpleName(SimpleName simpleName) {
         //Analyze variable
         if(variableTable.isAlreadyDefined(simpleName.getName())) {
             //Find variable
@@ -890,7 +890,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitMethodCall(MethodCall methodCall) {
+    public Expression visitMethodCall(MethodCall methodCall) {
         //Visit arguments list
         methodCall.setArgumentList(methodCall.getArgumentList().accept(this));
 
@@ -926,7 +926,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitMemberAccess(MemberAccess memberAccess) {
+    public Expression visitMemberAccess(MemberAccess memberAccess) {
         //Analyze method call accessor
         if(memberAccess.getAccessor() instanceof MethodCall methodCall) {
             //Visit arguments list
@@ -1097,7 +1097,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitQualifiedName(QualifiedName qualifiedName) {
+    public Expression visitQualifiedName(QualifiedName qualifiedName) {
         //Visit qualified name as node
         visitQualifiedName((Node) qualifiedName);
 
@@ -1105,7 +1105,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitClassCreation(ClassCreation classCreation) {
+    public Expression visitClassCreation(ClassCreation classCreation) {
         if(classCreation.getType() == null) {
             //Make sure the type can be infered if no type provided
             if(classCreation.getExpressionType() == null)
@@ -1161,7 +1161,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitArrayCreation(ArrayCreation arrayCreation) {
+    public Expression visitArrayCreation(ArrayCreation arrayCreation) {
         if(arrayCreation.getType() == null) {
             //Make sure the type can be infered if no type provided
             if(arrayCreation.getExpressionType() == null)
@@ -1180,7 +1180,7 @@ public final class Analyzer implements NodeModifier {
         //Visit the initialization expression
         arrayCreation.setInitializationExpression(arrayCreation.getInitializationExpression().accept(this));
 
-        Expression initializationExpression = (Expression) arrayCreation.getInitializationExpression();
+        Expression initializationExpression = arrayCreation.getInitializationExpression();
 
         //Make sure the initialization expression is an integer
         if(!(initializationExpression.getExpressionType() instanceof Primitive primitive)
@@ -1192,13 +1192,13 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitArrayAccess(ArrayAccess arrayAccess) {
+    public Expression visitArrayAccess(ArrayAccess arrayAccess) {
         //Visit array and expression
         arrayAccess.setArray(arrayAccess.getArray().accept(this));
         arrayAccess.setAccessExpression(arrayAccess.getAccessExpression().accept(this));
 
-        Expression arrayExpression = (Expression) arrayAccess.getArray();
-        Expression accessExpression = (Expression) arrayAccess.getAccessExpression();
+        Expression arrayExpression = arrayAccess.getArray();
+        Expression accessExpression = arrayAccess.getAccessExpression();
 
         //Make sure the array expression is not void or null
         if(isVoidExpression(arrayExpression) || isNullExpression(arrayExpression))
@@ -1229,12 +1229,12 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitAssignmentExpression(AssignmentExpression assignmentExpression) {
+    public Expression visitAssignmentExpression(AssignmentExpression assignmentExpression) {
         //Visit variable
         assignmentExpression.setVariable(assignmentExpression.getVariable().accept(this));
 
-        Expression variableExpression = (Expression) assignmentExpression.getVariable();
-        Expression expression = (Expression) assignmentExpression.getExpression();
+        Expression variableExpression = assignmentExpression.getVariable();
+        Expression expression = assignmentExpression.getExpression();
 
         //Make sure the variable is a variable expression
         if(!isVariableExpression(variableExpression))
@@ -1252,7 +1252,7 @@ public final class Analyzer implements NodeModifier {
 
             //Visit assignment expression
             assignmentExpression.setExpression(assignmentExpression.getExpression().accept(this));
-            expression = (Expression) assignmentExpression.getExpression();
+            expression = assignmentExpression.getExpression();
 
             //Make sure the type is not a primitive if the expression is null
             if(isNullExpression(expression)) {
@@ -1276,7 +1276,7 @@ public final class Analyzer implements NodeModifier {
         else {
             //Visit assignment expression
             assignmentExpression.setExpression(assignmentExpression.getExpression().accept(this));
-            expression = (Expression) assignmentExpression.getExpression();
+            expression = assignmentExpression.getExpression();
 
             Type expressionType = expression.getExpressionType();
 
@@ -1329,7 +1329,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitIfExpression(IfExpression ifExpression) {
+    public Expression visitIfExpression(IfExpression ifExpression) {
         //Visit condition
         ifExpression.setCondition(ifExpression.getCondition().accept(this));
 
@@ -1340,8 +1340,8 @@ public final class Analyzer implements NodeModifier {
         ifExpression.setExpression(ifExpression.getExpression().accept(this));
         ifExpression.setElseExpression(ifExpression.getElseExpression().accept(this));
 
-        Expression expression = (Expression) ifExpression.getExpression();
-        Expression elseExpression = (Expression) ifExpression.getElseExpression();
+        Expression expression = ifExpression.getExpression();
+        Expression elseExpression = ifExpression.getElseExpression();
 
         //Make sure expression types are equal
         if(!expression.getExpressionType().equals(elseExpression.getExpressionType()))
@@ -1355,7 +1355,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitSumExpression(SumExpression sumExpression) {
+    public Expression visitSumExpression(SumExpression sumExpression) {
         //Get the amount of previous local variables
         int previousVariableCount = variableTable.getVariableCount();
 
@@ -1388,7 +1388,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitProdExpression(ProdExpression prodExpression) {
+    public Expression visitProdExpression(ProdExpression prodExpression) {
         //Get the amount of previous local variables
         int previousVariableCount = variableTable.getVariableCount();
 
@@ -1421,7 +1421,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitThisExpression(ThisExpression thisExpression) {
+    public Expression visitThisExpression(ThisExpression thisExpression) {
         //Make sure the method is not static
         if(isStaticContext)
             new AnalyzingError.StaticThisReference(thisExpression);
@@ -1437,7 +1437,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitSuperExpression(SuperExpression superExpression) {
+    public Expression visitSuperExpression(SuperExpression superExpression) {
         //Make sure the method is not static
         if(isStaticContext)
             new AnalyzingError.StaticSuperReference(superExpression);
@@ -1459,7 +1459,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitOuterExpression(OuterExpression outerExpression) {
+    public Expression visitOuterExpression(OuterExpression outerExpression) {
         //Make sure the method is not static
         if(isStaticContext)
             new AnalyzingError.StaticOuterReference(outerExpression);
@@ -1481,7 +1481,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitPrimitiveAttribute(PrimitiveAttribute primitiveAttribute) {
+    public Expression visitPrimitiveAttribute(PrimitiveAttribute primitiveAttribute) {
         //Make sure the attribute is valid
         if(primitiveAttribute.getKind() == null)
             new AnalyzingError.InvalidPrimitiveAttribute(primitiveAttribute);
@@ -1524,7 +1524,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
-    public Node visitCaseStatement(CaseStatement caseStatement) {
+    public Statement visitCaseStatement(CaseStatement caseStatement) {
         //Visit expression
         caseStatement.setExpression(caseStatement.getExpression().accept(this));
 
@@ -1543,8 +1543,8 @@ public final class Analyzer implements NodeModifier {
      * @param unaryExpression the unary expression
      * @return the transformed node
      */
-    private Node visitUnaryOperationOverload(UnaryExpression unaryExpression) {
-        Expression expression = (Expression) unaryExpression.getExpression();
+    private Expression visitUnaryOperationOverload(UnaryExpression unaryExpression) {
+        Expression expression = unaryExpression.getExpression();
         Object object = (Object) expression.getExpressionType();
 
         //Make sure the expression is not null
@@ -1569,9 +1569,9 @@ public final class Analyzer implements NodeModifier {
      * @param binaryExpression the binary expression
      * @return the transformed node
      */
-    private Node visitBinaryOperationOverload(BinaryExpression binaryExpression) {
-        Expression first = (Expression) binaryExpression.getFirst();
-        Expression second = (Expression) binaryExpression.getSecond();
+    private Expression visitBinaryOperationOverload(BinaryExpression binaryExpression) {
+        Expression first = binaryExpression.getFirst();
+        Expression second = binaryExpression.getSecond();
 
         Object object = (Object) first.getExpressionType();
         ClassSymbol classSymbol = object.getClassSymbol();
@@ -1615,9 +1615,9 @@ public final class Analyzer implements NodeModifier {
      * @param arrayAccess the array access
      * @return the transformed node
      */
-    private Node visitArrayAccessOperationOverload(ArrayAccess arrayAccess) {
-        Expression arrayExpression = (Expression) arrayAccess.getArray();
-        Expression accessExpression = (Expression) arrayAccess.getAccessExpression();
+    private Expression visitArrayAccessOperationOverload(ArrayAccess arrayAccess) {
+        Expression arrayExpression = arrayAccess.getArray();
+        Expression accessExpression = arrayAccess.getAccessExpression();
 
         Object object = (Object) arrayExpression.getExpressionType();
         ClassSymbol classSymbol = object.getClassSymbol();
@@ -1643,9 +1643,9 @@ public final class Analyzer implements NodeModifier {
      * @param assignmentExpression the assignment expression
      * @return the transformed node
      */
-    private Node visitAssignmentOperationOverload(AssignmentExpression assignmentExpression) {
-        Expression variableExpression = (Expression) assignmentExpression.getVariable();
-        Expression expression = (Expression) assignmentExpression.getExpression();
+    private Expression visitAssignmentOperationOverload(AssignmentExpression assignmentExpression) {
+        Expression variableExpression = assignmentExpression.getVariable();
+        Expression expression = assignmentExpression.getExpression();
 
         Type expressionType = expression.getExpressionType();
         Object object = (Object) variableExpression.getExpressionType();
@@ -1675,7 +1675,7 @@ public final class Analyzer implements NodeModifier {
      * @param methodCall the method call
      * @return the transformed node
      */
-    private Node visitMethodCallOperationOverload(MethodCall methodCall) {
+    private Expression visitMethodCallOperationOverload(MethodCall methodCall) {
         String methodName = methodCall.getMethodName();
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
@@ -1732,7 +1732,7 @@ public final class Analyzer implements NodeModifier {
      * @param methodCall the expression call
      * @return the transformed node
      */
-    private Node visitExpressionCallOperationOverload(MethodCall methodCall) {
+    private Expression visitExpressionCallOperationOverload(MethodCall methodCall) {
         //Visit member
         methodCall.setMember(methodCall.getMember().accept(this));
 
