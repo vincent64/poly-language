@@ -40,7 +40,7 @@ public class ClassCreation extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitClassCreation(this);
     }
 

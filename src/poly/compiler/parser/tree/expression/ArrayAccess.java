@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.expression;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
@@ -11,26 +10,26 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class ArrayAccess extends Expression {
-    private Node array;
-    private Node accessExpression;
+    private Expression array;
+    private Expression accessExpression;
 
     public ArrayAccess(Meta meta) {
         super(meta);
     }
 
-    public void setArray(Node node) {
+    public void setArray(Expression node) {
         array = node;
     }
 
-    public void setAccessExpression(Node node) {
+    public void setAccessExpression(Expression node) {
         accessExpression = node;
     }
 
-    public Node getArray() {
+    public Expression getArray() {
         return array;
     }
 
-    public Node getAccessExpression() {
+    public Expression getAccessExpression() {
         return accessExpression;
     }
 
@@ -40,7 +39,7 @@ public class ArrayAccess extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitArrayAccess(this);
     }
 

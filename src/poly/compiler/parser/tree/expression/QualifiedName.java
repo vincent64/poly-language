@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.expression;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.ClassName;
@@ -13,14 +12,14 @@ import poly.compiler.util.ClassName;
  * @author Vincent Philippe (@vincent64)
  */
 public class QualifiedName extends Expression {
-    private Node qualifiedName;
+    private Expression qualifiedName;
     private String name;
 
     public QualifiedName(Meta meta) {
         super(meta);
     }
 
-    public void setQualifiedName(Node node) {
+    public void setQualifiedName(Expression node) {
         qualifiedName = node;
     }
 
@@ -32,7 +31,7 @@ public class QualifiedName extends Expression {
         this.name = name;
     }
 
-    public Node getQualifiedName() {
+    public Expression getQualifiedName() {
         return qualifiedName;
     }
 
@@ -45,8 +44,8 @@ public class QualifiedName extends Expression {
      * @param className the class name
      * @return the qualified name node
      */
-    public static Node fromClassName(ClassName className) {
-        Node node;
+    public static Expression fromClassName(ClassName className) {
+        Expression expression;
 
         //Returns empty qualified name
         if(className.isEmpty())
@@ -55,17 +54,17 @@ public class QualifiedName extends Expression {
         //Add first simple name
         SimpleName simpleName = new SimpleName(null);
         simpleName.setName(className.getFirst());
-        node = simpleName;
+        expression = simpleName;
 
         //Add every qualified name
         while(!(className = className.withoutFirst()).isEmpty()) {
             QualifiedName qualifiedName = new QualifiedName(null);
-            qualifiedName.setQualifiedName(node);
+            qualifiedName.setQualifiedName(expression);
             qualifiedName.setName(className.getFirst());
-            node = qualifiedName;
+            expression = qualifiedName;
         }
 
-        return node;
+        return expression;
     }
 
     @Override
@@ -74,7 +73,7 @@ public class QualifiedName extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitQualifiedName(this);
     }
 

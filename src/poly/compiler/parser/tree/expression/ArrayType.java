@@ -29,7 +29,7 @@ public class ArrayType extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitArrayType(this);
     }
 

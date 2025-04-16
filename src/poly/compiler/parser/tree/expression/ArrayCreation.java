@@ -12,7 +12,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class ArrayCreation extends Expression {
     private Node type;
-    private Node initializationExpression;
+    private Expression initializationExpression;
 
     public ArrayCreation(Meta meta) {
         super(meta);
@@ -22,7 +22,7 @@ public class ArrayCreation extends Expression {
         type = node;
     }
 
-    public void setInitializationExpression(Node node) {
+    public void setInitializationExpression(Expression node) {
         initializationExpression = node;
     }
 
@@ -30,7 +30,7 @@ public class ArrayCreation extends Expression {
         return type;
     }
 
-    public Node getInitializationExpression() {
+    public Expression getInitializationExpression() {
         return initializationExpression;
     }
 
@@ -40,7 +40,7 @@ public class ArrayCreation extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitArrayCreation(this);
     }
 

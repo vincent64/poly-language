@@ -1,8 +1,8 @@
 package poly.compiler.parser.tree.expression;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.parser.tree.statement.Statement;
 import poly.compiler.util.NodeStringifier;
 
 /**
@@ -12,44 +12,44 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class ProdExpression extends Expression {
-    private Node variableInitialization;
-    private Node condition;
-    private Node incrementExpression;
-    private Node expression;
+    private Statement variableInitialization;
+    private Expression condition;
+    private Statement incrementExpression;
+    private Expression expression;
 
     public ProdExpression(Meta meta) {
         super(meta);
     }
 
-    public void setVariableInitialization(Node node) {
+    public void setVariableInitialization(Statement node) {
         variableInitialization = node;
     }
 
-    public void setCondition(Node node) {
+    public void setCondition(Expression node) {
         condition = node;
     }
 
-    public void setIncrementExpression(Node node) {
+    public void setIncrementExpression(Statement node) {
         incrementExpression = node;
     }
 
-    public void setExpression(Node node) {
+    public void setExpression(Expression node) {
         expression = node;
     }
 
-    public Node getVariableInitialization() {
+    public Statement getVariableInitialization() {
         return variableInitialization;
     }
 
-    public Node getCondition() {
+    public Expression getCondition() {
         return condition;
     }
 
-    public Node getIncrementExpression() {
+    public Statement getIncrementExpression() {
         return incrementExpression;
     }
 
-    public Node getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
@@ -59,7 +59,7 @@ public class ProdExpression extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitProdExpression(this);
     }
 

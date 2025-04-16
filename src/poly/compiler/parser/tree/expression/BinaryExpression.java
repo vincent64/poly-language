@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.expression;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
@@ -13,7 +12,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class BinaryExpression extends Expression {
     private Kind kind;
-    private Node first, second;
+    private Expression first, second;
 
     public BinaryExpression(Meta meta) {
         super(meta);
@@ -23,11 +22,11 @@ public class BinaryExpression extends Expression {
         this.kind = kind;
     }
 
-    public void setFirst(Node node) {
+    public void setFirst(Expression node) {
         first = node;
     }
 
-    public void setSecond(Node node) {
+    public void setSecond(Expression node) {
         second = node;
     }
 
@@ -35,11 +34,11 @@ public class BinaryExpression extends Expression {
         return kind;
     }
 
-    public Node getFirst() {
+    public Expression getFirst() {
         return first;
     }
 
-    public Node getSecond() {
+    public Expression getSecond() {
         return second;
     }
 
@@ -49,7 +48,7 @@ public class BinaryExpression extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitBinaryExpression(this);
     }
 

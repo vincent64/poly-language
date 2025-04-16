@@ -13,7 +13,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class MethodCall extends Expression {
     private String methodName;
-    private Node member;
+    private Expression member;
     private Node argumentList;
 
     public MethodCall(Meta meta) {
@@ -28,7 +28,7 @@ public class MethodCall extends Expression {
         this.methodName = methodName;
     }
 
-    public void setMember(Node node) {
+    public void setMember(Expression node) {
         member = node;
     }
 
@@ -40,7 +40,7 @@ public class MethodCall extends Expression {
         return methodName;
     }
 
-    public Node getMember() {
+    public Expression getMember() {
         return member;
     }
 
@@ -54,7 +54,7 @@ public class MethodCall extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitMethodCall(this);
     }
 

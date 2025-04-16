@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.expression;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
@@ -13,8 +12,8 @@ import poly.compiler.util.NodeStringifier;
  */
 public class AssignmentExpression extends Expression {
     private Kind kind;
-    private Node variable;
-    private Node expression;
+    private Expression variable;
+    private Expression expression;
 
     public AssignmentExpression(Meta meta) {
         super(meta);
@@ -24,11 +23,11 @@ public class AssignmentExpression extends Expression {
         this.kind = kind;
     }
 
-    public void setVariable(Node node) {
+    public void setVariable(Expression node) {
         variable = node;
     }
 
-    public void setExpression(Node node) {
+    public void setExpression(Expression node) {
         expression = node;
     }
 
@@ -36,11 +35,11 @@ public class AssignmentExpression extends Expression {
         return kind;
     }
 
-    public Node getVariable() {
+    public Expression getVariable() {
         return variable;
     }
 
-    public Node getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
@@ -50,7 +49,7 @@ public class AssignmentExpression extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitAssignmentExpression(this);
     }
 

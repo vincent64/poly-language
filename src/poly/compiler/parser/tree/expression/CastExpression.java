@@ -11,14 +11,14 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class CastExpression extends Expression {
-    private Node expression;
+    private Expression expression;
     private Node castType;
 
     public CastExpression(Meta meta) {
         super(meta);
     }
 
-    public void setExpression(Node node) {
+    public void setExpression(Expression node) {
         expression = node;
     }
 
@@ -26,7 +26,7 @@ public class CastExpression extends Expression {
         castType = node;
     }
 
-    public Node getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
@@ -40,7 +40,7 @@ public class CastExpression extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitCastExpression(this);
     }
 

@@ -1,6 +1,5 @@
 package poly.compiler.parser.tree.expression;
 
-import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
@@ -13,14 +12,14 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class UnaryExpression extends Expression {
-    private Node expression;
+    private Expression expression;
     private Kind kind;
 
     public UnaryExpression(Meta meta) {
         super(meta);
     }
 
-    public void setExpression(Node node) {
+    public void setExpression(Expression node) {
         expression = node;
     }
 
@@ -28,7 +27,7 @@ public class UnaryExpression extends Expression {
         this.kind = kind;
     }
 
-    public Node getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
@@ -42,7 +41,7 @@ public class UnaryExpression extends Expression {
     }
 
     @Override
-    public Node accept(NodeModifier modifier) {
+    public Expression accept(NodeModifier modifier) {
         return modifier.visitUnaryExpression(this);
     }
 
