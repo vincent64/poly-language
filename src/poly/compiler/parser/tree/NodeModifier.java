@@ -26,49 +26,49 @@ public interface NodeModifier {
     default Node visitMethodDeclaration(MethodDeclaration methodDeclaration) { return methodDeclaration; }
 
     //Statement nodes
-    default Node visitAssertStatement(AssertStatement assertStatement) { return assertStatement; }
-    default Node visitBreakStatement(BreakStatement breakStatement) { return breakStatement; }
-    default Node visitContinueStatement(ContinueStatement continueStatement) { return continueStatement; }
-    default Node visitDoStatement(DoStatement doStatement) { return doStatement; }
-    default Node visitExpressionStatement(ExpressionStatement expressionStatement) { return expressionStatement; }
-    default Node visitForStatement(ForStatement forStatement) { return forStatement; }
-    default Node visitIfStatement(IfStatement ifStatement) { return ifStatement; }
-    default Node visitImportStatement(ImportStatement importStatement) { return importStatement; }
-    default Node visitMatchStatement(MatchStatement matchStatement) { return matchStatement; }
-    default Node visitReturnStatement(ReturnStatement returnStatement) { return returnStatement; }
-    default Node visitStatementBlock(StatementBlock statementBlock) { return statementBlock; }
-    default Node visitSuperStatement(SuperStatement superStatement) { return superStatement; }
-    default Node visitSwitchStatement(SwitchStatement switchStatement) { return switchStatement; }
-    default Node visitThisStatement(ThisStatement thisStatement) { return thisStatement; }
-    default Node visitWhileStatement(WhileStatement whileStatement) { return whileStatement; }
+    default Statement visitAssertStatement(AssertStatement assertStatement) { return assertStatement; }
+    default Statement visitBreakStatement(BreakStatement breakStatement) { return breakStatement; }
+    default Statement visitCaseStatement(CaseStatement caseStatement) { return caseStatement; }
+    default Statement visitContinueStatement(ContinueStatement continueStatement) { return continueStatement; }
+    default Statement visitDoStatement(DoStatement doStatement) { return doStatement; }
+    default Statement visitExpressionStatement(ExpressionStatement expressionStatement) { return expressionStatement; }
+    default Statement visitForStatement(ForStatement forStatement) { return forStatement; }
+    default Statement visitIfStatement(IfStatement ifStatement) { return ifStatement; }
+    default Statement visitImportStatement(ImportStatement importStatement) { return importStatement; }
+    default Statement visitMatchStatement(MatchStatement matchStatement) { return matchStatement; }
+    default Statement visitReturnStatement(ReturnStatement returnStatement) { return returnStatement; }
+    default Statement visitStatementBlock(StatementBlock statementBlock) { return statementBlock; }
+    default Statement visitSuperStatement(SuperStatement superStatement) { return superStatement; }
+    default Statement visitSwitchStatement(SwitchStatement switchStatement) { return switchStatement; }
+    default Statement visitThisStatement(ThisStatement thisStatement) { return thisStatement; }
+    default Statement visitVariableDeclaration(VariableDeclaration variableDeclaration) { return variableDeclaration; }
+    default Statement visitWhileStatement(WhileStatement whileStatement) { return whileStatement; }
 
     //Expression nodes
-    default Node visitArrayAccess(ArrayAccess arrayAccess) { return arrayAccess; }
-    default Node visitArrayCreation(ArrayCreation arrayCreation) { return arrayCreation; }
-    default Node visitArrayType(ArrayType arrayType) { return arrayType; }
-    default Node visitAssignmentExpression(AssignmentExpression assignmentExpression) { return assignmentExpression; }
-    default Node visitBinaryExpression(BinaryExpression binaryExpression) { return binaryExpression; }
-    default Node visitCaseStatement(CaseStatement caseStatement) { return caseStatement; }
-    default Node visitCastExpression(CastExpression castExpression) { return castExpression; }
-    default Node visitClassCreation(ClassCreation classCreation) { return classCreation; }
-    default Node visitIfExpression(IfExpression ifExpression) { return ifExpression; }
-    default Node visitLiteral(Literal literal) { return literal; }
-    default Node visitMemberAccess(MemberAccess memberAccess) { return memberAccess; }
-    default Node visitMethodCall(MethodCall methodCall) { return methodCall; }
-    default Node visitOuterExpression(OuterExpression outerExpression) { return outerExpression; }
-    default Node visitPrimitiveAttribute(PrimitiveAttribute primitiveAttribute) { return primitiveAttribute; }
-    default Node visitPrimitiveType(PrimitiveType primitiveType) { return primitiveType; }
-    default Node visitProdExpression(ProdExpression prodExpression) { return prodExpression; }
-    default Node visitQualifiedName(QualifiedName qualifiedName) { return qualifiedName; }
-    default Node visitSimpleName(SimpleName simpleName) { return simpleName; }
-    default Node visitSumExpression(SumExpression sumExpression) { return sumExpression; }
-    default Node visitSuperExpression(SuperExpression superExpression) { return superExpression; }
-    default Node visitThisExpression(ThisExpression thisExpression) { return thisExpression; }
-    default Node visitUnaryExpression(UnaryExpression unaryExpression) { return unaryExpression; }
+    default Expression visitArrayAccess(ArrayAccess arrayAccess) { return arrayAccess; }
+    default Expression visitArrayCreation(ArrayCreation arrayCreation) { return arrayCreation; }
+    default Expression visitArrayType(ArrayType arrayType) { return arrayType; }
+    default Expression visitAssignmentExpression(AssignmentExpression assignmentExpression) { return assignmentExpression; }
+    default Expression visitBinaryExpression(BinaryExpression binaryExpression) { return binaryExpression; }
+    default Expression visitCastExpression(CastExpression castExpression) { return castExpression; }
+    default Expression visitClassCreation(ClassCreation classCreation) { return classCreation; }
+    default Expression visitIfExpression(IfExpression ifExpression) { return ifExpression; }
+    default Expression visitLiteral(Literal literal) { return literal; }
+    default Expression visitMemberAccess(MemberAccess memberAccess) { return memberAccess; }
+    default Expression visitMethodCall(MethodCall methodCall) { return methodCall; }
+    default Expression visitOuterExpression(OuterExpression outerExpression) { return outerExpression; }
+    default Expression visitPrimitiveAttribute(PrimitiveAttribute primitiveAttribute) { return primitiveAttribute; }
+    default Expression visitPrimitiveType(PrimitiveType primitiveType) { return primitiveType; }
+    default Expression visitProdExpression(ProdExpression prodExpression) { return prodExpression; }
+    default Expression visitQualifiedName(QualifiedName qualifiedName) { return qualifiedName; }
+    default Expression visitSimpleName(SimpleName simpleName) { return simpleName; }
+    default Expression visitSumExpression(SumExpression sumExpression) { return sumExpression; }
+    default Expression visitSuperExpression(SuperExpression superExpression) { return superExpression; }
+    default Expression visitThisExpression(ThisExpression thisExpression) { return thisExpression; }
+    default Expression visitUnaryExpression(UnaryExpression unaryExpression) { return unaryExpression; }
 
     //Variable nodes
     default Node visitArgumentList(ArgumentList argumentList) { return argumentList; }
     default Node visitParameter(Parameter parameter) { return parameter; }
     default Node visitParameterList(ParameterList parameterList) { return parameterList; }
-    default Node visitVariableDeclaration(VariableDeclaration variableDeclaration) { return variableDeclaration; }
 }
