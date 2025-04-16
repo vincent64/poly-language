@@ -25,6 +25,7 @@ public interface NodeVisitor {
     //Statement nodes
     default void visitAssertStatement(AssertStatement assertStatement) {}
     default void visitBreakStatement(BreakStatement breakStatement) {}
+    default void visitCaseStatement(CaseStatement caseStatement) {}
     default void visitContinueStatement(ContinueStatement continueStatement) {}
     default void visitDoStatement(DoStatement doStatement) {}
     default void visitExpressionStatement(ExpressionStatement expressionStatement) {}
@@ -37,6 +38,7 @@ public interface NodeVisitor {
     default void visitSuperStatement(SuperStatement superStatement) {}
     default void visitSwitchStatement(SwitchStatement switchStatement) {}
     default void visitThisStatement(ThisStatement thisStatement) {}
+    default void visitVariableDeclaration(VariableDeclaration variableDeclaration) {}
     default void visitWhileStatement(WhileStatement whileStatement) {}
 
     //Expression nodes
@@ -45,7 +47,6 @@ public interface NodeVisitor {
     default void visitArrayType(ArrayType arrayType) {}
     default void visitAssignmentExpression(AssignmentExpression assignmentExpression) {}
     default void visitBinaryExpression(BinaryExpression binaryExpression) {}
-    default void visitCaseStatement(CaseStatement caseStatement) {}
     default void visitCastExpression(CastExpression castExpression) {}
     default void visitClassCreation(ClassCreation classCreation) {}
     default void visitIfExpression(IfExpression ifExpression) {}
@@ -67,5 +68,4 @@ public interface NodeVisitor {
     default void visitArgumentList(ArgumentList argumentList) {}
     default void visitParameter(Parameter parameter) {}
     default void visitParameterList(ParameterList parameterList) {}
-    default void visitVariableDeclaration(VariableDeclaration variableDeclaration) {}
 }
