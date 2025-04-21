@@ -22,6 +22,8 @@ import poly.compiler.resolver.symbol.*;
 import poly.compiler.util.ClassName;
 import poly.compiler.warning.AnalyzingWarning;
 
+import java.util.List;
+
 /**
  * The Analyzer class. This class is used to analyze the AST produced by the parser.
  * This step includes determining the type of the expressions, making sure they are valid,
@@ -122,7 +124,7 @@ public final class Analyzer implements NodeModifier {
         methodDeclaration.setStatementBlock(methodDeclaration.getStatementBlock().accept(this));
 
         StatementBlock statementBlock = (StatementBlock) methodDeclaration.getStatementBlock();
-        Node[] statements = statementBlock.getStatements();
+        List<Statement> statements = statementBlock.getStatements();
 
         boolean hasReturned = false;
         for(Node statement : statements) {
@@ -146,8 +148,8 @@ public final class Analyzer implements NodeModifier {
                     .findConstructor(new Type[0], classSymbol, methodDeclaration) == null;
 
         //Check whether the constructor has a constructor call
-        boolean hasSuperStatement = statements.length > 0 && statements[0] instanceof SuperStatement;
-        boolean hasThisStatement = statements.length > 0 && statements[0] instanceof ThisStatement;
+        boolean hasSuperStatement = !statements.isEmpty() && statements.getFirst() instanceof SuperStatement;
+        boolean hasThisStatement = !statements.isEmpty() && statements.getFirst() instanceof ThisStatement;
 
         //Make sure there is a constructor call
         if(shouldCallSuper && !hasSuperStatement && !hasThisStatement)
@@ -227,23 +229,23 @@ public final class Analyzer implements NodeModifier {
         //Get the amount of previous local variables
         int previousVariableCount = variableTable.getVariableCount();
 
-        Node[] statements = statementBlock.getStatements();
+        List<Statement> statements = statementBlock.getStatements();
 
         //Warn if statement block is empty
-        if(statements.length == 0)
+        if(statements.isEmpty())
             new AnalyzingWarning.EmptyBody(statementBlock);
 
         //Visit every statement
         boolean hasJumped = false;
-        for(int i = 0; i < statements.length; i++) {
+        for(int i = 0; i < statements.size(); i++) {
             //Make sure there is no statement after the jump
             if(hasJumped)
-                new AnalyzingError.UnreachableStatement(statements[i]);
+                new AnalyzingError.UnreachableStatement(statements.get(i));
 
             //Visit statement
-            statements[i] = statements[i].accept(this);
+            statements.set(i, statements.get(i).accept(this));
 
-            Node statement = statements[i];
+            Node statement = statements.get(i);
             hasJumped = statement instanceof ReturnStatement
                     || statement instanceof BreakStatement
                     || statement instanceof ContinueStatement;
@@ -344,14 +346,14 @@ public final class Analyzer implements NodeModifier {
         if(!(expression.getExpressionType() instanceof Primitive primitive) || !primitive.isIntegerType())
             new AnalyzingError.InvalidSwitchExpression(expression);
 
-        Node[] cases = switchStatement.getCases();
+        List<Statement> cases = switchStatement.getCases();
 
         //Visit every case statement
-        for(int i = 0; i < cases.length; i++) {
+        for(int i = 0; i < cases.size(); i++) {
             //Visit case statement
-            cases[i] = cases[i].accept(this);
+            cases.set(i, cases.get(i).accept(this));
 
-            CaseStatement caseStatement = (CaseStatement) cases[i];
+            CaseStatement caseStatement = (CaseStatement) cases.get(i);
             Expression caseExpression = caseStatement.getExpression();
 
             if(!(caseExpression instanceof Literal))
@@ -368,15 +370,15 @@ public final class Analyzer implements NodeModifier {
 
     @Override
     public Statement visitMatchStatement(MatchStatement matchStatement) {
-        Node[] cases = matchStatement.getCases();
+        List<Statement> cases = matchStatement.getCases();
 
         //Visit every case statement
-        for(int i = 0; i < cases.length; i++) {
+        for(int i = 0; i < cases.size(); i++) {
             //Visit case statement
-            cases[i] = cases[i].accept(this);
+            cases.set(i, cases.get(i).accept(this));
 
             //Make sure the case expression type is a boolean expression
-            matchBooleanExpression(((CaseStatement) cases[i]).getExpression());
+            matchBooleanExpression(((CaseStatement) cases.get(i)).getExpression());
         }
 
         return matchStatement;
@@ -1492,9 +1494,9 @@ public final class Analyzer implements NodeModifier {
     @Override
     public Node visitArgumentList(ArgumentList argumentList) {
         //Visit every argument
-        Node[] arguments = argumentList.getArguments();
-        for(int i = 0; i < arguments.length; i++)
-            arguments[i] = arguments[i].accept(this);
+        List<Expression> arguments = argumentList.getArguments();
+        for(int i = 0; i < arguments.size(); i++)
+            arguments.set(i, arguments.get(i).accept(this));
 
         return argumentList;
     }
@@ -1502,9 +1504,9 @@ public final class Analyzer implements NodeModifier {
     @Override
     public Node visitParameterList(ParameterList parameterList) {
         //Visit every parameter
-        Node[] parameters = parameterList.getParameters();
-        for(int i = 0; i < parameters.length; i++)
-            parameters[i] = parameters[i].accept(this);
+        List<Node> parameters = parameterList.getParameters();
+        for(int i = 0; i < parameters.size(); i++)
+            parameters.set(i, parameters.get(i).accept(this));
 
         return parameterList;
     }
@@ -2012,11 +2014,11 @@ public final class Analyzer implements NodeModifier {
      * @return the types array
      */
     private Type[] getTypesFromArguments(ArgumentList argumentList) {
-        Node[] arguments = argumentList.getArguments();
-        Type[] argumentTypes = new Type[arguments.length];
+        List<Expression> arguments = argumentList.getArguments();
+        Type[] argumentTypes = new Type[arguments.size()];
 
-        for(int i = 0; i < arguments.length; i++)
-            argumentTypes[i] = ((Expression) arguments[i]).getExpressionType();
+        for(int i = 0; i < arguments.size(); i++)
+            argumentTypes[i] = arguments.get(i).getExpressionType();
 
         return argumentTypes;
     }
