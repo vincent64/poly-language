@@ -168,7 +168,7 @@ public final class CodeGenerator implements NodeVisitor {
             visitFieldDeclarations(true);
 
         StatementBlock statementBlock = (StatementBlock) methodDeclaration.getStatementBlock();
-        Node[] statements = statementBlock.getStatements();
+        List<Statement> statements = statementBlock.getStatements();
 
         //Visit parameters list
         methodDeclaration.getParameterList().accept(this);
@@ -184,7 +184,7 @@ public final class CodeGenerator implements NodeVisitor {
         methodDeclaration.getStatementBlock().accept(this);
 
         //Generate empty return instruction
-        if(statements.length == 0 || !(statements[statements.length - 1] instanceof ReturnStatement))
+        if(statements.isEmpty() || !(statements.getLast() instanceof ReturnStatement))
             addInstruction(RETURN);
     }
 
@@ -450,7 +450,7 @@ public final class CodeGenerator implements NodeVisitor {
 
         Branching branching = new Branching();
 
-        Node[] cases = matchStatement.getCases();
+        List<Statement> cases = matchStatement.getCases();
 
         for(Node node : cases) {
             CaseStatement caseStatement = (CaseStatement) node;
@@ -2336,11 +2336,11 @@ public final class CodeGenerator implements NodeVisitor {
      * @return the types array
      */
     private Type[] getTypesFromArguments(ArgumentList argumentList) {
-        Node[] arguments = argumentList.getArguments();
-        Type[] argumentTypes = new Type[arguments.length];
+        List<Expression> arguments = argumentList.getArguments();
+        Type[] argumentTypes = new Type[arguments.size()];
 
-        for(int i = 0; i < arguments.length; i++)
-            argumentTypes[i] = ((Expression) arguments[i]).getExpressionType();
+        for(int i = 0; i < arguments.size(); i++)
+            argumentTypes[i] = arguments.get(i).getExpressionType();
 
         return argumentTypes;
     }
