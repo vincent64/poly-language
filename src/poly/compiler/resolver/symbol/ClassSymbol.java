@@ -29,7 +29,7 @@ public final class ClassSymbol extends Symbol {
     private List<Symbol> interfaceSymbols;
 
     private ClassSymbol(AccessModifier accessModifier, String name, boolean isStatic, boolean isConstant, boolean isInterface, boolean isInner,
-                        ClassName className, ClassName superclassName, Node[] interfaceNodes, Symbol ownerSymbol, PackageSymbol packageSymbol) {
+                        ClassName className, ClassName superclassName, List<Node> interfaceNodes, Symbol ownerSymbol, PackageSymbol packageSymbol) {
         super(Kind.CLASS, accessModifier, name, isStatic, isConstant);
         this.className = className;
         this.ownerSymbol = ownerSymbol;
@@ -95,7 +95,7 @@ public final class ClassSymbol extends Symbol {
                 ownerSymbol instanceof ClassSymbol && !classFile.isStatic(),
                 className,
                 null,
-                new Node[0],
+                new ArrayList<>(),
                 ownerSymbol,
                 packageSymbol);
     }
