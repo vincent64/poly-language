@@ -55,42 +55,6 @@ public abstract class Node {
     public abstract String toString();
 
     /**
-     * Adds the given node element to the given array and returns the new array.
-     * This method increase the size of the array to make the addition of the element possible.
-     * @param array the node array
-     * @param element the node element to add
-     * @return the new node array
-     */
-    public static Node[] add(Node[] array, Node element) {
-        //Increase the array size
-        Node[] newArray = new Node[array.length + 1];
-        System.arraycopy(array, 0, newArray, 0, array.length);
-
-        //Add the element
-        newArray[array.length] = element;
-
-        return newArray;
-    }
-
-    /**
-     * Adds the given node element at the beginning of the given array and returns the new array.
-     * This method increase the size of the array to make the addition of the element possible.
-     * @param array the node array
-     * @param element the node element to add
-     * @return the new node array
-     */
-    public static Node[] addFirst(Node[] array, Node element) {
-        //Increase the array size
-        Node[] newArray = new Node[array.length + 1];
-        System.arraycopy(array, 0, newArray, 1, array.length);
-
-        //Add the element at the start
-        newArray[0] = element;
-
-        return newArray;
-    }
-
-    /**
      * The Node.Meta class. This class contains metadata information about a node,
      * mainly its location in the code file. Since a node can represent a part of code
      * that sprawls accross several lines, the information represents those of the
