@@ -2,6 +2,8 @@ package poly.compiler.util;
 
 import poly.compiler.parser.tree.Node;
 
+import java.util.List;
+
 /**
  * The NodeStringifier class. This class is used to create a string representation of a node
  * in an Abstract Syntax Tree (AST). This tool may call the toString method of nodes recursively.
@@ -59,7 +61,7 @@ public class NodeStringifier {
      * Adds the string representations of the given nodes on a new indentation level.
      * @param nodes the nodes (nullable)
      */
-    public void addNodes(Node[] nodes) {
+    public void addNodes(List<? extends Node> nodes) {
         for(Node node : nodes) {
             if(node != null)
                 stringBuilder.append(node.toString().indent(INDENT));
