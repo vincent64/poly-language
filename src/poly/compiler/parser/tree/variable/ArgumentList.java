@@ -6,26 +6,29 @@ import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The ArgumentList class. This class represents the list of arguments, or expression,
  * used when calling a method.
  * @author Vincent Philippe (@vincent64)
  */
 public class ArgumentList extends Node {
-    private Expression[] arguments;
+    private List<Expression> arguments;
 
     public ArgumentList(Meta meta) {
         super(meta);
 
-        //Initialize arguments array
-        arguments = new Expression[0];
+        //Initialize arguments list
+        arguments = new ArrayList<>();
     }
 
     public void addArgument(Expression node) {
-        arguments = (Expression[]) add(arguments, node);
+        arguments.add(node);
     }
 
-    public Expression[] getArguments() {
+    public List<Expression> getArguments() {
         return arguments;
     }
 

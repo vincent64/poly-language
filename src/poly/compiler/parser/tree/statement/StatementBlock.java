@@ -4,30 +4,33 @@ import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The StatementBlock class. This class represents a block containing any amount of statement.
  * There may be zero, one or multiple statements in the statement block.
  * @author Vincent Philippe (@vincent64)
  */
 public class StatementBlock extends Statement {
-    private Statement[] statements;
+    private List<Statement> statements;
 
     public StatementBlock(Meta meta) {
         super(meta);
 
-        //Initialize statements array
-        statements = new Statement[0];
+        //Initialize statements list
+        statements = new ArrayList<>();
     }
 
     public void addStatement(Statement node) {
-        statements = (Statement[]) add(statements, node);
+        statements.add(node);
     }
 
     public void addFirstStatement(Statement node) {
-        statements = (Statement[]) addFirst(statements, node);
+        statements.addFirst(node);
     }
 
-    public Statement[] getStatements() {
+    public List<Statement> getStatements() {
         return statements;
     }
 

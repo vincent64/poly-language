@@ -5,30 +5,33 @@ import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The ParameterList class. This class represents the list of parameters of a method
  * in the method declaration.
  * @author Vincent Philippe (@vincent64)
  */
 public class ParameterList extends Node {
-    private Node[] parameters;
+    private List<Node> parameters;
 
     public ParameterList(Meta meta) {
         super(meta);
 
-        //Initialize parameters array
-        parameters = new Node[0];
+        //Initialize parameters list
+        parameters = new ArrayList<>();
     }
 
     public void addParameter(Node node) {
-        parameters = add(parameters, node);
+        parameters.add(node);
     }
 
     public void addFirstParameter(Node node) {
-        parameters = addFirst(parameters, node);
+        parameters.addFirst(node);
     }
 
-    public Node[] getParameters() {
+    public List<Node> getParameters() {
         return parameters;
     }
 

@@ -4,6 +4,9 @@ import poly.compiler.output.content.AccessModifier;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The ClassDeclaration class. This class represents a class declaration node,
  * with class attributes, such at the class name, superclass name, access modifier, etc.
@@ -15,10 +18,10 @@ public class ClassDeclaration extends Node {
     private AccessModifier accessModifier = AccessModifier.DEFAULT;
     private String name;
     private Node superclass;
-    private Node[] interfaces;
-    private Node[] fieldNodes;
-    private Node[] methodNodes;
-    private Node[] nestedClasses;
+    private List<Node> interfaces;
+    private List<Node> fieldNodes;
+    private List<Node> methodNodes;
+    private List<Node> nestedClasses;
     private boolean isStatic, isConstant;
     private boolean isInterface, isInner;
 
@@ -29,13 +32,13 @@ public class ClassDeclaration extends Node {
     public ClassDeclaration(Meta meta) {
         super(meta);
 
-        //Initialize interface names array
-        interfaces = new Node[0];
+        //Initialize interface names list
+        interfaces = new ArrayList<>();
 
-        //Initialize fields, methods and nested classes arrays
-        fieldNodes = new FieldDeclaration[0];
-        methodNodes = new MethodDeclaration[0];
-        nestedClasses = new ClassDeclaration[0];
+        //Initialize fields, methods and nested classes list
+        fieldNodes = new ArrayList<>();
+        methodNodes = new ArrayList<>();
+        nestedClasses = new ArrayList<>();
     }
 
     /**
@@ -67,7 +70,7 @@ public class ClassDeclaration extends Node {
      * @param node the interface node
      */
     public void addInterface(Node node) {
-        interfaces = add(interfaces, node);
+        interfaces.add(node);
     }
 
     /**
@@ -75,7 +78,7 @@ public class ClassDeclaration extends Node {
      * @param node the field node
      */
     public void addField(Node node) {
-        fieldNodes = add(fieldNodes, node);
+        fieldNodes.add(node);
     }
 
     /**
@@ -83,7 +86,7 @@ public class ClassDeclaration extends Node {
      * @param node the methode node
      */
     public void addMethod(Node node) {
-        methodNodes = add(methodNodes, node);
+        methodNodes.add(node);
     }
 
     /**
@@ -91,7 +94,7 @@ public class ClassDeclaration extends Node {
      * @param node the nested class node
      */
     public void addNestedClass(Node node) {
-        nestedClasses = add(nestedClasses, node);
+        nestedClasses.add(node);
     }
 
     /**
@@ -150,7 +153,7 @@ public class ClassDeclaration extends Node {
      * Returns the interface nodes.
      * @return the interfaces
      */
-    public Node[] getInterfaces() {
+    public List<Node> getInterfaces() {
         return interfaces;
     }
 
@@ -158,7 +161,7 @@ public class ClassDeclaration extends Node {
      * Returns the field declaration nodes.
      * @return the fields
      */
-    public Node[] getFields() {
+    public List<Node> getFields() {
         return fieldNodes;
     }
 
@@ -166,7 +169,7 @@ public class ClassDeclaration extends Node {
      * Returns the method declaration nodes.
      * @return the methods
      */
-    public Node[] getMethods() {
+    public List<Node> getMethods() {
         return methodNodes;
     }
 
@@ -174,7 +177,7 @@ public class ClassDeclaration extends Node {
      * Returns the nested class declaration nodes.
      * @return the nested classes
      */
-    public Node[] getNestedClasses() {
+    public List<Node> getNestedClasses() {
         return nestedClasses;
     }
 

@@ -6,6 +6,9 @@ import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The SwitchStatement class. This class represents a switch-statement, containing the
  * main expression and the cases to execute.
@@ -13,28 +16,28 @@ import poly.compiler.util.NodeStringifier;
  */
 public class SwitchStatement extends Statement {
     private Expression expression;
-    private Statement[] cases;
+    private List<Statement> cases;
 
     public SwitchStatement(Meta meta) {
         super(meta);
 
-        //Initialize cases array
-        cases = new Statement[0];
+        //Initialize cases list
+        cases = new ArrayList<>();
     }
 
     public void setExpression(Expression node) {
         expression = node;
     }
 
-    public void addCase(Node node) {
-        cases = (Statement[]) add(cases, node);
+    public void addCase(Statement node) {
+        cases.add(node);
     }
 
     public Expression getExpression() {
         return expression;
     }
 
-    public Statement[] getCases() {
+    public List<Statement> getCases() {
         return cases;
     }
 

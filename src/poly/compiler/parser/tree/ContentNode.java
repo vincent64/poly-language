@@ -2,6 +2,9 @@ package poly.compiler.parser.tree;
 
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The ContentNode class. This class reprensents the root node of a source file content.
  * It has no parent, and contains only import statement and class declaration nodes.
@@ -9,8 +12,8 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class ContentNode extends Node {
-    private Node[] importNodes;
-    private Node[] classNodes;
+    private List<Node> importations;
+    private List<Node> classes;
 
     /**
      * Constructs a content node.
@@ -18,9 +21,9 @@ public class ContentNode extends Node {
     public ContentNode() {
         super(null);
 
-        //Initialize import and class arrays
-        importNodes = new Node[0];
-        classNodes = new Node[0];
+        //Initialize importations and classes list
+        importations = new ArrayList<>();
+        classes = new ArrayList<>();
     }
 
     /**
@@ -28,7 +31,7 @@ public class ContentNode extends Node {
      * @param node the import node
      */
     public void addImport(Node node) {
-        importNodes = add(importNodes, node);
+        importations.add(node);
     }
 
     /**
@@ -36,23 +39,23 @@ public class ContentNode extends Node {
      * @param node the class node
      */
     public void addClass(Node node) {
-        classNodes = add(classNodes, node);
+        classes.add(node);
     }
 
     /**
      * Returns the import declaration nodes.
      * @return the imports
      */
-    public Node[] getImports() {
-        return importNodes;
+    public List<Node> getImports() {
+        return importations;
     }
 
     /**
      * Returns the class declaration nodes.
      * @return the classes
      */
-    public Node[] getClasses() {
-        return classNodes;
+    public List<Node> getClasses() {
+        return classes;
     }
 
     @Override
@@ -69,9 +72,9 @@ public class ContentNode extends Node {
     public String toString() {
         NodeStringifier string = new NodeStringifier("Content");
         string.addString("Importations:");
-        string.addNodes(importNodes);
+        string.addNodes(importations);
         string.addString("Classes:");
-        string.addNodes(classNodes);
+        string.addNodes(classes);
 
         return string.toString();
     }

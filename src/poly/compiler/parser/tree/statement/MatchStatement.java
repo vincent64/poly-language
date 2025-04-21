@@ -4,6 +4,9 @@ import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
 import poly.compiler.util.NodeStringifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The MatchStatement class. This class represents a match-statement, i.e. a statement
  * where each cases represent an if-else branch. Unlike the switch-statement, this
@@ -11,20 +14,20 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class MatchStatement extends Statement {
-    private Statement[] cases;
+    private List<Statement> cases;
 
     public MatchStatement(Meta meta) {
         super(meta);
 
-        //Initialize cases array
-        cases = new Statement[0];
+        //Initialize cases list
+        cases = new ArrayList<>();
     }
 
     public void addCase(Statement node) {
-        cases = (Statement[]) add(cases, node);
+        cases.add(node);
     }
 
-    public Statement[] getCases() {
+    public List<Statement> getCases() {
         return cases;
     }
 
