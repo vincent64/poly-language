@@ -17,6 +17,7 @@ import poly.compiler.util.ClassName;
 import poly.compiler.util.MethodStringifier;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * The MethodSymbol class. This class is the symbol representation of a method.
@@ -49,17 +50,17 @@ public final class MethodSymbol extends Symbol implements Comparable<MethodSymbo
     public static MethodSymbol fromMethodDeclaration(MethodDeclaration methodDeclaration, ClassSymbol classSymbol, ImportTable importTable) {
         //Get parameters list from method declaration
         ParameterList parameterList = (ParameterList) methodDeclaration.getParameterList();
-        Node[] parameters = parameterList.getParameters();
+        List<Node> parameters = parameterList.getParameters();
 
-        Type[] parameterTypes = new Type[parameters.length];
+        Type[] parameterTypes = new Type[parameters.size()];
 
         //Compute parameter types
-        for(int i = 0; i < parameters.length; i++) {
-            parameterTypes[i] = Type.fromTypeNode(((Parameter) parameters[i]).getType(), classSymbol, importTable);
+        for(int i = 0; i < parameters.size(); i++) {
+            parameterTypes[i] = Type.fromTypeNode(((Parameter) parameters.get(i)).getType(), classSymbol, importTable);
 
             //Make sure the parameter type is valid
             if(parameterTypes[i] == null)
-                new ResolvingError.UnresolvableType(((Parameter) parameters[i]).getType());
+                new ResolvingError.UnresolvableType(((Parameter) parameters.get(i)).getType());
         }
 
         Type returnType = Type.fromTypeNode(methodDeclaration.getReturnType(), classSymbol, importTable);
