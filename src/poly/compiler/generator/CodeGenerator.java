@@ -663,9 +663,10 @@ public final class CodeGenerator implements NodeVisitor {
         //Check method call
         if(expression instanceof MethodCall methodCall) {
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
+            String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
             //Find method in current class
-            MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, methodCall);
+            MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, methodCall);
 
             //Generate instructions
             if(!(methodSymbol.getReturnType() instanceof Void))
@@ -675,7 +676,7 @@ public final class CodeGenerator implements NodeVisitor {
         //Check access method call
         else if(expression instanceof MemberAccess memberAccess
                 && memberAccess.getAccessor() instanceof MethodCall methodCall) {
-            Expression member = (Expression) memberAccess.getMember();
+            Expression member = memberAccess.getMember();
 
             Type type = member.getExpressionType() == null
                     ? getTypeFromNode(memberAccess.getMember())
@@ -683,9 +684,10 @@ public final class CodeGenerator implements NodeVisitor {
             ClassSymbol classSymbol = ((Object) type).getClassSymbol();
 
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
+            String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
             //Find method in class
-            MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, memberAccess);
+            MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, memberAccess);
 
             //Generate instructions
             if(!(methodSymbol.getReturnType() instanceof Void))
@@ -976,9 +978,10 @@ public final class CodeGenerator implements NodeVisitor {
         addLineNumber(methodCall);
 
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
+        String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
         //Find method in current class
-        MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, classSymbol, methodCall);
+        MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, classSymbol, methodCall);
 
         if(!methodSymbol.isStatic())
             addInstruction(ALOAD_0);
@@ -1000,7 +1003,7 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitMemberAccess(MemberAccess memberAccess) {
         addLineNumber(memberAccess);
 
-        Expression member = (Expression) memberAccess.getMember();
+        Expression member = memberAccess.getMember();
 
         //Generate static access
         if(member.getExpressionType() == null) {
@@ -1022,9 +1025,10 @@ public final class CodeGenerator implements NodeVisitor {
                 methodCall.getArgumentList().accept(this);
 
                 Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
+                String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
                 //Find method in member class
-                MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, methodCall);
+                MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, methodCall);
 
                 //Generate instructions
                 generateCallStaticMethod(methodSymbol);
@@ -1061,9 +1065,10 @@ public final class CodeGenerator implements NodeVisitor {
                 methodCall.getArgumentList().accept(this);
 
                 Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
+                String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
                 //Find method in member class
-                MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, methodCall);
+                MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, methodCall);
 
                 boolean isSpecial = member instanceof ThisExpression
                         || member instanceof SuperExpression;
@@ -1084,7 +1089,7 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitQualifiedName(QualifiedName qualifiedName) {
         addLineNumber(qualifiedName);
 
-        Expression member = (Expression) qualifiedName.getQualifiedName();
+        Expression member = qualifiedName.getQualifiedName();
 
         //Generate static access
         if(member.getExpressionType() == null) {
@@ -1294,7 +1299,7 @@ public final class CodeGenerator implements NodeVisitor {
         int jumpOffset = programCounter;
 
         //Visit condition expression
-        visitCondition((Expression) sumExpression.getCondition(), branching);
+        visitCondition(sumExpression.getCondition(), branching);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -1342,7 +1347,7 @@ public final class CodeGenerator implements NodeVisitor {
         int jumpOffset = programCounter;
 
         //Visit condition expression
-        visitCondition((Expression) prodExpression.getCondition(), branching);
+        visitCondition(prodExpression.getCondition(), branching);
 
         //Resolve jumps to true-clause
         generateStackMapFrame();
@@ -1791,7 +1796,7 @@ public final class CodeGenerator implements NodeVisitor {
      * @param isResultNeeded whether the result value is needed
      */
     private void visitMemberAccessAssignement(AssignmentExpression assignmentExpression, MemberAccess memberAccess, boolean isResultNeeded) {
-        Expression member = (Expression) memberAccess.getMember();
+        Expression member = memberAccess.getMember();
         SimpleName simpleName = (SimpleName) memberAccess.getAccessor();
 
         //Visit member
@@ -1821,7 +1826,7 @@ public final class CodeGenerator implements NodeVisitor {
      * @param isResultNeeded whether the result value is needed
      */
     private void visitQualifiedNameAssignement(AssignmentExpression assignmentExpression, QualifiedName qualifiedName, boolean isResultNeeded) {
-        Expression member = (Expression) qualifiedName.getQualifiedName();
+        Expression member = qualifiedName.getQualifiedName();
 
         Type memberType = member.getExpressionType();
 
@@ -1962,7 +1967,7 @@ public final class CodeGenerator implements NodeVisitor {
      * @param isResultNeeded whether the result value is needed
      */
     private void visitMemberAccessIncrement(UnaryExpression unaryExpression, MemberAccess memberAccess, boolean isResultNeeded) {
-        Expression member = (Expression) memberAccess.getMember();
+        Expression member = memberAccess.getMember();
         SimpleName simpleName = (SimpleName) memberAccess.getAccessor();
 
         //Visit member
@@ -1990,7 +1995,7 @@ public final class CodeGenerator implements NodeVisitor {
      * @param isResultNeeded whether the result value is needed
      */
     private void visitQualifiedNameIncrement(UnaryExpression unaryExpression, QualifiedName qualifiedName, boolean isResultNeeded) {
-        Expression member = (Expression) qualifiedName.getQualifiedName();
+        Expression member = qualifiedName.getQualifiedName();
 
         Type memberType = member.getExpressionType();
 
