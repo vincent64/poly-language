@@ -899,9 +899,9 @@ public final class Analyzer implements NodeModifier {
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
         //Analyze method call
-        if(methodCall.getMember() == null) {
+        if(methodCall.getMethod() instanceof SimpleName simpleName) {
             //Find method in current class
-            MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, classSymbol, methodCall);
+            MethodSymbol methodSymbol = classSymbol.findMethod(simpleName.getName(), argumentTypes, classSymbol, methodCall);
 
             //Analyze member call
             if(methodSymbol == null)
@@ -937,7 +937,7 @@ public final class Analyzer implements NodeModifier {
             //Get the type of each argument
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
-            String methodName = methodCall.getMethodName();
+            String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
             ClassSymbol classSymbol = null;
             boolean isStaticContext = false;
@@ -955,7 +955,7 @@ public final class Analyzer implements NodeModifier {
                 //Visit member
                 memberAccess.setMember(memberAccess.getMember().accept(this));
 
-                Type memberType = ((Expression) memberAccess.getMember()).getExpressionType();
+                Type memberType = (memberAccess.getMember()).getExpressionType();
 
                 //Make sure the member is an object
                 if(memberType.getKind() != Type.Kind.OBJECT)
@@ -984,7 +984,7 @@ public final class Analyzer implements NodeModifier {
                 new AnalyzingError.UnresolvableMethod(methodCall, methodName, argumentTypes);
 
             //Find field in current class
-            FieldSymbol fieldSymbol = classSymbol.findField(methodCall.getMethodName(), classSymbol);
+            FieldSymbol fieldSymbol = classSymbol.findField(methodName, classSymbol);
 
             //Make sure the field exists
             if(fieldSymbol == null || fieldSymbol.getType().getKind() != Type.Kind.OBJECT)
@@ -1006,8 +1006,7 @@ public final class Analyzer implements NodeModifier {
         //Visit member
         memberAccess.setMember(memberAccess.getMember().accept(this));
 
-        Expression member = (Expression) memberAccess.getMember();
-        Type memberType = member.getExpressionType();
+        Type memberType = memberAccess.getMember().getExpressionType();
 
         //Make sure the member is not a primitive type
         if(memberType.getKind() == Type.Kind.PRIMITIVE)
@@ -1377,7 +1376,7 @@ public final class Analyzer implements NodeModifier {
         //Remove local variables added in this sum-expression
         variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
 
-        Expression expression = (Expression) sumExpression.getExpression();
+        Expression expression = sumExpression.getExpression();
 
         //Make sure the expression type is a numerical expression
         if(!(expression.getExpressionType() instanceof Primitive primitive && primitive.isNumericalType()))
@@ -1410,7 +1409,7 @@ public final class Analyzer implements NodeModifier {
         //Remove local variables added in this prod-expression
         variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
 
-        Expression expression = (Expression) prodExpression.getExpression();
+        Expression expression = prodExpression.getExpression();
 
         //Make sure the expression type is a numerical expression
         if(!(expression.getExpressionType() instanceof Primitive primitive && primitive.isNumericalType()))
@@ -1678,7 +1677,7 @@ public final class Analyzer implements NodeModifier {
      * @return the transformed node
      */
     private Expression visitMethodCallOperationOverload(MethodCall methodCall) {
-        String methodName = methodCall.getMethodName();
+        String methodName = ((SimpleName) methodCall.getMethod()).getName();
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
         ClassSymbol classSymbol;
@@ -1689,7 +1688,7 @@ public final class Analyzer implements NodeModifier {
         //Analyze variable call
         if(variable == null) {
             //Find field in current class
-            FieldSymbol fieldSymbol = this.classSymbol.findField(methodCall.getMethodName(), this.classSymbol);
+            FieldSymbol fieldSymbol = this.classSymbol.findField(methodName, this.classSymbol);
 
             //Make sure the field exists
             if(fieldSymbol == null || fieldSymbol.getType().getKind() != Type.Kind.OBJECT)
@@ -1714,9 +1713,12 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.UnresolvableMethod(methodCall, methodName, argumentTypes);
 
+        SimpleName simpleMethodName = new SimpleName(methodCall.getMeta());
+        simpleMethodName.setName(OperatorMethod.Name.METHOD_INVOCATION);
+
         //Transform expression to method call
         MethodCall methodInvokation = new MethodCall(methodCall.getMeta());
-        methodInvokation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
+        methodInvokation.setMethod(simpleMethodName);
         methodInvokation.setArgumentList(methodCall.getArgumentList());
 
         //Transform method call to member access
@@ -1736,9 +1738,9 @@ public final class Analyzer implements NodeModifier {
      */
     private Expression visitExpressionCallOperationOverload(MethodCall methodCall) {
         //Visit member
-        methodCall.setMember(methodCall.getMember().accept(this));
+        methodCall.setMethod(methodCall.getMethod().accept(this));
 
-        Expression member = (Expression) methodCall.getMember();
+        Expression member = methodCall.getMethod();
         Type type = member.getExpressionType();
 
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
@@ -1756,9 +1758,12 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidObjectCall(methodCall, argumentTypes);
 
+        SimpleName simpleMethodName = new SimpleName(methodCall.getMeta());
+        simpleMethodName.setName(OperatorMethod.Name.METHOD_INVOCATION);
+
         //Transform expression to method call
         MethodCall methodInvocation = new MethodCall(methodCall.getMeta());
-        methodInvocation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
+        methodInvocation.setMethod(simpleMethodName);
         methodInvocation.setArgumentList(methodCall.getArgumentList());
 
         //Transform method call to member access
@@ -1827,7 +1832,7 @@ public final class Analyzer implements NodeModifier {
             Symbol symbol = visitQualifiedName(qualifiedName.getQualifiedName());
             String name = qualifiedName.getName();
 
-            Type type = ((Expression) qualifiedName.getQualifiedName()).getExpressionType();
+            Type type = qualifiedName.getQualifiedName().getExpressionType();
 
             //Analyze instance access
             if(type != null) {
@@ -1928,7 +1933,7 @@ public final class Analyzer implements NodeModifier {
         //Analyze member access variable
         else if(variableExpression instanceof MemberAccess memberAccess) {
             SimpleName simpleName = (SimpleName) memberAccess.getAccessor();
-            Type type = ((Expression) memberAccess.getMember()).getExpressionType();
+            Type type = memberAccess.getMember().getExpressionType();
 
             //Make sure the variable is not the array size
             if(type.getKind() == Type.Kind.ARRAY)
@@ -1950,7 +1955,7 @@ public final class Analyzer implements NodeModifier {
 
             Type type;
             if((type = getTypeFromNode(qualifiedName.getQualifiedName())) == null)
-                type = ((Expression) qualifiedName.getQualifiedName()).getExpressionType();
+                type = qualifiedName.getQualifiedName().getExpressionType();
 
             //Make sure the variable is not the array size
             if(type.getKind() == Type.Kind.ARRAY)
