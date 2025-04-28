@@ -1285,7 +1285,7 @@ public final class Parser {
             else if(matches(OPENING_PARENTHESIS)) {
                 //Parse method call
                 MethodCall methodCall = new MethodCall(Node.Meta.fromLeadingToken(currentToken));
-                methodCall.setMember(expression);
+                methodCall.setMethod(expression);
                 methodCall.setArgumentList(parseArgumentList());
                 expression = methodCall;
                 nextToken();
@@ -1357,8 +1357,7 @@ public final class Parser {
         MethodCall expression = new MethodCall(Node.Meta.fromLeadingToken(currentToken));
 
         //Parse method name
-        expression.setMethodName(currentToken);
-        nextToken();
+        expression.setMethod(parseSimpleName());
 
         //Parse arguments list
         match(OPENING_PARENTHESIS);
