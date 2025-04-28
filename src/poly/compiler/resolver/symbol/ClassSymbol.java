@@ -520,6 +520,11 @@ public final class ClassSymbol extends Symbol {
     }
 
     @Override
+    public int hashCode() {
+        return className.hashCode();
+    }
+
+    @Override
     public String toString() {
         StringBuilder string = new StringBuilder("ClassSymbol("
                 + accessModifier + ", "
