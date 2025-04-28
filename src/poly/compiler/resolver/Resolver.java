@@ -59,7 +59,7 @@ public final class Resolver {
 
             //Add the class symbol to the project classes
             if(!packageSymbol.addSymbol(classSymbol))
-                new ResolvingError.DuplicateClass(classDeclaration, String.valueOf(classDeclaration.getName()));
+                new ResolvingError.DuplicateClass(classDeclaration, classDeclaration.getName());
         }
 
         return classDefinitions;
@@ -76,7 +76,7 @@ public final class Resolver {
     private ClassSymbol resolveClass(ClassDeclaration classDeclaration, ClassName packageName,
                                      Symbol ownerSymbol, PackageSymbol packageSymbol) {
         //Compute the class qualified name
-        ClassName className = packageName.addClassName(String.valueOf(classDeclaration.getName()));
+        ClassName className = packageName.addClassName(classDeclaration.getName());
 
         //Resolve the class symbols
         ClassSymbol classSymbol = ClassSymbol.fromClassDeclaration(classDeclaration, className, ownerSymbol, packageSymbol);
