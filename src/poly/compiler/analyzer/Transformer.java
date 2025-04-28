@@ -34,9 +34,12 @@ public final class Transformer {
      * @return the transformed node
      */
     Expression transformOperationOverload(Node node, Expression expression, Expression argumentExpression, String methodName) {
+        SimpleName simpleMethodName = new SimpleName(node.getMeta());
+        simpleMethodName.setName(methodName);
+
         //Generate operation method call
         MethodCall methodCall = new MethodCall(node.getMeta());
-        methodCall.setMethodName(methodName);
+        methodCall.setMethod(simpleMethodName);
 
         //Add argument expression to arguments list
         ArgumentList argumentList = new ArgumentList(node.getMeta());
@@ -89,11 +92,14 @@ public final class Transformer {
         if(!(secondType instanceof Object object)
                 || !object.getClassSymbol().getClassInternalQualifiedName()
                 .equals(ClassName.STRING.toInternalQualifiedName())) {
+            SimpleName simpleMethodName = new SimpleName(binaryExpression.getMeta());
+            simpleMethodName.setName("valueOf");
+
             //Generate method call
             ArgumentList argumentList = new ArgumentList(binaryExpression.getMeta());
             argumentList.addArgument(second);
             MethodCall methodCall = new MethodCall(binaryExpression.getMeta());
-            methodCall.setMethodName("valueOf");
+            methodCall.setMethod(simpleMethodName);
             methodCall.setArgumentList(argumentList);
 
             //Generate member access
