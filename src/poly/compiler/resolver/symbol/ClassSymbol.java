@@ -69,7 +69,7 @@ public final class ClassSymbol extends Symbol {
                 classDeclaration.isInterface(),
                 classDeclaration.isInner(),
                 className,
-                superclassNode == null || classDeclaration.isInterface()
+                superclassNode == null
                         ? ClassName.OBJECT
                         : ClassName.fromNodeQualifiedName(superclassNode),
                 classDeclaration.getInterfaces(),
