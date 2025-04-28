@@ -12,6 +12,7 @@ import poly.compiler.resolver.symbol.FieldSymbol;
 import poly.compiler.resolver.symbol.MethodSymbol;
 import poly.compiler.resolver.symbol.Symbol;
 import poly.compiler.util.ByteArray;
+import poly.compiler.util.ClassName;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -85,8 +86,20 @@ public class ClassFile implements Byteable {
         //Set class in constant pool
         classIndex = (short) constantPool.addClassConstant(classQualifiedName);
 
+        //Set superinterface in constant pool
+        if(classSymbol.isInterface()) {
+            superclassIndex = (short) constantPool.addClassConstant(ClassName.OBJECT.toInternalQualifiedName());
+
+            //Add superinterface in constant pool
+            ClassSymbol superclassSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
+            if(!superclassSymbol.isRoot()) {
+                String interfaceName = superclassSymbol.getClassInternalQualifiedName();
+                interfaces.addInterface((short) constantPool.addClassConstant(interfaceName));
+            }
+        }
+
         //Set superclass in constant pool
-        if(classSymbol.getSuperclassSymbol() != null) {
+        else if(classSymbol.getSuperclassSymbol() != null) {
             String superclassName = ((ClassSymbol) classSymbol.getSuperclassSymbol()).getClassInternalQualifiedName();
             superclassIndex = (short) constantPool.addClassConstant(superclassName);
         } else {
