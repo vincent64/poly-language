@@ -194,40 +194,48 @@ public final class DependencyResolver {
     }
 
     /**
-     * Checks the class symbol's methods and makes sure the ones that must be implemented
-     * are correctly implemented. This includes making sure methods with the same signature
+     * Checks every method of the given class with the methods to implement defined by the interfaces.
+     * This includes making sure methods with the same signature as an interface method
      * have the same return type and no weaker access modifier.
      * @param classSymbol the class symbol
-     * @param implementableMethods the list of methods to be implemented
      */
-    private void checkImplement(ClassSymbol classSymbol, List<MethodSymbol> implementableMethods) {
+    private void checkImplement(ClassSymbol classSymbol) {
+        List<MethodSymbol> implementableMethods = new ArrayList<>();
         ClassSymbol superinterfaceSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
 
-        //Check superclass implements
-        if(!classSymbol.isRoot())
-            checkImplement(superinterfaceSymbol, implementableMethods);
+        //Check superinterface implemented methods
+        if(!classSymbol.isRoot()) {
+            if(implementationMethods.containsKey(superinterfaceSymbol)) {
+                implementableMethods.addAll(implementationMethods.get(superinterfaceSymbol));
+            } else if(!superinterfaceSymbol.isRoot()) {
+                checkImplement(superinterfaceSymbol);
+            }
+        }
 
+        //Check interface implemented methods
         for(MethodSymbol methodSymbol : classSymbol.getMethods()) {
             //Skip static methods
             if(methodSymbol.isStatic())
                 continue;
 
-            if(!implementableMethods.contains(methodSymbol)) {
-                implementableMethods.add(methodSymbol);
-            } else {
-                //Get the implementable method
+            //Add implementable method
+            if(implementableMethods.contains(methodSymbol)) {
                 MethodSymbol implementableMethod = implementableMethods.get(implementableMethods.indexOf(methodSymbol));
 
-                //Make sure the methods are valid
+                //Make sure the implementable method signature is valid
                 checkSignature(methodSymbol, implementableMethod);
 
-                //Replace the method
-                if(!implementableMethod.isEmpty() && methodSymbol.isEmpty()) {
-                    implementableMethods.remove(implementableMethod);
-                    implementableMethods.add(methodSymbol);
-                }
+                //Remove the previous method
+                implementableMethods.remove(implementableMethod);
             }
+
+            //Add empty method
+            if(methodSymbol.isEmpty())
+                implementableMethods.add(methodSymbol);
         }
+
+        //Add the interface symbol and its implementable methods
+        implementationMethods.put(classSymbol, implementableMethods);
     }
 
     /**
