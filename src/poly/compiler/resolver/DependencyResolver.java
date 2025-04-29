@@ -89,17 +89,15 @@ public final class DependencyResolver {
         ClassSymbol classSymbol = classDefinition.getClassSymbol();
 
         //Check overridable methods
-        checkOverride(classSymbol, new ArrayList<>());
+        checkOverride(classSymbol);
 
         List<MethodSymbol> implementableMethods = new ArrayList<>();
 
         //Check implementable methods
         for(Symbol interfaceSymbol : classSymbol.getInterfaceSymbols()) {
-            List<MethodSymbol> interfaceMethods = new ArrayList<>();
+            checkImplement((ClassSymbol) interfaceSymbol);
 
-            checkImplement((ClassSymbol) interfaceSymbol, interfaceMethods);
-
-            for(MethodSymbol methodSymbol : interfaceMethods) {
+            for(MethodSymbol methodSymbol : implementationMethods.get(interfaceSymbol)) {
                 if(implementableMethods.contains(methodSymbol)) {
                     MethodSymbol implementableMethod = implementableMethods.get(implementableMethods.indexOf(methodSymbol));
 
