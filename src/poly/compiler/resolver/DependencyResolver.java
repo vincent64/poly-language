@@ -73,21 +73,10 @@ public final class DependencyResolver {
             classSymbol = (ClassSymbol) interfaceSymbol;
 
             //Make sure the same interface is not implemented several times
-            if(!interfaces.add(classSymbol))
+            do if(!interfaces.add(classSymbol)) {
                 new ResolvingError.CyclicImplementation(classDefinition.getClassDeclaration(),
                         classSymbol.getClassQualifiedName());
-
-            classSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
-
-            //Make sure a superinterface does not extend itself
-            while(!classSymbol.isRoot()) {
-                classSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
-
-                //Make sure the superinterface is not implemented several times
-                if(!interfaces.add(classSymbol))
-                    new ResolvingError.CyclicImplementation(classDefinition.getClassDeclaration(),
-                            classSymbol.getClassQualifiedName());
-            }
+            } while(!(classSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol()).isRoot());
         }
     }
 
