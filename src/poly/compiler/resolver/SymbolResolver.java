@@ -86,15 +86,9 @@ public final class SymbolResolver {
 
         List<Symbol> interfaceSymbols = classSymbol.getInterfaceSymbols();
 
-        if(classSymbol.isInterface()) {
-            //Make sure there is no interfaces if the class is an interface
-            if(!interfaceSymbols.isEmpty())
-                new ResolvingError.InvalidInterfaceInheritance(classDefinition.getClassDeclaration());
-
-            //Add the superinterface to the interface symbols
-            if(classDeclaration.getSuperclass() != null)
-                interfaceSymbols.add(TypeSymbol.fromNode(classDefinition.getClassDeclaration().getSuperclass()));
-        }
+        //Make sure there is no interfaces if the class is an interface
+        if(classSymbol.isInterface() && !interfaceSymbols.isEmpty())
+            new ResolvingError.InvalidInterfaceInheritance(classDefinition.getClassDeclaration());
 
         //Resolve interfaces
         for(int i = 0; i < interfaceSymbols.size(); i++) {
