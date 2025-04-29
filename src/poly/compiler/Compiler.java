@@ -58,14 +58,20 @@ public class Compiler {
 
     public static void main(String[] arguments) {
         //Print header message (in red because it looks cooler)
-        System.err.println(HEADER.formatted(VERSION));
-        System.err.flush();
+        System.out.println(HEADER.formatted(VERSION));
+        System.out.flush();
         System.out.println(HEADER_INFORMATION);
         System.out.flush();
 
         //Print help message if no arguments
         if(arguments.length == 0) {
             System.out.println(HEADER_HELP);
+            return;
+        }
+
+        //Print version message
+        if(arguments.length == 1 && arguments[0].equals(Parameters.VERSION)) {
+            System.out.println(HEADER);
             return;
         }
 
