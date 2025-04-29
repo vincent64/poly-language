@@ -9,10 +9,7 @@ import poly.compiler.resolver.symbol.FieldSymbol;
 import poly.compiler.resolver.symbol.MethodSymbol;
 import poly.compiler.resolver.symbol.Symbol;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The DependencyResolver class. This class is used to resolve the inheritance and interfaces
@@ -21,6 +18,8 @@ import java.util.Set;
  * @author Vincent Philippe (@vincent64)
  */
 public final class DependencyResolver {
+    private static final HashMap<ClassSymbol, List<MethodSymbol>> inheritedMethods = new HashMap<>();
+    private static final HashMap<ClassSymbol, List<MethodSymbol>> implementationMethods = new HashMap<>();
     private final ClassDefinition classDefinition;
 
     private DependencyResolver(ClassDefinition classDefinition) {
