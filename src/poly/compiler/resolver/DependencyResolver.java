@@ -97,16 +97,8 @@ public final class DependencyResolver {
         for(Symbol interfaceSymbol : classSymbol.getInterfaceSymbols()) {
             checkImplement((ClassSymbol) interfaceSymbol);
 
-            for(MethodSymbol methodSymbol : implementationMethods.get(interfaceSymbol)) {
-                if(implementableMethods.contains(methodSymbol)) {
-                    MethodSymbol implementableMethod = implementableMethods.get(implementableMethods.indexOf(methodSymbol));
-
-                    //Make sure the methods are valid
-                    checkSignature(methodSymbol, implementableMethod);
-                } else {
-                    implementableMethods.add(methodSymbol);
-                }
-            }
+            //Add all the method to be implemented
+            implementableMethods.addAll(implementationMethods.get(interfaceSymbol));
         }
 
         List<MethodSymbol> methodSymbols = classSymbol.getMethods();
