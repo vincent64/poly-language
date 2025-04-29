@@ -239,25 +239,26 @@ public final class DependencyResolver {
     }
 
     /**
-     * Checks the given method symbols' signature. This includes making sure the return types
-     * are the same and the access modifier is not weaker.
+     * Checks the signature of the given method symbol with the signature of the given overriden method.
+     * This includes making sure the return types are the same and the access modifier is not weaker.
      * @param methodSymbol the method symbol
-     * @param implementableMethodSymbol the implementable method symbol
+     * @param overridenMethod the overriden method symbol
      */
-    private void checkSignature(MethodSymbol methodSymbol, MethodSymbol implementableMethodSymbol) {
-        //Make sure the methods have the same return type
-        if(!(methodSymbol.getReturnType() == null && implementableMethodSymbol.getReturnType() == null)) {
-            if(methodSymbol.getReturnType() == null || implementableMethodSymbol.getReturnType() == null
-                    || !methodSymbol.getReturnType().equals(implementableMethodSymbol.getReturnType()))
+    private void checkSignature(MethodSymbol methodSymbol, MethodSymbol overridenMethod) {
+        //Make sure both methods have the same return type
+        if(!(methodSymbol.getReturnType() == null && overridenMethod.getReturnType() == null)) {
+            if(methodSymbol.getReturnType() == null || overridenMethod.getReturnType() == null
+                    || !methodSymbol.getReturnType().equals(overridenMethod.getReturnType())) {
                 new ResolvingError.InvalidOverrideReturnType(classDefinition.getClassDeclaration(),
-                        methodSymbol, implementableMethodSymbol.getClassSymbol().getClassInternalQualifiedName());
+                        methodSymbol, overridenMethod.getClassSymbol().getClassInternalQualifiedName());
+            }
         }
 
-        //Make sure the implementable method does not have a weaker access modifier
-        if(implementableMethodSymbol.getAccessModifier().isWeakerThan(methodSymbol.getAccessModifier())
+        //Make sure the method does not have a weaker access modifier unless it is a constructor
+        if(overridenMethod.getAccessModifier().isWeakerThan(methodSymbol.getAccessModifier())
                 && !methodSymbol.isConstructor())
             new ResolvingError.InvalidOverrideAccessModifier(classDefinition.getClassDeclaration(),
-                    methodSymbol, implementableMethodSymbol.getClassSymbol().getClassInternalQualifiedName());
+                    methodSymbol, overridenMethod.getClassSymbol().getClassInternalQualifiedName());
     }
 
     /**
