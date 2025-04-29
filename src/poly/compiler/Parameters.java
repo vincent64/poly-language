@@ -14,6 +14,7 @@ import java.nio.file.Path;
  * @author Vincent Philippe (@vincent64)
  */
 public class Parameters {
+    public static final String VERSION = "-version";
     private static boolean OPTIMIZATIONS = false;
     private static boolean VERBOSITY = false;
     private static boolean WARNINGS = false;
