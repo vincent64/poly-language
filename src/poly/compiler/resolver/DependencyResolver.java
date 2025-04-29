@@ -130,49 +130,67 @@ public final class DependencyResolver {
     }
 
     /**
-     * Checks the class symbol's methods and makes sure they are correctly overriden.
-     * This includes making sure methods with the same signature as a superclass or interface
-     * method have the same return type and no weaker access modifier.
+     * Checks every method of the given class with the methods inherited from its superclass and interfaces.
+     * This includes making sure methods with the same signature as a superclass or interface method
+     * have the same return type and no weaker access modifier.
      * @param classSymbol the class symbol
-     * @param overridableMethods the list of overridable methods
      */
-    private void checkOverride(ClassSymbol classSymbol, List<MethodSymbol> overridableMethods) {
+    private void checkOverride(ClassSymbol classSymbol) {
+        List<MethodSymbol> overridableMethods = new ArrayList<>();
         ClassSymbol superclassSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
 
-        //Check superclass overrides
+        //Check superclass overriden methods
         if(!classSymbol.isRoot()) {
-            if(!classSymbol.isInterface() || superclassSymbol.isInterface())
-                checkOverride(superclassSymbol, overridableMethods);
+            if(inheritedMethods.containsKey(superclassSymbol)) {
+                overridableMethods.addAll(inheritedMethods.get(superclassSymbol));
+            } else if(!classSymbol.isInterface() || superclassSymbol.isInterface()) {
+                checkOverride(superclassSymbol);
+            }
         }
 
-        //Check interfaces overrides
-        for(Symbol interfaceSymbol : classSymbol.getInterfaceSymbols())
-            checkOverride((ClassSymbol) interfaceSymbol, overridableMethods);
+        //Check interfaces overriden methods
+        for(Symbol symbol : classSymbol.getInterfaceSymbols()) {
+            ClassSymbol interfaceSymbol = (ClassSymbol) symbol;
 
+            if(inheritedMethods.containsKey(interfaceSymbol)) {
+                overridableMethods.addAll(inheritedMethods.get(interfaceSymbol));
+            } else {
+                checkOverride(interfaceSymbol);
+            }
+        }
+
+        //Check class overriden methods
         for(MethodSymbol methodSymbol : classSymbol.getMethods()) {
             //Skip static and empty methods
             if(methodSymbol.isStatic() || methodSymbol.isEmpty())
                 continue;
 
+            //Add non-overriding method
             if(!overridableMethods.contains(methodSymbol)) {
                 overridableMethods.add(methodSymbol);
-            } else {
-                //Get the overridable method
-                MethodSymbol overridableMethodSymbol = overridableMethods.get(overridableMethods.indexOf(methodSymbol));
+            }
 
-                //Make sure the methods are valid
-                checkSignature(methodSymbol, overridableMethodSymbol);
+            //Add overriding method
+            else {
+                MethodSymbol overridenMethod = overridableMethods.get(overridableMethods.indexOf(methodSymbol));
+
+                //Make sure the overriding method signature is valid
+                checkSignature(methodSymbol, overridenMethod);
 
                 //Make sure the method is not constant
-                if(overridableMethodSymbol.isConstant())
+                if(overridenMethod.isConstant()) {
                     new ResolvingError.InvalidConstantOverride(classDefinition.getClassDeclaration(),
                             methodSymbol, classDefinition.getClassSymbol().getName());
+                }
 
                 //Replace the method
-                overridableMethods.remove(overridableMethodSymbol);
+                overridableMethods.remove(overridenMethod);
                 overridableMethods.add(methodSymbol);
             }
         }
+
+        //Add the class symbol and its inherited methods
+        inheritedMethods.put(classSymbol, overridableMethods);
     }
 
     /**
