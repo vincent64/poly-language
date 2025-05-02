@@ -402,6 +402,39 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
+    public Statement visitTryStatement(TryStatement tryStatement) {
+        //Visit statement block
+        tryStatement.setStatementBlock(tryStatement.getStatementBlock().accept(this));
+
+        //Get the amount of previous local variables
+        int previousVariableCount = variableTable.getVariableCount();
+
+        //Visit exception parameter
+        tryStatement.setExceptionParameter(tryStatement.getExceptionParameter().accept(this));
+
+        ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.THROWABLE);
+
+        //Make sure the throwable class exists
+        if(classSymbol == null)
+            new AnalyzingError.UnresolvableClass(tryStatement, ClassName.THROWABLE.toString());
+
+        Parameter parameter = (Parameter) tryStatement.getExceptionParameter();
+        Type type = getTypeFromNode(parameter.getType());
+
+        //Make sure the exception type is a subclass of throwable
+        if(!(type instanceof Object object && object.getClassSymbol().isSubtypeOf(classSymbol)))
+            new AnalyzingError.TypeConversion(parameter, type, new Object(classSymbol));
+
+        //Visit catch statement block
+        tryStatement.setCatchStatementBlock(tryStatement.getCatchStatementBlock().accept(this));
+
+        //Remove local variables added in this try-statement
+        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+
+        return tryStatement;
+    }
+
+    @Override
     public Statement visitReturnStatement(ReturnStatement returnStatement) {
         Expression expression = returnStatement.getExpression();
 
