@@ -527,6 +527,56 @@ public final class CodeGenerator implements NodeVisitor {
     }
 
     @Override
+    public void visitTryStatement(TryStatement tryStatement) {
+        addLineNumber(tryStatement);
+
+        Branching branching = new Branching();
+
+        int startProgramCounter = programCounter;
+
+        //Visit statement body
+        tryStatement.getStatementBlock().accept(this);
+
+        branching.addJumpIndex(instructions.size(), programCounter);
+        addInstruction(Instruction.forUnconditionalJump(programCounter));
+
+        int endProgramCounter = programCounter;
+
+        //Get the amount of previous local variables
+        int previousLocalCount = localTable.getCount();
+        int previousVariableCount = variableTable.getVariableCount();
+
+        Parameter parameter = (Parameter) tryStatement.getExceptionParameter();
+        Object catchType = (Object) getTypeFromNode(parameter.getType());
+
+        operandStack.push(catchType);
+        generateStackMapFrame();
+
+        int handlerProgramCounter = programCounter;
+
+        //Visit exception parameter
+        tryStatement.getExceptionParameter().accept(this);
+
+        //Store exception as parameter
+        addInstruction(Instruction.forStoring(variableTable.getLastVariable()));
+
+        //Visit catch statement body
+        tryStatement.getCatchStatementBlock().accept(this);
+
+        //Remove local variables added in this try-statement
+        localTable.remove(localTable.getCount() - previousLocalCount);
+        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+
+        //Resolve unconditonal jump
+        generateStackMapFrame();
+        branching.resolveJumps(instructions, programCounter);
+
+        //Add the exception entry to the table
+        exceptionTable.addEntry(startProgramCounter, endProgramCounter, handlerProgramCounter,
+                (short) constantPool.addClassConstant(catchType.getClassSymbol().getClassInternalQualifiedName()));
+    }
+
+    @Override
     public void visitReturnStatement(ReturnStatement returnStatement) {
         addLineNumber(returnStatement);
 
