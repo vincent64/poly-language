@@ -1,5 +1,6 @@
 package poly.compiler.output.attribute;
 
+import poly.compiler.generator.ExceptionTable;
 import poly.compiler.output.content.Attributes;
 import poly.compiler.output.content.ConstantPool;
 import poly.compiler.util.ByteArray;
@@ -34,26 +35,26 @@ public final class CodeAttribute extends Attribute {
     private final short maxLocals;
     private final int codeLength;
     private final byte[] code;
-    private final short exceptionTableLength;
+    private final ExceptionTable exceptionTable;
     private final Attributes attributes;
 
     /**
-     * Constructs a code attribute with the given max stack count, max locals count, code content,
-     * exception table length and attributes.
+     * Constructs a code attribute with the given max stack count, max locals count,
+     * code content, exception table and attributes.
      * @param constantPool the constant pool
      * @param maxStack the max stack count
      * @param maxLocals the max locals count
      * @param code the code content
-     * @param exceptionTableLength the exception table length
+     * @param exceptionTable the exception table
      * @param attributes the attributes
      */
     public CodeAttribute(ConstantPool constantPool, short maxStack, short maxLocals, byte[] code,
-                         short exceptionTableLength, Attributes attributes) {
-        super((short) constantPool.addUTF8Constant(NAME), code.length + 10);
+                         ExceptionTable exceptionTable, Attributes attributes) {
+        super((short) constantPool.addUTF8Constant(NAME), code.length + 8);
         this.maxStack = maxStack;
         this.maxLocals = maxLocals;
         this.codeLength = code.length;
-        this.exceptionTableLength = exceptionTableLength;
+        this.exceptionTable = exceptionTable;
         this.code = code;
         this.attributes = attributes;
     }
@@ -62,19 +63,21 @@ public final class CodeAttribute extends Attribute {
     public byte[] getBytes() {
         ByteArray byteArray = new ByteArray();
 
+        byte[] exceptionBytes = exceptionTable.getBytes();
         byte[] attributeBytes = attributes.getBytes();
 
         //Add attribute content
         byteArray.add(nameIndex);
-        byteArray.add(length + attributeBytes.length);
+        byteArray.add(length + exceptionBytes.length + attributeBytes.length);
 
         //Add code attribute content
         byteArray.add(maxStack);
         byteArray.add(maxLocals);
         byteArray.add(codeLength);
         byteArray.add(code);
-        byteArray.add(exceptionTableLength);
 
+        //Add exception table content
+        byteArray.add(exceptionBytes);
         //Add attributes content
         byteArray.add(attributeBytes);
 
