@@ -89,6 +89,14 @@ public class VariableTable {
     }
 
     /**
+     * Returns the variable that was last added to the variable table.
+     * @return the variable
+     */
+    public Variable getLastVariable() {
+        return variables.getLast();
+    }
+
+    /**
      * Removes every variable from the table and clears the counter.
      */
     public void clear() {
