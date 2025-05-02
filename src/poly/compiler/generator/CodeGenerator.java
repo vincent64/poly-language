@@ -45,6 +45,7 @@ public final class CodeGenerator implements NodeVisitor {
     private final List<Instruction> instructions;
     private final LineNumberTable lineNumberTable;
     private final StackMapTable stackMapTable;
+    private final ExceptionTable exceptionTable;
     private final ClassDeclaration classDeclaration;
     private final ClassSymbol classSymbol;
     private final VariableTable variableTable;
@@ -66,6 +67,8 @@ public final class CodeGenerator implements NodeVisitor {
         //Initialize stack map and line number tables
         lineNumberTable = new LineNumberTable();
         stackMapTable = new StackMapTable();
+        //Initialize exceptions table
+        exceptionTable = new ExceptionTable();
 
         //Initialize variables table
         variableTable = new VariableTable();
@@ -141,7 +144,7 @@ public final class CodeGenerator implements NodeVisitor {
                 (short) operandStack.getMaxStack(),
                 (short) localTable.getMaxCount(),
                 bytes,
-                (short) 0,
+                exceptionTable,
                 attributes);
     }
 
