@@ -531,8 +531,8 @@ public final class Parser {
         //Parse statement body
         statement.setStatementBlock(parseStatementBlock());
 
-        //Parse else condition statement
-        while(matches(STATEMENT_ELSE))
+        //Parse else statement body
+        if(matches(STATEMENT_ELSE))
             statement.setElseStatementBlock(parseStatementBlock());
 
         return statement;
