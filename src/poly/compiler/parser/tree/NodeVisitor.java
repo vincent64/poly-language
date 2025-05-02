@@ -38,6 +38,7 @@ public interface NodeVisitor {
     default void visitSuperStatement(SuperStatement superStatement) {}
     default void visitSwitchStatement(SwitchStatement switchStatement) {}
     default void visitThisStatement(ThisStatement thisStatement) {}
+    default void visitTryStatement(TryStatement tryStatement) {}
     default void visitVariableDeclaration(VariableDeclaration variableDeclaration) {}
     default void visitWhileStatement(WhileStatement whileStatement) {}
 
