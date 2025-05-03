@@ -537,6 +537,7 @@ public final class CodeGenerator implements NodeVisitor {
         //Visit statement body
         tryStatement.getStatementBlock().accept(this);
 
+        generateStackMapFrame();
         branching.addJumpIndex(instructions.size(), programCounter);
         addInstruction(Instruction.forUnconditionalJump(programCounter));
 
