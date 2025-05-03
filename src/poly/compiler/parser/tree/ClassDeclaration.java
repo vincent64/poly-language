@@ -23,7 +23,7 @@ public class ClassDeclaration extends Node {
     private List<Node> methodNodes;
     private List<Node> nestedClasses;
     private boolean isStatic, isConstant;
-    private boolean isInterface, isInner;
+    private boolean isInterface, isInner, isException;
 
     /**
      * Constructs a class declaration node with the given metadata information.
@@ -126,6 +126,13 @@ public class ClassDeclaration extends Node {
     }
 
     /**
+     * Sets the current class declaration as an exception.
+     */
+    public void setException() {
+        isException = true;
+    }
+
+    /**
      * Returns the class access modifier.
      * @return the access modifier
      */
@@ -211,6 +218,14 @@ public class ClassDeclaration extends Node {
      */
     public boolean isInner() {
         return isInner;
+    }
+
+    /**
+     * Returns whether the class declaration is an exception.
+     * @return true if the class is an exception
+     */
+    public boolean isException() {
+        return isException;
     }
 
     @Override
