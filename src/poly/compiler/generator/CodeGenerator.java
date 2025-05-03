@@ -186,8 +186,9 @@ public final class CodeGenerator implements NodeVisitor {
         //Visit method body
         methodDeclaration.getStatementBlock().accept(this);
 
-        //Generate empty return instruction
-        if(statements.isEmpty() || !(statements.getLast() instanceof ReturnStatement))
+        //Generate implicit return instruction
+        if(statements.isEmpty() || !(statements.getLast() instanceof ReturnStatement
+                || statements.getLast() instanceof ThrowStatement))
             addInstruction(RETURN);
     }
 
