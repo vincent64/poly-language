@@ -70,7 +70,8 @@ public final class ClassSymbol extends Symbol {
                 classDeclaration.isInner(),
                 className,
                 superclassNode == null
-                        ? ClassName.OBJECT
+                        ? classDeclaration.isException()
+                            ? ClassName.RUNTIME_EXCEPTION : ClassName.OBJECT
                         : ClassName.fromNodeQualifiedName(superclassNode),
                 classDeclaration.getInterfaces(),
                 ownerSymbol,
