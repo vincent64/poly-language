@@ -45,12 +45,15 @@ public class Keyword {
     public static final char[] STATEMENT_CONTINUE = {'c', 'o', 'n', 't', 'i', 'n', 'u', 'e'};
     public static final char[] STATEMENT_BREAK = {'b', 'r', 'e', 'a', 'k'};
     public static final char[] STATEMENT_FOREACH = {'f', 'o', 'r', 'e', 'a', 'c', 'h'};
+    public static final char[] STATEMENT_TRY = {'t', 'r', 'y'};
+    public static final char[] STATEMENT_CATCH = {'c', 'a', 't', 'c', 'h'};
 
     //Class keywords
     public static final char[] CLASS = {'c', 'l', 'a', 's', 's'};
     public static final char[] CLASS_NEW = {'n', 'e', 'w'};
     public static final char[] CLASS_INTERFACE = {'i', 'n', 't', 'e', 'r', 'f', 'a', 'c', 'e'};
     public static final char[] CLASS_INNER = {'i', 'n', 'n', 'e', 'r'};
+    public static final char[] CLASS_EXCEPTION = {'e', 'x', 'c', 'e', 'p', 't', 'i', 'o', 'n'};
 
     //Method keywords
     public static final char[] METHOD = {'f', 'n'};
@@ -58,11 +61,6 @@ public class Keyword {
     public static final char[] METHOD_CONSTRUCTOR = {'c', 'o', 'n', 's', 't', 'r', 'u', 'c', 't', 'o', 'r'};
     public static final char[] METHOD_OPERATOR = {'o', 'p'};
     public static final char[] METHOD_NULLIFIER = {'n', 'u', 'l', 'l', 'i', 'f', 'i', 'e', 'r'};
-
-    //Exception keywords
-    public static final char[] EXCEPTION = {'e', 'x', 'c', 'e', 'p', 't', 'i', 'o', 'n'};
-    public static final char[] EXCEPTION_TRY = {'t', 'r', 'y'};
-    public static final char[] EXCEPTION_CATCH = {'c', 'a', 't', 'c', 'h'};
 
     //Variable keywords
     public static final char[] VAR_CONST = {'c', 'o', 'n', 's', 't'};
@@ -86,9 +84,9 @@ public class Keyword {
             STATEMENT_IF, STATEMENT_ELSE, STATEMENT_FOR, STATEMENT_WHILE,
             STATEMENT_DO, STATEMENT_RETURN, STATEMENT_SWITCH, STATEMENT_MATCH, STATEMENT_CASE,
             STATEMENT_ASSERT, STATEMENT_CONTINUE, STATEMENT_BREAK, STATEMENT_FOREACH,
-            CLASS, CLASS_NEW, CLASS_INTERFACE, CLASS_INNER,
+            STATEMENT_TRY, STATEMENT_CATCH,
+            CLASS, CLASS_NEW, CLASS_INTERFACE, CLASS_INNER, CLASS_EXCEPTION,
             METHOD, METHOD_VOID, METHOD_CONSTRUCTOR, METHOD_OPERATOR, METHOD_NULLIFIER,
-            EXCEPTION, EXCEPTION_TRY, EXCEPTION_CATCH,
             VAR_CONST,
             PACKAGE, IMPORT, DEFINE,
             CONCURRENCY_ASYNC, CONCURRENCY_AWAIT, CONCURRENCY_THREAD
