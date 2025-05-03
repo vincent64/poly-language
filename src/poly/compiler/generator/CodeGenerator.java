@@ -577,6 +577,17 @@ public final class CodeGenerator implements NodeVisitor {
     }
 
     @Override
+    public void visitThrowStatement(ThrowStatement throwStatement) {
+        addLineNumber(throwStatement);
+
+        //Visit throw expression
+        throwStatement.getExpression().accept(this);
+
+        //Generate instructions
+        addInstruction(ATHROW);
+    }
+
+    @Override
     public void visitReturnStatement(ReturnStatement returnStatement) {
         addLineNumber(returnStatement);
 
