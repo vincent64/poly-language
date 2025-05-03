@@ -47,6 +47,7 @@ public class Keyword {
     public static final char[] STATEMENT_FOREACH = {'f', 'o', 'r', 'e', 'a', 'c', 'h'};
     public static final char[] STATEMENT_TRY = {'t', 'r', 'y'};
     public static final char[] STATEMENT_CATCH = {'c', 'a', 't', 'c', 'h'};
+    public static final char[] STATEMENT_THROW = {'t', 'h', 'r', 'o', 'w'};
 
     //Class keywords
     public static final char[] CLASS = {'c', 'l', 'a', 's', 's'};
