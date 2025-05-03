@@ -23,6 +23,8 @@ public class ClassName {
     public static final ClassName ASSERTION_ERROR = ClassName.fromStringQualifiedName("java/lang/AssertionError");
     /** The Throwable class' class name. */
     public static final ClassName THROWABLE = ClassName.fromStringQualifiedName("java/lang/Throwable");
+    /** The RuntimeException class' class name. */
+    public static final ClassName RUNTIME_EXCEPTION = ClassName.fromStringQualifiedName("java/lang/RuntimeException");
 
     public static final String PACKAGE_SEPARATOR = "/";
     public static final String CLASS_SEPARATOR = "$";
