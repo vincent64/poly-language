@@ -225,7 +225,7 @@ public class OperandStack {
                     IFNULL, IFNONNULL, TABLESWITCH, LOOKUPSWITCH,
                     INVOKEVIRTUAL, INVOKESPECIAL, INVOKEINTERFACE,
                     IRETURN, LRETURN, FRETURN, DRETURN, ARETURN,
-                    PUTSTATIC, GETFIELD, NEWARRAY ->
+                    PUTSTATIC, GETFIELD, NEWARRAY, ATHROW ->
                 pop(1);
 
             case IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
