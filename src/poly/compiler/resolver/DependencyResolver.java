@@ -8,6 +8,7 @@ import poly.compiler.resolver.symbol.ClassSymbol;
 import poly.compiler.resolver.symbol.FieldSymbol;
 import poly.compiler.resolver.symbol.MethodSymbol;
 import poly.compiler.resolver.symbol.Symbol;
+import poly.compiler.util.ClassName;
 
 import java.util.*;
 
@@ -78,6 +79,11 @@ public final class DependencyResolver {
                         classSymbol.getClassQualifiedName());
             } while(!(classSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol()).isRoot());
         }
+
+        //Make sure the exception superclass is a subtype of exception
+        if(classDefinition.getClassDeclaration().isException()
+                && !((ClassSymbol) classSymbol.getSuperclassSymbol()).isSubtypeOf(LibraryClasses.findClass(ClassName.RUNTIME_EXCEPTION)))
+            throw new RuntimeException();
     }
 
     /**
