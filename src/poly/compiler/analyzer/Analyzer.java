@@ -436,6 +436,28 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
+    public Statement visitThrowStatement(ThrowStatement throwStatement) {
+        //Visit throw expression
+        throwStatement.setExpression(throwStatement.getExpression().accept(this));
+
+        ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.THROWABLE);
+
+        //Make sure the throwable class exists
+        if(classSymbol == null)
+            new AnalyzingError.UnresolvableClass(throwStatement, ClassName.THROWABLE.toString());
+
+        Expression expression = throwStatement.getExpression();
+        Type type = expression.getExpressionType();
+
+        //Make sure the expression type is a subclass of throwable
+        if(!isNullExpression(expression)
+                && !(type instanceof Object object && object.getClassSymbol().isSubtypeOf(classSymbol)))
+            new AnalyzingError.TypeConversion(expression, type, new Object(classSymbol));
+
+        return throwStatement;
+    }
+
+    @Override
     public Statement visitReturnStatement(ReturnStatement returnStatement) {
         Expression expression = returnStatement.getExpression();
 
