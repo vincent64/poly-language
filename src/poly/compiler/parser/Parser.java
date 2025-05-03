@@ -425,6 +425,10 @@ public final class Parser {
             if(isMatching(STATEMENT_TRY))
                 return parseTryStatement();
 
+            //Parse throw-statement
+            if(isMatching(STATEMENT_THROW))
+                return parseThrowStatement();
+
             //Parse return statement
             if(isMatching(STATEMENT_RETURN))
                 return parseReturnStatement();
@@ -687,6 +691,21 @@ public final class Parser {
 
         //Parse catch statement body
         statement.setCatchStatementBlock(parseStatementBlock());
+
+        return statement;
+    }
+
+    private Statement parseThrowStatement() {
+        ThrowStatement statement = new ThrowStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match throw keyword
+        match(STATEMENT_THROW);
+
+        //Parse throw expression
+        statement.setExpression(parseExpression());
+
+        //Match semicolon at the end
+        match(SEMICOLON);
 
         return statement;
     }
