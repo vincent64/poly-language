@@ -422,7 +422,7 @@ public final class Parser {
                 return parseAssertStatement();
 
             //Parse try-statement
-            if(isMatching(EXCEPTION_TRY))
+            if(isMatching(STATEMENT_TRY))
                 return parseTryStatement();
 
             //Parse return statement
@@ -672,13 +672,13 @@ public final class Parser {
         TryStatement statement = new TryStatement(Node.Meta.fromLeadingToken(currentToken));
 
         //Match try keyword
-        match(EXCEPTION_TRY);
+        match(STATEMENT_TRY);
 
         //Parse statement body
         statement.setStatementBlock(parseStatementBlock());
 
         //Match catch keyword
-        match(EXCEPTION_CATCH);
+        match(STATEMENT_CATCH);
 
         //Parse exception parameter
         match(OPENING_PARENTHESIS);
