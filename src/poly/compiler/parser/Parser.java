@@ -162,7 +162,7 @@ public final class Parser {
             node.addImport(parseImportStatement());
 
         //Parse class declarations
-        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE))
+        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_EXCEPTION))
             node.addClass(parseClassDeclaration());
 
         //Throw an error if there are tokens left
@@ -201,13 +201,16 @@ public final class Parser {
     private Node parseClassDeclaration() {
         ClassDeclaration node = new ClassDeclaration(Node.Meta.fromLeadingToken(currentToken));
 
-        //Match class or interface keyword
-        if(matches(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER)) {
+        //Match class, interface, inner or exception keyword
+        if(matches(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION)) {
             if(matches(CLASS_INTERFACE))
                 node.setInterface();
 
             if(matches(CLASS_INNER))
                 node.setInner();
+
+            if(matches(CLASS_EXCEPTION))
+                node.setException();
         }
 
         //Parse class access modifier
