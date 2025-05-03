@@ -53,6 +53,7 @@ super
 switch
 this
 thread
+throw
 true
 try
 void
