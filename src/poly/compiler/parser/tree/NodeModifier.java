@@ -41,6 +41,7 @@ public interface NodeModifier {
     default Statement visitSuperStatement(SuperStatement superStatement) { return superStatement; }
     default Statement visitSwitchStatement(SwitchStatement switchStatement) { return switchStatement; }
     default Statement visitThisStatement(ThisStatement thisStatement) { return thisStatement; }
+    default Statement visitThrowStatement(ThrowStatement throwStatement) { return throwStatement; }
     default Statement visitTryStatement(TryStatement tryStatement) { return tryStatement; }
     default Statement visitVariableDeclaration(VariableDeclaration variableDeclaration) { return variableDeclaration; }
     default Statement visitWhileStatement(WhileStatement whileStatement) { return whileStatement; }
