@@ -248,7 +248,8 @@ public final class Analyzer implements NodeModifier {
             Node statement = statements.get(i);
             hasJumped = statement instanceof ReturnStatement
                     || statement instanceof BreakStatement
-                    || statement instanceof ContinueStatement;
+                    || statement instanceof ContinueStatement
+                    || statement instanceof ThrowStatement;
         }
 
         //Remove local variables added in this statement block
