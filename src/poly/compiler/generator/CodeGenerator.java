@@ -514,7 +514,6 @@ public final class CodeGenerator implements NodeVisitor {
         //Generate instructions
         generateCallSpecialMethod(methodSymbol);
         addInstruction(ATHROW);
-        operandStack.pop(1);
 
         generateStackMapFrame();
         branching.addJumpIndex(instructions.size(), programCounter);
