@@ -1,5 +1,6 @@
 package poly.compiler.generator;
 
+import poly.compiler.analyzer.type.Array;
 import poly.compiler.analyzer.type.Object;
 import poly.compiler.analyzer.type.Primitive;
 import poly.compiler.analyzer.type.Type;
@@ -190,6 +191,21 @@ public class OperandStack {
             case NEW ->
                 push(VerificationType.forUninitializedObject((short) (programCounter - 3)));
 
+            case NEWARRAY -> {
+                pop(1);
+                push(new Array(new Primitive(switch(bytes[0]) {
+                    case 4 -> Primitive.Kind.BOOLEAN;
+                    case 5 -> Primitive.Kind.CHAR;
+                    case 6 -> Primitive.Kind.FLOAT;
+                    case 7 -> Primitive.Kind.DOUBLE;
+                    case 8 -> Primitive.Kind.BYTE;
+                    case 9 -> Primitive.Kind.SHORT;
+                    case 10 -> Primitive.Kind.INTEGER;
+                    case 11 -> Primitive.Kind.LONG;
+                    default -> null;
+                })));
+            }
+
             case CHECKCAST, ANEWARRAY -> {
                 pop(1);
                 push(VerificationType.forObject(ByteArray.getShortFromByteArray(bytes)));
@@ -225,7 +241,7 @@ public class OperandStack {
                     IFNULL, IFNONNULL, TABLESWITCH, LOOKUPSWITCH,
                     INVOKEVIRTUAL, INVOKESPECIAL, INVOKEINTERFACE,
                     IRETURN, LRETURN, FRETURN, DRETURN, ARETURN,
-                    PUTSTATIC, GETFIELD, NEWARRAY, ATHROW ->
+                    PUTSTATIC, GETFIELD, ATHROW ->
                 pop(1);
 
             case IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
