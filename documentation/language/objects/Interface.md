@@ -39,7 +39,7 @@ Additionnally, an interface can have operator overloading methods, but no constr
 ## Access & behavior
 Similar to classes, an interface can have an access modifier.
 However, an interface cannot have a behavior modifier.
-Please refer to the [classes](Classes.md) documentation for access and behavior modifiers.
+Please refer to the [classes](Class.md) documentation for access and behavior modifiers.
 
 
 ---
