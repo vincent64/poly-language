@@ -1,10 +1,13 @@
 package poly.compiler.output.jvm;
 
 import poly.compiler.analyzer.table.Variable;
+import poly.compiler.analyzer.type.Object;
 import poly.compiler.analyzer.type.Primitive;
 import poly.compiler.analyzer.type.Type;
 import poly.compiler.output.Byteable;
 import poly.compiler.output.content.ConstantPool;
+import poly.compiler.output.content.Descriptor;
+import poly.compiler.resolver.symbol.ClassSymbol;
 
 import static poly.compiler.output.jvm.Instructions.*;
 
@@ -619,6 +622,47 @@ public class Instruction implements Byteable {
         } else {
             return new Builder(GOTO_W, 5)
                     .add(index)
+                    .build();
+        }
+    }
+
+    /**
+     * Returns the instruction for creating a new array with the given type.
+     * @param type the array type
+     * @param constantPool the constant pool
+     * @return the instruction for creating a new array
+     */
+    public static Instruction forNewArray(Type type, ConstantPool constantPool) {
+        //Generate array of primitive
+        if(type instanceof Primitive primitive) {
+            return new Instruction.Builder(NEWARRAY, 2)
+                    .add((byte) switch(primitive.getPrimitiveKind()) {
+                        case BOOLEAN -> 4;
+                        case CHAR -> 5;
+                        case FLOAT -> 6;
+                        case DOUBLE -> 7;
+                        case BYTE -> 8;
+                        case SHORT -> 9;
+                        case INTEGER -> 10;
+                        case LONG -> 11;
+                    }).build();
+        }
+
+        //Generate array of object
+        else if(type instanceof Object object) {
+            ClassSymbol classSymbol = object.getClassSymbol();
+
+            return new Instruction.Builder(ANEWARRAY, 3)
+                    .add((short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()))
+                    .build();
+        }
+
+        //Generate array of array
+        else {
+            String descriptor = String.valueOf(Descriptor.getDescriptorFromType(type));
+
+            return new Instruction.Builder(ANEWARRAY, 3)
+                    .add((short) constantPool.addClassConstant(descriptor))
                     .build();
         }
     }
