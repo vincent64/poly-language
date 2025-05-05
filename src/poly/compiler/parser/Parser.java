@@ -1362,6 +1362,10 @@ public final class Parser {
             return expression;
         }
 
+        //Parse literal array expression
+        if(isMatching(OPENING_SQUARE_BRACKET))
+            return parseArrayLiteral();
+
         //Parse this expression
         if(isMatching(EXPRESSION_THIS))
             return parseExpressionThis();
@@ -1478,6 +1482,23 @@ public final class Parser {
         } else new ParsingError.UnexpectedToken(currentToken);
 
         return null;
+    }
+
+    private Expression parseArrayLiteral() {
+        Literal.Array expression = new Literal.Array(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match opening bracket
+        match(OPENING_SQUARE_BRACKET);
+
+        //Parse elements
+        do {
+            expression.addElement(parseExpression());
+        } while(matches(COMMA));
+
+        //Match closing bracket
+        match(CLOSING_SQUARE_BRACKET);
+
+        return expression;
     }
 
     private Expression parsePrimitiveAttribute() {
