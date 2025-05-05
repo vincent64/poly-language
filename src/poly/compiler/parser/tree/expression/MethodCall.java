@@ -12,11 +12,20 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class MethodCall extends Expression {
+    private String methodName;
     private Expression method;
     private Node argumentList;
 
     public MethodCall(Meta meta) {
         super(meta);
+    }
+
+    public void setMethodName(Token token) {
+        methodName = String.valueOf(token.getContent());
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 
     public void setMethod(Expression node) {
@@ -25,6 +34,10 @@ public class MethodCall extends Expression {
 
     public void setArgumentList(Node node) {
         argumentList = node;
+    }
+
+    public String getMethodName() {
+        return methodName;
     }
 
     public Expression getMethod() {
@@ -47,7 +60,8 @@ public class MethodCall extends Expression {
 
     @Override
     public String toString() {
-        NodeStringifier string = new NodeStringifier("MethodCall");
+        NodeStringifier string = new NodeStringifier("MethodCall",
+                "name=" + methodName);
         string.addString("Method:");
         string.addNode(method);
         string.addString("Arguments list:");

@@ -1406,7 +1406,8 @@ public final class Parser {
         MethodCall expression = new MethodCall(Node.Meta.fromLeadingToken(currentToken));
 
         //Parse method name
-        expression.setMethod(parseSimpleName());
+        expression.setMethodName(currentToken);
+        nextToken();
 
         //Parse arguments list
         match(OPENING_PARENTHESIS);

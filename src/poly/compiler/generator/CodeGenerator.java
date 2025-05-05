@@ -728,10 +728,9 @@ public final class CodeGenerator implements NodeVisitor {
         //Check method call
         if(expression instanceof MethodCall methodCall) {
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
-            String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
             //Find method in current class
-            MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, methodCall);
+            MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, methodCall);
 
             //Generate instructions
             if(!(methodSymbol.getReturnType() instanceof Void))
@@ -749,10 +748,9 @@ public final class CodeGenerator implements NodeVisitor {
             ClassSymbol classSymbol = ((Object) type).getClassSymbol();
 
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
-            String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
             //Find method in class
-            MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, memberAccess);
+            MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, memberAccess);
 
             //Generate instructions
             if(!(methodSymbol.getReturnType() instanceof Void))
@@ -1043,10 +1041,9 @@ public final class CodeGenerator implements NodeVisitor {
         addLineNumber(methodCall);
 
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
-        String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
         //Find method in current class
-        MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, classSymbol, methodCall);
+        MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, classSymbol, methodCall);
 
         if(!methodSymbol.isStatic())
             addInstruction(ALOAD_0);
@@ -1090,10 +1087,9 @@ public final class CodeGenerator implements NodeVisitor {
                 methodCall.getArgumentList().accept(this);
 
                 Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
-                String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
                 //Find method in member class
-                MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, methodCall);
+                MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, methodCall);
 
                 //Generate instructions
                 generateCallStaticMethod(methodSymbol);
@@ -1130,10 +1126,9 @@ public final class CodeGenerator implements NodeVisitor {
                 methodCall.getArgumentList().accept(this);
 
                 Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
-                String methodName = ((SimpleName) methodCall.getMethod()).getName();
 
                 //Find method in member class
-                MethodSymbol methodSymbol = classSymbol.findMethod(methodName, argumentTypes, this.classSymbol, methodCall);
+                MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, this.classSymbol, methodCall);
 
                 boolean isSpecial = member instanceof ThisExpression
                         || member instanceof SuperExpression;

@@ -955,9 +955,9 @@ public final class Analyzer implements NodeModifier {
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
         //Analyze method call
-        if(methodCall.getMethod() instanceof SimpleName simpleName) {
+        if(methodCall.getMethod() == null) {
             //Find method in current class
-            MethodSymbol methodSymbol = classSymbol.findMethod(simpleName.getName(), argumentTypes, classSymbol, methodCall);
+            MethodSymbol methodSymbol = classSymbol.findMethod(methodCall.getMethodName(), argumentTypes, classSymbol, methodCall);
 
             //Analyze member call
             if(methodSymbol == null)
@@ -993,7 +993,7 @@ public final class Analyzer implements NodeModifier {
             //Get the type of each argument
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
-            String methodName = ((SimpleName) methodCall.getMethod()).getName();
+            String methodName = methodCall.getMethodName();
 
             ClassSymbol classSymbol = null;
             boolean isStaticContext = false;
@@ -1733,7 +1733,7 @@ public final class Analyzer implements NodeModifier {
      * @return the transformed node
      */
     private Expression visitMethodCallOperationOverload(MethodCall methodCall) {
-        String methodName = ((SimpleName) methodCall.getMethod()).getName();
+        String methodName = methodCall.getMethodName();
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) methodCall.getArgumentList());
 
         ClassSymbol classSymbol;
@@ -1769,12 +1769,9 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.UnresolvableMethod(methodCall, methodName, argumentTypes);
 
-        SimpleName simpleMethodName = new SimpleName(methodCall.getMeta());
-        simpleMethodName.setName(OperatorMethod.Name.METHOD_INVOCATION);
-
         //Transform expression to method call
         MethodCall methodInvokation = new MethodCall(methodCall.getMeta());
-        methodInvokation.setMethod(simpleMethodName);
+        methodInvokation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
         methodInvokation.setArgumentList(methodCall.getArgumentList());
 
         //Transform method call to member access
@@ -1814,12 +1811,9 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidObjectCall(methodCall, argumentTypes);
 
-        SimpleName simpleMethodName = new SimpleName(methodCall.getMeta());
-        simpleMethodName.setName(OperatorMethod.Name.METHOD_INVOCATION);
-
         //Transform expression to method call
         MethodCall methodInvocation = new MethodCall(methodCall.getMeta());
-        methodInvocation.setMethod(simpleMethodName);
+        methodInvocation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
         methodInvocation.setArgumentList(methodCall.getArgumentList());
 
         //Transform method call to member access
