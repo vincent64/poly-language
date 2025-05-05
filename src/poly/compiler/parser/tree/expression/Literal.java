@@ -2,6 +2,10 @@ package poly.compiler.parser.tree.expression;
 
 import poly.compiler.parser.tree.NodeModifier;
 import poly.compiler.parser.tree.NodeVisitor;
+import poly.compiler.util.NodeStringifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Literal class. This class represents a literal value, and is a terminal node.
@@ -47,7 +51,8 @@ public abstract class Literal extends Expression {
         FLOAT,
         DOUBLE,
         CHAR,
-        STRING
+        STRING,
+        ARRAY
     }
 
     /**
@@ -208,6 +213,36 @@ public abstract class Literal extends Expression {
         @Override
         public java.lang.String toString() {
             return "Literal: " + value + "\n";
+        }
+    }
+
+    /**
+     * The Literal.Array class. This class represents a literal array.
+     */
+    public static class Array extends Literal {
+        private List<Expression> elements;
+
+        public Array(Meta meta) {
+            super(meta, Type.ARRAY);
+
+            //Initialize elements list
+            elements = new ArrayList<>();
+        }
+
+        public void addElement(Expression node) {
+            elements.add(node);
+        }
+
+        public List<Expression> getElements() {
+            return elements;
+        }
+
+        @Override
+        public java.lang.String toString() {
+            NodeStringifier string = new NodeStringifier("Array:");
+            string.addNodes(elements);
+
+            return string.toString();
         }
     }
 }
