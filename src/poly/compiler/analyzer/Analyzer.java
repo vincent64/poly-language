@@ -606,6 +606,8 @@ public final class Analyzer implements NodeModifier {
             literal.setExpressionType(new Primitive(Primitive.Kind.CHAR));
         else if(literal instanceof Literal.Null)
             literal.setExpressionType(Object.NULL_REFERENCE);
+
+        //Analyze string literal
         else if(literal instanceof Literal.String) {
             ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.STRING);
 
@@ -614,6 +616,27 @@ public final class Analyzer implements NodeModifier {
                 new AnalyzingError.UnresolvableClass(literal, ClassName.STRING.toString());
 
             literal.setExpressionType(new Object(classSymbol));
+        }
+
+        //Analyze array literal
+        else if(literal instanceof Literal.Array array) {
+            //Visit every element
+            List<Expression> elements = array.getElements();
+            for(int i = 0; i < elements.size(); i++)
+                elements.set(i, elements.get(i).accept(this));
+
+            Type type = elements.getFirst().getExpressionType();
+
+            for(int i = 1; i < elements.size(); i++) {
+                Expression element = elements.get(i);
+
+                //Make sure the elements have the same type
+                if(!type.equals(element.getExpressionType()))
+                    new AnalyzingError.TypeConversion(element, element.getExpressionType(), type);
+            }
+
+            //Define resulting type
+            array.setExpressionType(new Array(type));
         }
 
         return literal;
