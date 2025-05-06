@@ -783,7 +783,10 @@ public final class CodeGenerator implements NodeVisitor {
         else if(literal instanceof Literal.Char value) {
             addInstruction(Instruction.forConstantInteger(value.getValue(), constantPool));
             addInstruction(I2C);
-        } else if(literal instanceof Literal.String string) {
+        }
+
+        //Generate string literal
+        else if(literal instanceof Literal.String string) {
             //Add string constant to constant pool
             short index = (short) constantPool.addStringConstant(String.valueOf(string.getValue()));
 
@@ -791,6 +794,29 @@ public final class CodeGenerator implements NodeVisitor {
             addInstruction(new Instruction.Builder(LDC_W, 3)
                     .add(index)
                     .build());
+        }
+
+        //Generate array literal
+        else if(literal instanceof Literal.Array array) {
+            List<Expression> elements = array.getElements();
+            Type elementType = ((Array) array.getExpressionType()).getType();
+
+            //Generate new array instructions
+            addInstruction(Instruction.forConstantInteger(elements.size(), constantPool));
+            addInstruction(Instruction.forNewArray(elementType, constantPool));
+
+            //Visit every element
+            for(int i = 0; i < elements.size(); i++) {
+                //Generate instructions
+                addInstruction(DUP);
+                addInstruction(Instruction.forConstantInteger(i, constantPool));
+
+                //Visit the element
+                elements.get(i).accept(this);
+
+                //Generate instructions
+                addInstruction(Instruction.forStoringInArray(elementType));
+            }
         }
     }
 
