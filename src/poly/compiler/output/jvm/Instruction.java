@@ -627,6 +627,15 @@ public class Instruction implements Byteable {
     }
 
     /**
+     * Returns the instruction for popping the last operand from the operand stack.
+     * @param type the operand type
+     * @return the instruction for popping the last operand
+     */
+    public static Instruction forPoppingFromStack(Type type) {
+        return new Instruction(type instanceof Primitive primitive && primitive.isWideType() ? POP_2 : POP);
+    }
+
+    /**
      * Returns the instruction for creating a new array with the given type.
      * @param type the array type
      * @param constantPool the constant pool
