@@ -55,6 +55,10 @@ The various options and their functionnality are described in the table below :
 > However, if you want more complex JAR files, use the `jar` tool included in the Java Development Kit.
 
 
+### Version
+To obtain the version of the compiler you are currently using, you can execute the compiler with `-version` as the only option.
+
+
 ## Errors
 If there is an issue in your code, the compiler will produce a compile-time error and halt the compilation.
 These errors are displayed in red and point the location of the error in your code.
