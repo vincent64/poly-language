@@ -734,7 +734,7 @@ public final class CodeGenerator implements NodeVisitor {
 
             //Generate instructions
             if(!(methodSymbol.getReturnType() instanceof Void))
-                addInstruction(POP);
+                addInstruction(Instruction.forPoppingFromStack(methodSymbol.getReturnType()));
         }
 
         //Check access method call
@@ -754,7 +754,7 @@ public final class CodeGenerator implements NodeVisitor {
 
             //Generate instructions
             if(!(methodSymbol.getReturnType() instanceof Void))
-                addInstruction(POP);
+                addInstruction(Instruction.forPoppingFromStack(methodSymbol.getReturnType()));
         }
 
         //Check class creation
