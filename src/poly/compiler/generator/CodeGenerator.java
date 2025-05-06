@@ -1225,46 +1225,8 @@ public final class CodeGenerator implements NodeVisitor {
 
         Type arrayType = ((Array) arrayCreation.getExpressionType()).getType();
 
-        //Generate array of primitive
-        if(arrayType instanceof Primitive primitive) {
-            //Generate instructions
-            addInstruction(new Instruction.Builder(NEWARRAY, 2)
-                    .add((byte) switch(primitive.getPrimitiveKind()) {
-                        case BOOLEAN -> 4;
-                        case CHAR -> 5;
-                        case FLOAT -> 6;
-                        case DOUBLE -> 7;
-                        case BYTE -> 8;
-                        case SHORT -> 9;
-                        case INTEGER -> 10;
-                        case LONG -> 11;
-                    })
-                    .build());
-
-            //Push primitive array to stack
-            operandStack.push(arrayCreation.getExpressionType());
-        }
-
-        //Generate array of object
-        else if(arrayType instanceof Object object) {
-            ClassSymbol classSymbol = object.getClassSymbol();
-
-            //Generate instructions
-            addInstruction(new Instruction.Builder(ANEWARRAY, 3)
-                    .add((short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()))
-                    .build());
-        }
-
-        //Generate array of array
-        else {
-            //Generate array descriptor
-            String arrayDescriptor = String.valueOf(Descriptor.getDescriptorFromType(arrayType));
-
-            //Generate instructions
-            addInstruction(new Instruction.Builder(ANEWARRAY, 3)
-                    .add((short) constantPool.addClassConstant(arrayDescriptor))
-                    .build());
-        }
+        //Generate instructions
+        addInstruction(Instruction.forNewArray(arrayType, constantPool));
     }
 
     @Override
