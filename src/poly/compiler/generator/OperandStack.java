@@ -297,6 +297,9 @@ public class OperandStack {
                 }
             }
 
+            case POP_2 ->
+                pop(peek().isDoubleEntry() ? 1 : 2);
+
             case L2I, F2I, D2I, I2B, I2S, I2C, ARRAYLENGTH -> {
                 pop(1);
                 push(VerificationType.forInteger());
