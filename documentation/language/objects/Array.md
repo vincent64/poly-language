@@ -20,6 +20,15 @@ int[][] array;
 ```
 
 
+### Literal
+Instead of declaring an array to be initialized and populated later, it is possible to declare an array literal, as such :
+```poly
+int[] array = [1, 2, 3, 4];
+```
+In an array literal, the type of each element must be exactly the same.
+Moreover, an array literal must contain at least one element.
+
+
 ## Initialization
 An array has a fixed size which must be provided when initializing it.
 To initialize an array, the keyword `new` must be used with a pair of square bracket :
