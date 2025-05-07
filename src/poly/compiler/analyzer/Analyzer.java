@@ -198,12 +198,10 @@ public final class Analyzer implements NodeModifier {
                 if(variableType.getKind() == Type.Kind.PRIMITIVE)
                     new AnalyzingError.TypeConversion(expression,
                             expression.getExpressionType(), variableType);
-
-                return variableDeclaration;
             }
 
             //Make sure the expression type is assignable to the variable type
-            if(!expression.getExpressionType().isAssignableTo(variableType))
+            else if(!expression.getExpressionType().isAssignableTo(variableType))
                 new AnalyzingError.TypeConversion(expression,
                         expression.getExpressionType(), variableType);
         }
