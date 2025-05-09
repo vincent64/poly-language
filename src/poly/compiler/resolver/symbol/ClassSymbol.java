@@ -19,23 +19,21 @@ import java.util.List;
  * @author Vincent Philippe (@vincent64)
  */
 public final class ClassSymbol extends Symbol {
+    private final Kind kind;
     private final ClassName className;
     private final List<Symbol> symbols;
     private final Symbol ownerSymbol;
     private final PackageSymbol packageSymbol;
-    private final boolean isInterface;
-    private final boolean isInner;
     private Symbol superclassSymbol;
     private List<Symbol> interfaceSymbols;
 
-    private ClassSymbol(AccessModifier accessModifier, String name, boolean isStatic, boolean isConstant, boolean isInterface, boolean isInner,
+    private ClassSymbol(AccessModifier accessModifier, Kind kind, String name, boolean isStatic, boolean isConstant,
                         ClassName className, ClassName superclassName, List<Node> interfaceNodes, Symbol ownerSymbol, PackageSymbol packageSymbol) {
-        super(Kind.CLASS, accessModifier, name, isStatic, isConstant);
+        super(Symbol.Kind.CLASS, accessModifier, name, isStatic, isConstant);
+        this.kind = kind;
         this.className = className;
         this.ownerSymbol = ownerSymbol;
         this.packageSymbol = packageSymbol;
-        this.isInterface = isInterface;
-        this.isInner = isInner;
 
         //Set unresolved superclass symbol
         superclassSymbol = new TypeSymbol(superclassName);
@@ -63,11 +61,10 @@ public final class ClassSymbol extends Symbol {
         Node superclassNode = classDeclaration.getSuperclass();
 
         return new ClassSymbol(classDeclaration.getAccessModifier(),
+                classDeclaration.getKind(),
                 classDeclaration.getName(),
                 classDeclaration.isStatic(),
                 classDeclaration.isConstant(),
-                classDeclaration.isInterface(),
-                classDeclaration.isInner(),
                 className,
                 superclassNode == null
                         ? classDeclaration.isException()
@@ -89,11 +86,12 @@ public final class ClassSymbol extends Symbol {
         ClassName className = ClassName.fromStringQualifiedName(classFile.getClassQualifiedName());
 
         return new ClassSymbol(classFile.getAccessModifier(),
+                classFile.isInterface() ? Kind.INTERFACE
+                        : ownerSymbol instanceof ClassSymbol && !classFile.isStatic() ? Kind.INNER
+                        : Kind.CLASS,
                 className.getLast(),
                 false,
                 classFile.isConstant(),
-                classFile.isInterface(),
-                ownerSymbol instanceof ClassSymbol && !classFile.isStatic(),
                 className,
                 null,
                 new ArrayList<>(),
@@ -496,7 +494,7 @@ public final class ClassSymbol extends Symbol {
      * @return true if the class is an interface
      */
     public boolean isInterface() {
-        return isInterface;
+        return kind == Kind.INTERFACE;
     }
 
     /**
@@ -504,7 +502,7 @@ public final class ClassSymbol extends Symbol {
      * @return true if the class is inner
      */
     public boolean isInner() {
-        return isInner;
+        return kind == Kind.INNER;
     }
 
     /**
@@ -529,6 +527,7 @@ public final class ClassSymbol extends Symbol {
     public String toString() {
         StringBuilder string = new StringBuilder("ClassSymbol("
                 + accessModifier + ", "
+                + kind + ", "
                 + name + ", "
                 + "isStatic=" + isStatic + ", "
                 + "isConstant=" + isConstant + ", "
