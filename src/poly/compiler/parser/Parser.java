@@ -260,7 +260,7 @@ public final class Parser {
             node.addMethod(parseMethodDeclaration());
 
         //Parse class innerclasses
-        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER))
+        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION))
             node.addNestedClass(parseClassDeclaration());
 
         //Match closing bracket
