@@ -106,7 +106,7 @@ In any other cases, it outputs the value of the first expression.
 
 
 
-## Precende
+## Precendence
 The precedence of the operations is given by the table below.
 Most precende levels are similar to C-like languages.
 
