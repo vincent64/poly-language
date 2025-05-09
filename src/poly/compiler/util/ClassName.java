@@ -200,8 +200,10 @@ public class ClassName {
         }
 
         //Add class names
-        for(String className : classNames)
-            string.append(".").append(className);
+        for(String className : classNames) {
+            if(!packageNames.isEmpty()) string.append(".");
+            string.append(className);
+        }
 
         return string.toString();
     }
