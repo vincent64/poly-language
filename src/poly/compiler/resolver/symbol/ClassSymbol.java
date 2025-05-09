@@ -545,4 +545,15 @@ public final class ClassSymbol extends Symbol {
 
         return string.toString();
     }
+
+    /**
+     * The ClassSymbol.Kind enum. This enum contains every kind of
+     * class symbol there exists.
+     */
+    public enum Kind {
+        CLASS,
+        INTERFACE,
+        INNER,
+        EXCEPTION
+    }
 }
