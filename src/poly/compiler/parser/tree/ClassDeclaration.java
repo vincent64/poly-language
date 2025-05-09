@@ -3,6 +3,7 @@ package poly.compiler.parser.tree;
 import poly.compiler.output.content.AccessModifier;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.util.NodeStringifier;
+import poly.compiler.resolver.symbol.ClassSymbol.Kind;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class ClassDeclaration extends Node {
     private AccessModifier accessModifier = AccessModifier.DEFAULT;
+    private Kind kind = Kind.CLASS;
     private String name;
     private Node superclass;
     private List<Node> interfaces;
@@ -23,7 +25,6 @@ public class ClassDeclaration extends Node {
     private List<Node> methodNodes;
     private List<Node> nestedClasses;
     private boolean isStatic, isConstant;
-    private boolean isInterface, isInner, isException;
 
     /**
      * Constructs a class declaration node with the given metadata information.
@@ -115,21 +116,21 @@ public class ClassDeclaration extends Node {
      * Sets the current class declaration as an interface.
      */
     public void setInterface() {
-        isInterface = true;
+        kind = Kind.INTERFACE;
     }
 
     /**
      * Sets the current class declaration as inner.
      */
     public void setInner() {
-        isInner = true;
+        kind = Kind.INNER;
     }
 
     /**
      * Sets the current class declaration as an exception.
      */
     public void setException() {
-        isException = true;
+        kind = Kind.EXCEPTION;
     }
 
     /**
@@ -138,6 +139,14 @@ public class ClassDeclaration extends Node {
      */
     public AccessModifier getAccessModifier() {
         return accessModifier;
+    }
+
+    /**
+     * Returns the class kind.
+     * @return the kind
+     */
+    public Kind getKind() {
+        return kind;
     }
 
     /**
@@ -209,7 +218,7 @@ public class ClassDeclaration extends Node {
      * @return true if the class is an interface
      */
     public boolean isInterface() {
-        return isInterface;
+        return kind == Kind.INTERFACE;
     }
 
     /**
@@ -217,7 +226,7 @@ public class ClassDeclaration extends Node {
      * @return true if the class is inner
      */
     public boolean isInner() {
-        return isInner;
+        return kind == Kind.INNER;
     }
 
     /**
@@ -225,7 +234,7 @@ public class ClassDeclaration extends Node {
      * @return true if the class is an exception
      */
     public boolean isException() {
-        return isException;
+        return kind == Kind.EXCEPTION;
     }
 
     @Override
@@ -242,11 +251,10 @@ public class ClassDeclaration extends Node {
     public String toString() {
         NodeStringifier string = new NodeStringifier("ClassDeclaration",
                 "accessModifier=" + accessModifier,
+                "kind=" + kind,
                 "name=" + name,
-                "isInterface=" + isInterface,
                 "isStatic=" + isStatic,
-                "isConstant=" + isConstant,
-                "isInner=" + isInner);
+                "isConstant=" + isConstant);
         string.addString("Superclass:");
         string.addNode(superclass);
         string.addString("Interfaces:");
