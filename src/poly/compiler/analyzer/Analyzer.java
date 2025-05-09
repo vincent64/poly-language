@@ -1360,7 +1360,7 @@ public final class Analyzer implements NodeModifier {
 
             //Make sure the variable is not an array
             if(variableType instanceof Array)
-                new AnalyzingError.InvalidAssignment(assignmentExpression);
+                new AnalyzingError.InvalidAssignment(assignmentExpression, variableType);
 
             //Analyze primitive assignment
             if(variableType instanceof Primitive primitive) {
@@ -1369,7 +1369,7 @@ public final class Analyzer implements NodeModifier {
                          ASSIGNMENT_DIVISION, ASSIGNMENT_MODULO -> {
                         //Make sure the type is numerical
                         if(!primitive.isNumericalType())
-                            new AnalyzingError.InvalidAssignment(assignmentExpression);
+                            new AnalyzingError.InvalidAssignment(assignmentExpression, variableType);
 
                         //Make sure the types are equal
                         if(!variableType.equals(expressionType))
@@ -1384,7 +1384,7 @@ public final class Analyzer implements NodeModifier {
                          ASSIGNMENT_SHIFT_LEFT, ASSIGNMENT_SHIFT_RIGHT, ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC -> {
                         //Make sure the type is integer
                         if(!primitive.isIntegerType())
-                            new AnalyzingError.InvalidAssignment(assignmentExpression);
+                            new AnalyzingError.InvalidAssignment(assignmentExpression, variableType);
 
                         //Make sure the types are equal
                         if(!variableType.equals(expressionType))
@@ -1731,7 +1731,7 @@ public final class Analyzer implements NodeModifier {
 
         //Make sure the expression is not null
         if(isNullExpression(variableExpression))
-            new AnalyzingError.InvalidAssignment(assignmentExpression);
+            new AnalyzingError.InvalidAssignment(assignmentExpression, object);
 
         //Get assignment overload name from expression
         String methodName = OperatorMethod.getNameFromAssignmentExpression(assignmentExpression.getKind());
@@ -1743,7 +1743,7 @@ public final class Analyzer implements NodeModifier {
 
         //Make sure the object supports the assignment
         if(methodSymbol == null)
-            new AnalyzingError.InvalidAssignment(assignmentExpression);
+            new AnalyzingError.InvalidAssignment(assignmentExpression, object);
 
         return transformer.transformOperationOverload(assignmentExpression, variableExpression, expression, methodName);
     }

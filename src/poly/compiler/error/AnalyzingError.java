@@ -401,8 +401,8 @@ public abstract class AnalyzingError extends Error {
     public static class InvalidAssignment extends AnalyzingError {
         private static final String MESSAGE = "Cannot assign variable with type '%s'";
 
-        public InvalidAssignment(Node node) {
-            super(node, MESSAGE);
+        public InvalidAssignment(Node node, Type type) {
+            super(node, MESSAGE.formatted(type));
         }
     }
 
