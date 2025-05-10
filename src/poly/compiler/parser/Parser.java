@@ -669,6 +669,10 @@ public final class Parser {
         statement.setCondition(parseExpression());
         match(CLOSING_PARENTHESIS);
 
+        //Parse exception expression
+        if(matches(COLON))
+            statement.setExceptionExpression(parseExpression());
+
         //Match semicolon at the end
         match(SEMICOLON);
 
