@@ -3,6 +3,7 @@
 ¦ @note Last-in-First-out (LIFO)
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 interface+ Stack(Deque) {
 
@@ -34,4 +35,18 @@ interface+ Stack(Deque) {
     ¦ @returns the topmost object
     ¦
     fn Object peek();
+
+    ¦ The StackOverflowException is thrown when the stack reaches
+    ¦ its maximum capacity when attempting to push an element.
+    ¦
+    exception~ StackOverflowException {
+        fn~ constructor() super("The stack has reached its maximal capacity");
+    }
+
+    ¦ The StackUnderflowException is thrown when the stack is empty
+    ¦ and there is an attempt to pop or peek an element.
+    ¦
+    exception~ StackUnderflowException {
+        fn~ constructor() super("The stack is empty.");
+    }
 }

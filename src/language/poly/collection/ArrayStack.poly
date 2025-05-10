@@ -3,6 +3,7 @@ import java.lang.System;
 ¦ The ArrayStack class represents a stack implemented as an array.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.2
+¦ @update 0.3
 ¦
 class+ const ArrayStack : Stack {
     - const int INITIAL_CAPACITY = 8;
@@ -12,12 +13,14 @@ class+ const ArrayStack : Stack {
     fn+ constructor() { }
 
     fn+ void push(Object object) {
+        assert(size < int.max) : new Stack.StackOverflowException();
+
         allocate();
         array[size++] = object;
     }
 
     fn+ Object pop() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Stack.StackUnderflowException();
 
         //Retrieve and pop element
         Object object = array[size - 1];
@@ -27,7 +30,7 @@ class+ const ArrayStack : Stack {
     }
 
     fn+ Object peek() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Stack.StackUnderflowException();
         return array[size - 1];
     }
 

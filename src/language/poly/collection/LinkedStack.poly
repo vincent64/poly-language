@@ -1,6 +1,7 @@
 ¦ The LinkedStack class represents a stack implemented as linked nodes.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.2
+¦ @update 0.3
 ¦
 class+ const LinkedStack : Stack {
     - Node top = null;
@@ -14,7 +15,7 @@ class+ const LinkedStack : Stack {
     }
 
     fn+ Object pop() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Stack.StackUnderflowException();
 
         //Retrieve and pop element
         Object previous = top.object;
@@ -25,7 +26,7 @@ class+ const LinkedStack : Stack {
     }
 
     fn+ Object peek() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Stack.StackUnderflowException();
         return top.object;
     }
 
