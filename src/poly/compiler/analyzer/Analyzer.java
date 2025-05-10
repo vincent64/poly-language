@@ -391,11 +391,35 @@ public final class Analyzer implements NodeModifier {
         //Make sure the condition is a boolean expression
         matchBooleanExpression(assertStatement.getCondition());
 
-        ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.ASSERTION_ERROR);
+        //Analyze exception from expression
+        if(assertStatement.getExceptionExpression() != null) {
+            //Visit exception expression
+            assertStatement.setExceptionExpression(assertStatement.getExceptionExpression().accept(this));
 
-        //Make sure the string class exists
-        if(classSymbol == null)
-            new AnalyzingError.UnresolvableClass(assertStatement, ClassName.ASSERTION_ERROR.toString());
+            Expression exceptionExpression = assertStatement.getExceptionExpression();
+
+            ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.THROWABLE);
+
+            //Make sure the throwable class exists
+            if(classSymbol == null)
+                new AnalyzingError.UnresolvableClass(assertStatement, ClassName.THROWABLE.toString());
+
+            Type type = exceptionExpression.getExpressionType();
+
+            //Make sure the expression type is a subclass of throwable
+            if(!isNullExpression(exceptionExpression)
+                    && !(type instanceof Object object && object.getClassSymbol().isSubtypeOf(classSymbol)))
+                new AnalyzingError.TypeConversion(exceptionExpression, type, new Object(classSymbol));
+        }
+
+        //Analyze assertion exception
+        else {
+            ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.ASSERTION_ERROR);
+
+            //Make sure the string class exists
+            if(classSymbol == null)
+                new AnalyzingError.UnresolvableClass(assertStatement, ClassName.ASSERTION_ERROR.toString());
+        }
 
         return assertStatement;
     }
