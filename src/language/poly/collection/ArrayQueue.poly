@@ -3,6 +3,7 @@ import java.lang.System;
 ¦ The ArrayQueue class represents a queue implemented as an array.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.2
+¦ @update 0.3
 ¦
 class+ const ArrayQueue : Queue {
     - const int INITIAL_CAPACITY = 8;
@@ -14,6 +15,8 @@ class+ const ArrayQueue : Queue {
     fn+ constructor() { }
 
     fn+ void push(Object object) {
+        assert(size < int.max) : new Queue.QueueOverflowException();
+
         allocate();
         array[lastIndex++] = object;
         lastIndex %= array.size;
@@ -21,7 +24,7 @@ class+ const ArrayQueue : Queue {
     }
 
     fn+ Object pop() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Queue.QueueUnderflowException();
 
         //Retrieve and pop element
         Object object = array[firstIndex];
@@ -33,7 +36,7 @@ class+ const ArrayQueue : Queue {
     }
 
     fn+ Object peek() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Queue.QueueUnderflowException();
         return array[firstIndex];
     }
 

@@ -3,6 +3,7 @@
 ¦ @note First-in-First-out (FIFO)
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 interface+ Queue(Deque) {
 
@@ -34,4 +35,18 @@ interface+ Queue(Deque) {
     ¦ @returns the first object
     ¦
     fn Object peek();
+
+    ¦ The QueueOverflowException is thrown when the queue reaches
+    ¦ its maximum capacity when attempting to push an element.
+    ¦
+    exception~ QueueOverflowException {
+        fn~ constructor() super("The queue has reached its maximal capacity");
+    }
+
+    ¦ The QueueUnderflowException is thrown when the queue is empty
+    ¦ and there is an attempt to pop or peek an element.
+    ¦
+    exception~ QueueUnderflowException {
+        fn~ constructor() super("The queue is empty.");
+    }
 }

@@ -1,6 +1,7 @@
 ¦ The LinkedQueue class represents a queue implemented as linked nodes.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.2
+¦ @update 0.3
 ¦
 class+ const LinkedQueue : Queue {
     - Node first = null;
@@ -19,7 +20,7 @@ class+ const LinkedQueue : Queue {
     }
 
     fn+ Object pop() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Queue.QueueUnderflowException();
 
         //Retrieve and pop element
         Object previous = first.object;
@@ -30,7 +31,7 @@ class+ const LinkedQueue : Queue {
     }
 
     fn+ Object peek() {
-        assert(!isEmpty());
+        assert(!isEmpty()) : new Queue.QueueUnderflowException();
         return first.object;
     }
 
