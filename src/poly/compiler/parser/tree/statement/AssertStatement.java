@@ -12,6 +12,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class AssertStatement extends Statement {
     private Expression condition;
+    private Expression exceptionExpression;
 
     public AssertStatement(Meta meta) {
         super(meta);
@@ -21,8 +22,16 @@ public class AssertStatement extends Statement {
         condition = node;
     }
 
+    public void setExceptionExpression(Expression node) {
+        exceptionExpression = node;
+    }
+
     public Expression getCondition() {
         return condition;
+    }
+
+    public Expression getExceptionExpression() {
+        return exceptionExpression;
     }
 
     @Override
@@ -40,6 +49,8 @@ public class AssertStatement extends Statement {
         NodeStringifier string = new NodeStringifier("AssertStatement");
         string.addString("Condition:");
         string.addNode(condition);
+        string.addString("Exception expression:");
+        string.addNode(exceptionExpression);
 
         return string.toString();
     }
