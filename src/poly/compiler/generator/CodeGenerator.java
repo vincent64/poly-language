@@ -499,21 +499,32 @@ public final class CodeGenerator implements NodeVisitor {
         generateStackMapFrame();
         branching.resolveTrueJump(instructions, programCounter);
 
-        ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.ASSERTION_ERROR);
+        //Throw exception from expression
+        if(assertStatement.getExceptionExpression() != null) {
+            //Visit exception expression
+            assertStatement.getExceptionExpression().accept(this);
+        }
 
-        //Add class name to the constant pool
-        short index = (short) constantPool.addClassConstant(ClassName.ASSERTION_ERROR.toInternalQualifiedName());
+        //Throw assertion exception
+        else {
+            ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.ASSERTION_ERROR);
+
+            //Add class name to the constant pool
+            short index = (short) constantPool.addClassConstant(ClassName.ASSERTION_ERROR.toInternalQualifiedName());
+
+            //Generate instructions
+            addInstruction(new Instruction.Builder(NEW, 3)
+                    .add(index)
+                    .build());
+            addInstruction(DUP);
+
+            MethodSymbol methodSymbol = classSymbol.findConstructor(new Type[0], this.classSymbol, assertStatement);
+
+            //Generate instructions
+            generateCallSpecialMethod(methodSymbol);
+        }
 
         //Generate instructions
-        addInstruction(new Instruction.Builder(NEW, 3)
-                .add(index)
-                .build());
-        addInstruction(DUP);
-
-        MethodSymbol methodSymbol = classSymbol.findConstructor(new Type[0], this.classSymbol, assertStatement);
-
-        //Generate instructions
-        generateCallSpecialMethod(methodSymbol);
         addInstruction(ATHROW);
 
         generateStackMapFrame();
