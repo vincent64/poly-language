@@ -1,6 +1,7 @@
 ¦ The Vector class represents a mathematical vector with a fixed size.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ Vector {
     ¦ The vector size.
@@ -10,7 +11,7 @@ class+ Vector {
     ¦ @param size the vector size (size > 0)
     ¦
     fn+ constructor(const int size) {
-        assert(size > 0);
+        assert(size > 0) : new InvalidVectorSizeException();
         this.size = size;
     }
 
@@ -30,5 +31,26 @@ class+ Vector {
         ¦ A vector is a unit vector if its length is equal to zero.
         ¦ @returns true if the the vector is unit
         fn bool isUnit();
+    }
+
+    ¦ The InvalidVectorSizeException is thrown when there is an attempt
+    ¦ to construct a vector with an invalid size (below 1).
+    ¦
+    exception~ InvalidVectorSizeException {
+        fn~ constructor() super("Vector size must be greater or equal to 1.");
+    }
+
+    ¦ The IndexOutOfBoundsException is thrown when an index out of
+    ¦ the vector bounds (below 0 or above vector size) is used.
+    ¦
+    exception~ IndexOutOfBoundsException {
+        fn~ constructor() super("Index is out of vector bounds.");
+    }
+
+    ¦ The VectorDimensionMismatchException is thrown when there is a
+    ¦ dimension mismatch when applying an operation between two vectors.
+    ¦
+    exception~ VectorDimensionMismatchException {
+        fn~ constructor() super("The vector dimensions do not match.");
     }
 }

@@ -6,6 +6,7 @@ import poly.util.Array;
 ¦ The DoubleVector class represents a vector with double-precision floating point components.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ DoubleVector(Vector) : Vector.Property, Equatable {
     ¦ The vector double components.
@@ -33,7 +34,7 @@ class+ DoubleVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the component value
     ¦
     fn+ double get(int index) {
-        assert(index >= 0 && index < size);
+        assert(index >= 0 && index < size) : new Vector.IndexOutOfBoundsException();
         return values[index];
     }
 
@@ -67,7 +68,7 @@ class+ DoubleVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the resulting double vector
     ¦
     op+ DoubleVector +(DoubleVector that) {
-        assert(that.size == size);
+        assert(that.size == size) : new Vector.VectorDimensionMismatchException();
 
         //Add every component
         double[] values = new[size];
@@ -82,7 +83,7 @@ class+ DoubleVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the resulting double vector
     ¦
     op+ DoubleVector -(DoubleVector that) {
-        assert(that.size == size);
+        assert(that.size == size) : new Vector.VectorDimensionMismatchException();
 
         //Subtract every component
         double[] values = new[size];
@@ -122,7 +123,7 @@ class+ DoubleVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the dot product
     ¦
     op+ double *(DoubleVector that) {
-        assert(that.size == size);
+        assert(that.size == size) : new Vector.VectorDimensionMismatchException();
         return sum(int i = 0; i < size; i++) this.values[i] * that.values[i];
     }
 
@@ -132,7 +133,7 @@ class+ DoubleVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the cross product
     ¦
     op+ DoubleVector ^(DoubleVector that) {
-        assert(size == 3);
+        assert(size == 3) : new Vector.VectorDimensionMismatchException();
 
         //Compute cross product
         double[] values = new[size];

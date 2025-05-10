@@ -5,6 +5,7 @@ import poly.util.Array;
 ¦ The LongVector class represents a vector with long integer components.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ LongVector(Vector) : Vector.Property, Equatable {
     ¦ The vector long components.
@@ -32,7 +33,7 @@ class+ LongVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the component value
     ¦
     fn+ long get(int index) {
-        assert(index >= 0 && index < size);
+        assert(index >= 0 && index < size) : new Vector.IndexOutOfBoundsException();
         return values[index];
     }
 
@@ -66,7 +67,7 @@ class+ LongVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the resulting long vector
     ¦
     op+ LongVector +(LongVector that) {
-        assert(that.size == size);
+        assert(that.size == size) : new Vector.VectorDimensionMismatchException();
 
         //Add every component
         long[] values = new[size];
@@ -81,7 +82,7 @@ class+ LongVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the resulting long vector
     ¦
     op+ LongVector -(LongVector that) {
-        assert(that.size == size);
+        assert(that.size == size) : new Vector.VectorDimensionMismatchException();
 
         //Subtract every component
         long[] values = new[size];
@@ -121,7 +122,7 @@ class+ LongVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the dot product
     ¦
     op+ long *(LongVector that) {
-        assert(that.size == size);
+        assert(that.size == size) : new Vector.VectorDimensionMismatchException();
         return sum(int i = 0; i < size; i++) this.values[i] * that.values[i];
     }
 
@@ -131,7 +132,7 @@ class+ LongVector(Vector) : Vector.Property, Equatable {
     ¦ @returns the cross product
     ¦
     op+ LongVector ^(LongVector that) {
-        assert(size == 3);
+        assert(size == 3) : new Vector.VectorDimensionMismatchException();
 
         //Compute cross product
         long[] values = new[size];
