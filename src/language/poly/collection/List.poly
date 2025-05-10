@@ -4,6 +4,7 @@ import poly.util.Equatable;
 ¦ and objects can be dynamically added, removed or retrieved.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 interface+ List(Collection) {
 
@@ -76,4 +77,11 @@ interface+ List(Collection) {
     ¦ @returns the object
     ¦
     op Object access(int index);
+
+    ¦ The IndexOutOfBoundsException is thrown when an index out of
+    ¦ the list bounds (below 0 or above list size) is used.
+    ¦
+    exception~ IndexOutOfBoundsException {
+        fn~ constructor() super("Index is out of list bounds.");
+    }
 }

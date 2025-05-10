@@ -3,6 +3,7 @@ import java.lang.System;
 ¦ The ArrayList class represents a list implemented as an array.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ const ArrayList : List {
     - const int INITIAL_CAPACITY = 8;
@@ -17,7 +18,7 @@ class+ const ArrayList : List {
     }
 
     fn+ void insert(int index, Object object) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         allocate();
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -26,7 +27,7 @@ class+ const ArrayList : List {
     }
 
     fn+ Object replace(int index, Object object) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         //Retrieve and replace element
         Object previous = array[index];
@@ -36,12 +37,12 @@ class+ const ArrayList : List {
     }
 
     fn+ Object get(int index) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
         return array[index];
     }
 
     fn+ Object remove(int index) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         //Retrieve and remove element
         Object object = array[index];

@@ -1,6 +1,7 @@
 ¦ The LinkedList class represents a list implemented as linked nodes.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ const LinkedList : List {
     - Node first = null;
@@ -19,7 +20,7 @@ class+ const LinkedList : List {
     }
 
     fn+ void insert(int index, Object object) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         if(index == 0) {
             first = new(first, object);
@@ -31,7 +32,7 @@ class+ const LinkedList : List {
     }
 
     fn+ Object replace(int index, Object object) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         //Retrieve and replace element
         Node node = getNodeAt(index);
@@ -42,12 +43,12 @@ class+ const LinkedList : List {
     }
 
     fn+ Object get(int index) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
         return getNodeAt(index).object;
     }
 
     fn+ Object remove(int index) {
-        assert(0 <= index && index < size);
+        assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         Object previous;
         if(index == 0) {
