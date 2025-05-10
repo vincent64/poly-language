@@ -2191,4 +2191,21 @@ public final class Analyzer implements NodeModifier {
     private boolean isVoidExpression(Expression expression) {
         return expression.getExpressionType() instanceof Void;
     }
+
+    /**
+     * Returns whether the given exception is a throwable expression.
+     * An expression is throwable if its resulting type is assignable to Throwable.
+     * @param expression the expression node
+     * @return true if the expression is throwable
+     */
+    private boolean isThrowableExpression(Expression expression) {
+        Type type = expression.getExpressionType();
+        ClassSymbol classSymbol = LibraryClasses.findClass(ClassName.THROWABLE);
+
+        //Make sure the throwable class exists
+        if(classSymbol == null)
+            new AnalyzingError.UnresolvableClass(expression, ClassName.THROWABLE.toString());
+
+        return type.isAssignableTo(new Object(classSymbol));
+    }
 }
