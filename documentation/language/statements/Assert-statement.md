@@ -13,8 +13,13 @@ The syntax of an assert-statement is as follows :
 ```poly
 assert(condition);
 ```
-
 The condition must be a boolean expression.
+
+It is also possible to provide the exception to throw when the condition is not satisfied, with the following syntax :
+```poly
+assert(condition) : expression;
+```
+The expression type must be a subtype of the `Throwable` class.
 
 
 ## Example
