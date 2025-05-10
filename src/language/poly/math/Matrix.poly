@@ -1,6 +1,7 @@
 ¦ The Matrix class represents a mathematical matrix with a fixed size.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ Matrix {
     ¦ The matrix rows count.
@@ -13,8 +14,8 @@ class+ Matrix {
     ¦ @param columns the columns count (columns > 0)
     ¦
     fn+ constructor(const int rows, const int columns) {
-        assert(rows > 0);
-        assert(columns > 0);
+        assert(rows > 0) : new InvalidMatrixSizeException();
+        assert(columns > 0) : new InvalidMatrixSizeException();
         this.rows = rows;
         this.columns = columns;
     }
@@ -76,5 +77,40 @@ class+ Matrix {
         ¦ A square matrix is symmetric if it is equal to its transpose.
         ¦ @returns true if the matrix is symmetric
         fn bool isSymmetric();
+    }
+
+    ¦ The InvalidMatrixSizeException is thrown when there is an attempt
+    ¦ to construct a matrix with an invalid size (below 1).
+    ¦
+    exception~ InvalidMatrixSizeException {
+        fn~ constructor() super("Matrix size must be greater or equal to 1.");
+    }
+
+    ¦ The RowIndexOutOfBoundsException is thrown when a row index out of
+    ¦ the matrix row bounds (below 0 or above rows count) is used.
+    ¦
+    exception~ RowIndexOutOfBoundsException {
+        fn~ constructor() super("Row index is out of bounds.");
+    }
+
+    ¦ The ColumnIndexOutOfBoundsException is thrown when a column index out of
+    ¦ the matrix column bounds (below 0 or above columns count) is used.
+    ¦
+    exception~ ColumnIndexOutOfBoundsException {
+        fn~ constructor() super("Column index is out of bounds.");
+    }
+
+    ¦ The NonSquareMatrixException is thrown when there is an attempt to
+    ¦ perform an operation requiring a square matrix.
+    ¦
+    exception~ NonSquareMatrixException {
+        fn~ constructor() super("Square matrix required to perform this operation.");
+    }
+
+    ¦ The MatrixDimensionMismatchException is thrown when there is a
+    ¦ dimension mismatch when applying an operation between two matrices.
+    ¦
+    exception~ MatrixDimensionMismatchException {
+        fn~ constructor() super("The matrix dimensions do not match.");
     }
 }

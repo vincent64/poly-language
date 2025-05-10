@@ -7,6 +7,7 @@ import poly.util.Array;
 ¦ The matrix components are stored in row-major order and should be provided as such.
 ¦ @author Vincent Philippe (@vincent64)
 ¦ @version 0.1
+¦ @update 0.3
 ¦
 class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ The matrix integer components.
@@ -56,8 +57,8 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the component value
     ¦
     fn+ int get(int row, int column) {
-        assert(0 <= row && row < rows);
-        assert(0 <= column && column < columns);
+        assert(0 <= row && row < rows) : new Matrix.RowIndexOutOfBoundsException();
+        assert(0 <= column && column < columns) : new Matrix.ColumnIndexOutOfBoundsException();
 
         return values[row * columns + column];
     }
@@ -75,7 +76,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the row vector
     ¦
     fn+ IntVector getRow(int row) {
-        assert(0 <= row && row < rows);
+        assert(0 <= row && row < rows) : new Matrix.RowIndexOutOfBoundsException();
 
         //Copy the components subarray
         int[] values = new[columns];
@@ -89,7 +90,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the column vector
     ¦
     fn+ IntVector getColumn(int column) {
-        assert(0 <= column && column < columns);
+        assert(0 <= column && column < columns) : new Matrix.ColumnIndexOutOfBoundsException();
 
         //Compute the column components
         int[] values = new[rows];
@@ -103,12 +104,12 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the trace
     ¦
     fn+ int trace() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
         return sum(int i = 0; i < rows; i++) values[i * columns + i];
     }
 
     fn+ bool isDiagonal() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
 
         //Check every non-diagonal component
         for(int i = 0; i < rows; i++) {
@@ -122,7 +123,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     }
 
     fn+ bool isHollow() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
 
         //Check every diagonal component
         for(int i = 0; i < rows; i++) {
@@ -134,7 +135,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     }
 
     fn+ bool isUpperTriangular() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
 
         //Check every lower-triangular component
         for(int i = 1; i < rows; i++) {
@@ -148,7 +149,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     }
 
     fn+ bool isLowerTriangular() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
 
         //Check every upper-triangular component
         for(int i = 0; i < rows - 1; i++) {
@@ -162,7 +163,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     }
 
     fn+ bool isSymmetric() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
 
         //Check every component
         for(int i = 1; i < rows; i++) {
@@ -179,7 +180,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the transposed matrix
     ¦
     fn+ IntMatrix transpose() {
-        assert(isSquare());
+        assert(isSquare()) : new Matrix.NonSquareMatrixException();
 
         //Transpose components
         int[] values = new[this.values.size];
@@ -197,8 +198,8 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     fn+ IntMatrix swapRow(int row1, int row2) {
-        assert(0 <= row1 && row1 < rows);
-        assert(0 <= row2 && row2 < rows);
+        assert(0 <= row1 && row1 < rows) : new Matrix.RowIndexOutOfBoundsException();
+        assert(0 <= row2 && row2 < rows) : new Matrix.RowIndexOutOfBoundsException();
 
         //Swap every component in the rows
         int[] values = Array.copy(this.values);
@@ -217,8 +218,8 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     fn+ IntMatrix swapColumn(int column1, int column2) {
-        assert(0 <= column1 && column1 < columns);
-        assert(0 <= column2 && column2 < columns);
+        assert(0 <= column1 && column1 < columns) : new Matrix.ColumnIndexOutOfBoundsException();
+        assert(0 <= column2 && column2 < columns) : new Matrix.ColumnIndexOutOfBoundsException();
 
         //Swap every component in the columns
         int[] values = Array.copy(this.values);
@@ -237,7 +238,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     fn+ IntMatrix mulRow(int row, int value) {
-        assert(0 <= row && row < rows);
+        assert(0 <= row && row < rows) : new Matrix.RowIndexOutOfBoundsException();
 
         //Multiply every component in the row
         int[] values = Array.copy(this.values);
@@ -253,7 +254,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     fn+ IntMatrix mulColumn(int column, int value) {
-        assert(0 <= column && column < columns);
+        assert(0 <= column && column < columns) : new Matrix.ColumnIndexOutOfBoundsException();
 
         //Multiply every component in the column
         int[] values = Array.copy(this.values);
@@ -268,8 +269,8 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     op+ IntMatrix +(IntMatrix that) {
-        assert(this.rows == that.rows);
-        assert(this.columns == that.columns);
+        assert(this.rows == that.rows) : new Matrix.MatrixDimensionMismatchException();
+        assert(this.columns == that.columns) : new Matrix.MatrixDimensionMismatchException();
 
         //Add every component
         int[] values = new[this.values.size];
@@ -284,8 +285,8 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     op+ IntMatrix -(IntMatrix that) {
-        assert(this.rows == that.rows);
-        assert(this.columns == that.columns);
+        assert(this.rows == that.rows) : new Matrix.MatrixDimensionMismatchException();
+        assert(this.columns == that.columns) : new Matrix.MatrixDimensionMismatchException();
 
         //Subtract every component
         int[] values = new[this.values.size];
@@ -312,7 +313,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer matrix
     ¦
     op+ IntMatrix *(IntMatrix that) {
-        assert(this.columns == that.rows);
+        assert(this.columns == that.rows) : new Matrix.MatrixDimensionMismatchException();
 
         //Multiply every component
         int[] values = new[this.rows * that.columns];
@@ -331,7 +332,7 @@ class+ IntMatrix(Matrix) : Matrix.Property, Equatable {
     ¦ @returns the resulting integer vector
     ¦
     op+ IntVector *(IntVector vector) {
-        assert(columns == vector.size);
+        assert(columns == vector.size) : new Matrix.MatrixDimensionMismatchException();
 
         //Multiply every component
         int[] values = new[rows];
