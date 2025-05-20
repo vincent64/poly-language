@@ -16,6 +16,11 @@ _None_
 Features that are planned and will get added in the future :
 
 - Enums
-- Exceptions, throw-statement, try/catch-statement
-- Default array initialization
 - Concurrency
+
+
+## Implemented
+Features that were recently implemented includes :
+
+- Exceptions, throw-statement, try-catch-statement
+- Default array initialization (array literal)
