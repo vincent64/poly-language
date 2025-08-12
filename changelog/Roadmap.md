@@ -9,7 +9,7 @@ Note that this file can change and some planned features may be removed at any t
 ## In development
 Features that are currently being worked :
 
-_None_
+- Enums
 
 
 ## Planned
