@@ -552,6 +552,7 @@ public final class ClassSymbol extends Symbol {
     public enum Kind {
         CLASS,
         INTERFACE,
+        ENUM,
         INNER,
         EXCEPTION
     }
