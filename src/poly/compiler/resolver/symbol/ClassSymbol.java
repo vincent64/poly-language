@@ -498,6 +498,14 @@ public final class ClassSymbol extends Symbol {
     }
 
     /**
+     * Returns whether the class is an enum.
+     * @return true if the class is an enum
+     */
+    public boolean isEnum() {
+        return kind == Kind.ENUM;
+    }
+
+    /**
      * Returns whether the class is inner.
      * @return true if the class is inner
      */
