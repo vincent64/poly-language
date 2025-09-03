@@ -53,6 +53,7 @@ public class Keyword {
     public static final char[] CLASS = {'c', 'l', 'a', 's', 's'};
     public static final char[] CLASS_NEW = {'n', 'e', 'w'};
     public static final char[] CLASS_INTERFACE = {'i', 'n', 't', 'e', 'r', 'f', 'a', 'c', 'e'};
+    public static final char[] CLASS_ENUM = {'e', 'n', 'u', 'm'};
     public static final char[] CLASS_INNER = {'i', 'n', 'n', 'e', 'r'};
     public static final char[] CLASS_EXCEPTION = {'e', 'x', 'c', 'e', 'p', 't', 'i', 'o', 'n'};
 
@@ -86,7 +87,7 @@ public class Keyword {
             STATEMENT_DO, STATEMENT_RETURN, STATEMENT_SWITCH, STATEMENT_MATCH, STATEMENT_CASE,
             STATEMENT_ASSERT, STATEMENT_CONTINUE, STATEMENT_BREAK, STATEMENT_FOREACH,
             STATEMENT_TRY, STATEMENT_CATCH, STATEMENT_THROW,
-            CLASS, CLASS_NEW, CLASS_INTERFACE, CLASS_INNER, CLASS_EXCEPTION,
+            CLASS, CLASS_NEW, CLASS_INTERFACE, CLASS_ENUM, CLASS_INNER, CLASS_EXCEPTION,
             METHOD, METHOD_VOID, METHOD_CONSTRUCTOR, METHOD_OPERATOR, METHOD_NULLIFIER,
             VAR_CONST,
             PACKAGE, IMPORT, DEFINE,
