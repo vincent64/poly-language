@@ -167,6 +167,10 @@ public class ClassFile implements Byteable {
         if(fieldSymbol.isConstant())
             accessFlag |= Instructions.FieldAccessFlag.FINAL;
 
+        //Set enum field flag
+        if(fieldSymbol.isEnum())
+            accessFlag |= Instructions.FieldAccessFlag.ENUM;
+
         //Add field name to constant pool
         short nameIndex = (short) constantPool.addUTF8Constant(fieldSymbol.getName());
 
