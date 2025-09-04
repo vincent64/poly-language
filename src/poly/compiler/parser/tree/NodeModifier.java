@@ -2,10 +2,7 @@ package poly.compiler.parser.tree;
 
 import poly.compiler.parser.tree.expression.*;
 import poly.compiler.parser.tree.statement.*;
-import poly.compiler.parser.tree.variable.ArgumentList;
-import poly.compiler.parser.tree.variable.Parameter;
-import poly.compiler.parser.tree.variable.ParameterList;
-import poly.compiler.parser.tree.variable.VariableDeclaration;
+import poly.compiler.parser.tree.variable.*;
 
 /**
  * The NodeModifier interface. This interface is used to visit each node in the AST.
@@ -73,4 +70,6 @@ public interface NodeModifier {
     default Node visitArgumentList(ArgumentList argumentList) { return argumentList; }
     default Node visitParameter(Parameter parameter) { return parameter; }
     default Node visitParameterList(ParameterList parameterList) { return parameterList; }
+    default Node visitEnumConstant(EnumConstant constant) { return constant; }
+    default Node visitEnumConstantList(EnumConstantList constantList) { return constantList; }
 }
