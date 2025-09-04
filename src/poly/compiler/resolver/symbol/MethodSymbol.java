@@ -218,6 +218,14 @@ public final class MethodSymbol extends Symbol implements Comparable<MethodSymbo
     }
 
     /**
+     * Returns the same method symbol with the private access modifier set.
+     * @return the same method symbol but private
+     */
+    public MethodSymbol asPrivate() {
+        return new MethodSymbol(classSymbol, AccessModifier.PRIVATE, returnType, parameterTypes, name, isStatic, isConstant, isEmpty);
+    }
+
+    /**
      * Returns the method parameters count.
      * @return the parameters count
      */
