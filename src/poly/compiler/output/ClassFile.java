@@ -300,6 +300,14 @@ public class ClassFile implements Byteable {
     }
 
     /**
+     * Returns whether the class is an enum.
+     * @return true if the class is an enum
+     */
+    public boolean isEnum() {
+        return (accessFlag & Instructions.ClassAccessFlag.ENUM) != 0;
+    }
+
+    /**
      * Returns whether the class is static.
      * @return true if the class is static
      */
