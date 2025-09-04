@@ -73,6 +73,10 @@ public class ClassFile implements Byteable {
             accessFlag |= Instructions.ClassAccessFlag.INTERFACE
                     | Instructions.ClassAccessFlag.ABSTRACT;
 
+        //Set class enum flag
+        if(classSymbol.isEnum())
+            accessFlag |= Instructions.ClassAccessFlag.ENUM;
+
         //Set class final flag
         if(classSymbol.isConstant())
             accessFlag |= Instructions.ClassAccessFlag.FINAL;
