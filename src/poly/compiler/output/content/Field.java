@@ -88,6 +88,14 @@ public class Field implements Byteable {
     }
 
     /**
+     * Returns whether the field is an enum constant.
+     * @return true if the field is an enum constant
+     */
+    public boolean isEnum() {
+        return (accessFlag & Instructions.FieldAccessFlag.ENUM) != 0;
+    }
+
+    /**
      * Returns the field name index.
      * @return the name index
      */
