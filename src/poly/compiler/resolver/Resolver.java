@@ -89,6 +89,14 @@ public final class Resolver {
         if(classSymbol.isInterface() && classSymbol.isConstant())
             new ResolvingError.InvalidConstantInterface(classDeclaration);
 
+        //Make sure the class is not static if it is an enum
+        if(classSymbol.isEnum() && classSymbol.isStatic())
+            new ResolvingError.InvalidStaticEnum(classDeclaration);
+
+        //Make sure there is no superclass if the class is an enum
+        if(classSymbol.isEnum() && classDeclaration.getSuperclass() != null)
+            new ResolvingError.InvalidEnumSuperclass(classDeclaration);
+
         //Make sure there is no superclass if the class is static
         if(classSymbol.isStatic() && classDeclaration.getSuperclass() != null)
             new ResolvingError.InvalidStaticSuperclass(classDeclaration);
