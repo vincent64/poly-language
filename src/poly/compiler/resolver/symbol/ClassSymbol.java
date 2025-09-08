@@ -239,6 +239,17 @@ public final class ClassSymbol extends Symbol {
     }
 
     /**
+     * Returns the enum constructor method symbol with the given parameter types.
+     * @param types the parameter types
+     * @param sourceClass the source class symbol
+     * @param node the node
+     * @return the enum constructor method symbol (null if not found)
+     */
+    public MethodSymbol findEnumConstructor(Type[] types, ClassSymbol sourceClass, Node node) {
+        return findConstructor(MethodSymbol.getEnumConstructorParameterTypes(types), sourceClass, node);
+    }
+
+    /**
      * Returns the class symbol from the given class name.
      * @param className the class name
      * @return the class symbol (null if not found)
