@@ -2,9 +2,8 @@ package poly.compiler.resolver.symbol;
 
 import poly.compiler.analyzer.content.SpecialMethod;
 import poly.compiler.analyzer.table.ImportTable;
-import poly.compiler.analyzer.type.Array;
+import poly.compiler.analyzer.type.*;
 import poly.compiler.analyzer.type.Object;
-import poly.compiler.analyzer.type.Type;
 import poly.compiler.analyzer.type.Void;
 import poly.compiler.error.ResolvingError;
 import poly.compiler.output.content.*;
@@ -145,6 +144,20 @@ public final class MethodSymbol extends Symbol implements Comparable<MethodSymbo
                 new Type[0],
                 SpecialMethod.Name.STATIC_CONSTRUCTOR,
                 true, false, false);
+    }
+
+    /**
+     * Generates and returns the method symbol of an enum constructor for the given class symbol.
+     * @param classSymbol the class symbol
+     * @return the enum constructor method symbol
+     */
+    public static MethodSymbol generateEnumConstructor(ClassSymbol classSymbol) {
+        return new MethodSymbol(classSymbol,
+                AccessModifier.PRIVATE,
+                new Void(),
+                getEnumConstructorParameterTypes(new Type[0]),
+                SpecialMethod.Name.CONSTRUCTOR,
+                false, false, false);
     }
 
     /**
