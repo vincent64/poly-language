@@ -6,6 +6,7 @@ import poly.compiler.analyzer.type.Type;
 import poly.compiler.error.ResolvingError;
 import poly.compiler.output.content.*;
 import poly.compiler.parser.tree.FieldDeclaration;
+import poly.compiler.parser.tree.variable.EnumConstant;
 import poly.compiler.parser.tree.variable.VariableDeclaration;
 import poly.compiler.tokenizer.content.Keyword;
 
@@ -20,12 +21,14 @@ import java.nio.charset.StandardCharsets;
 public final class FieldSymbol extends Symbol {
     private final ClassSymbol classSymbol;
     private final Type type;
+    private final boolean isEnum;
 
     private FieldSymbol(ClassSymbol classSymbol, AccessModifier accessModifier, Type type,
-                        String name, boolean isStatic, boolean isConstant) {
+                        String name, boolean isStatic, boolean isConstant, boolean isEnum) {
         super(Kind.FIELD, accessModifier, name, isStatic, isConstant);
         this.classSymbol = classSymbol;
         this.type = type;
+        this.isEnum = isEnum;
     }
 
     /**
@@ -79,7 +82,8 @@ public final class FieldSymbol extends Symbol {
                 type,
                 name,
                 field.isStatic(),
-                field.isConstant());
+                field.isConstant(),
+                false);
     }
 
     /**
@@ -92,7 +96,7 @@ public final class FieldSymbol extends Symbol {
                 AccessModifier.DEFAULT,
                 new Object((ClassSymbol) classSymbol.getOwnerSymbol()),
                 String.valueOf(Keyword.EXPRESSION_OUTER),
-                false, true);
+                false, true, false);
     }
 
     /**
@@ -116,7 +120,7 @@ public final class FieldSymbol extends Symbol {
      * @return the same field symbol but static
      */
     public FieldSymbol asStatic() {
-        return new FieldSymbol(classSymbol, accessModifier, type, name, true, isConstant);
+        return new FieldSymbol(classSymbol, accessModifier, type, name, true, isConstant, isEnum);
     }
 
     /**
@@ -124,7 +128,7 @@ public final class FieldSymbol extends Symbol {
      * @return the same field symbol but static and constant
      */
     public FieldSymbol asStaticConstant() {
-        return new FieldSymbol(classSymbol, accessModifier, type, name, true, true);
+        return new FieldSymbol(classSymbol, accessModifier, type, name, true, true, isEnum);
     }
 
     /**
@@ -141,6 +145,14 @@ public final class FieldSymbol extends Symbol {
      */
     public Type getType() {
         return type;
+    }
+
+    /**
+     * Returns whether the field is an enum constant.
+     * @return true if the field is an enum constant
+     */
+    public boolean isEnum() {
+        return isEnum;
     }
 
     /**
@@ -163,6 +175,7 @@ public final class FieldSymbol extends Symbol {
                 + type + ", "
                 + name + ", "
                 + "isStatic=" + isStatic + ", "
-                + "isConstant=" + isConstant + ")";
+                + "isConstant=" + isConstant + ", "
+                + "isEnum=" + isEnum + ")";
     }
 }
