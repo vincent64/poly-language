@@ -226,6 +226,14 @@ public final class MethodSymbol extends Symbol implements Comparable<MethodSymbo
     }
 
     /**
+     * Returns the same method symbol with the actual enum constructor parameter types.
+     * @return the same method but as actual enum constructor
+     */
+    public MethodSymbol asEnumConstructor() {
+        return new MethodSymbol(classSymbol, accessModifier, returnType, getEnumConstructorParameterTypes(parameterTypes), name, isStatic, isConstant, isEmpty);
+    }
+
+    /**
      * Returns the method parameters count.
      * @return the parameters count
      */
