@@ -24,6 +24,7 @@ public class ClassDeclaration extends Node {
     private List<Node> fieldNodes;
     private List<Node> methodNodes;
     private List<Node> nestedClasses;
+    private Node constantList;
     private boolean isStatic, isConstant;
 
     /**
@@ -96,6 +97,14 @@ public class ClassDeclaration extends Node {
      */
     public void addNestedClass(Node node) {
         nestedClasses.add(node);
+    }
+
+    /**
+     * Sets the enum constants list node.
+     * @param node the constants list node
+     */
+    public void setConstantList(Node node) {
+        constantList = node;
     }
 
     /**
@@ -198,6 +207,14 @@ public class ClassDeclaration extends Node {
     }
 
     /**
+     * Returns the enum constants list node.
+     * @return the constants list node
+     */
+    public Node getConstantList() {
+        return constantList;
+    }
+
+    /**
      * Returns whether the class declaration is static.
      * @return true if the class is static
      */
@@ -265,6 +282,8 @@ public class ClassDeclaration extends Node {
         string.addNodes(methodNodes);
         string.addString("Nested classes:");
         string.addNodes(nestedClasses);
+        string.addString("Constants list:");
+        string.addNode(constantList);
 
         return string.toString();
     }
