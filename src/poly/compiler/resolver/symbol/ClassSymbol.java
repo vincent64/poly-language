@@ -64,12 +64,15 @@ public final class ClassSymbol extends Symbol {
                 classDeclaration.getKind(),
                 classDeclaration.getName(),
                 classDeclaration.isStatic(),
-                classDeclaration.isConstant(),
+                classDeclaration.isConstant() || classDeclaration.isEnum(),
                 className,
                 superclassNode == null
-                        ? classDeclaration.isException()
-                            ? ClassName.RUNTIME_EXCEPTION : ClassName.OBJECT
-                        : ClassName.fromNodeQualifiedName(superclassNode),
+                    ? classDeclaration.isException()
+                        ? ClassName.RUNTIME_EXCEPTION
+                        : classDeclaration.isEnum()
+                            ? ClassName.ENUM
+                            : ClassName.OBJECT
+                    : ClassName.fromNodeQualifiedName(superclassNode),
                 classDeclaration.getInterfaces(),
                 ownerSymbol,
                 packageSymbol);
@@ -87,6 +90,7 @@ public final class ClassSymbol extends Symbol {
 
         return new ClassSymbol(classFile.getAccessModifier(),
                 classFile.isInterface() ? Kind.INTERFACE
+                        : classFile.isEnum() ? Kind.ENUM
                         : ownerSymbol instanceof ClassSymbol && !classFile.isStatic() ? Kind.INNER
                         : Kind.CLASS,
                 className.getLast(),
@@ -201,7 +205,7 @@ public final class ClassSymbol extends Symbol {
      * @param name the method name
      * @param types the method parameter types
      * @param methodCandidates the method candidates
-     * @param sourceClass the source class
+     * @param sourceClass the source class symbol
      * @param includeSuperclass whether superclass methods should be included
      */
     private void findMethodCandidates(String name, Type[] types, List<MethodSymbol> methodCandidates,
@@ -232,6 +236,8 @@ public final class ClassSymbol extends Symbol {
     /**
      * Returns the constructor method symbol with the given parameter types.
      * @param types the parameter types
+     * @param sourceClass the source class symbol
+     * @param node the node
      * @return the constructor method symbol (null if not found)
      */
     public MethodSymbol findConstructor(Type[] types, ClassSymbol sourceClass, Node node) {
