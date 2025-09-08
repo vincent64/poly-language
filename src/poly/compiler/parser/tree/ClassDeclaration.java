@@ -129,6 +129,13 @@ public class ClassDeclaration extends Node {
     }
 
     /**
+     * Sets the current class declaration as an enum.
+     */
+    public void setEnum() {
+        kind = Kind.ENUM;
+    }
+
+    /**
      * Sets the current class declaration as inner.
      */
     public void setInner() {
@@ -236,6 +243,14 @@ public class ClassDeclaration extends Node {
      */
     public boolean isInterface() {
         return kind == Kind.INTERFACE;
+    }
+
+    /**
+     * Returns whether the class declaration is an enum.
+     * @return true if the class is an enum
+     */
+    public boolean isEnum() {
+        return kind == Kind.ENUM;
     }
 
     /**
