@@ -319,6 +319,23 @@ public final class MethodSymbol extends Symbol implements Comparable<MethodSymbo
     }
 
     /**
+     * Returns the actual enum constructor parameter types from the given parameter types.
+     * The actual types include the enum constant name and ordinal to the parameter types.
+     * @param types the parameter types
+     * @return the actual enum constructor parameter types
+     */
+    public static Type[] getEnumConstructorParameterTypes(Type[] types) {
+        //Copy the parameter types array
+        Type[] actualTypes = new Type[types.length + 2];
+        System.arraycopy(types, 0, actualTypes, 2, types.length);
+        //Add implicit enum constant name and ordinal
+        actualTypes[0] = new Object(LibraryClasses.findClass(ClassName.STRING));
+        actualTypes[1] = new Primitive(Primitive.Kind.INTEGER);
+
+        return actualTypes;
+    }
+
+    /**
      * Returns whether the given method symbol has the same signature as the current one.
      * @param object the method symbol
      * @return true if the symbols have the same signature
