@@ -53,7 +53,22 @@ public final class FieldSymbol extends Symbol {
                 type,
                 variableDeclaration.getName(),
                 fieldDeclaration.isStatic(),
-                variableDeclaration.isConstant());
+                variableDeclaration.isConstant(),
+                false);
+    }
+
+    /**
+     * Creates and returns the field symbol from the given enum constant.
+     * @param constant the enum constant
+     * @param classSymbol the class symbol
+     * @return the field symbol
+     */
+    public static FieldSymbol fromEnumConstant(EnumConstant constant, ClassSymbol classSymbol) {
+        return new FieldSymbol(classSymbol,
+                AccessModifier.PUBLIC,
+                new Object(classSymbol),
+                constant.getName(),
+                true, true, true);
     }
 
     /**
