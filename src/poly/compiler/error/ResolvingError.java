@@ -47,6 +47,14 @@ public abstract class ResolvingError extends Error {
         }
     }
 
+    public static class DuplicateEnumConstant extends ResolvingError {
+        private static final String MESSAGE = "Enum constant with name '%s' already exists in current class";
+
+        public DuplicateEnumConstant(Node node, String constantName) {
+            super(node, MESSAGE.formatted(constantName));
+        }
+    }
+
     public static class InvalidClassAccessModifier extends ResolvingError {
         private static final String MESSAGE = "Class access modifier must be either default or public";
 
