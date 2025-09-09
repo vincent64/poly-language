@@ -16,10 +16,7 @@ import poly.compiler.output.jvm.Instruction;
 import poly.compiler.parser.tree.*;
 import poly.compiler.parser.tree.expression.*;
 import poly.compiler.parser.tree.statement.*;
-import poly.compiler.parser.tree.variable.ArgumentList;
-import poly.compiler.parser.tree.variable.Parameter;
-import poly.compiler.parser.tree.variable.ParameterList;
-import poly.compiler.parser.tree.variable.VariableDeclaration;
+import poly.compiler.parser.tree.variable.*;
 import poly.compiler.resolver.ClassDefinition;
 import poly.compiler.resolver.LibraryClasses;
 import poly.compiler.resolver.symbol.ClassSymbol;
@@ -1480,6 +1477,49 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitCaseStatement(CaseStatement caseStatement) {
         //Visit statements block
         caseStatement.getStatementBlock().accept(this);
+    }
+
+    @Override
+    public void visitEnumConstantList(EnumConstantList constantList) {
+        //Add class reference to constant pool and initialize ordinal value
+        short classIndex = (short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName());
+        int ordinal = 0;
+
+        //Visit every constant
+        for(Node node : constantList.getConstants()) {
+            EnumConstant constant = (EnumConstant) node;
+            String name = constant.getName();
+
+            //Add enum name string constant to constant pool
+            short nameIndex = (short) constantPool.addStringConstant(name);
+
+            //Generate instructions
+            addInstruction(new Instruction.Builder(NEW, 3)
+                    .add(classIndex)
+                    .build());
+            addInstruction(DUP);
+
+            //Load enum name and ordinal value
+            addInstruction(new Instruction.Builder(LDC_W, 3)
+                    .add(nameIndex)
+                    .build());
+            addInstruction(Instruction.forConstantInteger(ordinal++, constantPool));
+
+            //Visit constant arguments
+            if(constant.getArgumentList() != null)
+                constant.getArgumentList().accept(this);
+
+            Type[] types = constant.getArgumentList() != null
+                    ? getTypesFromArguments(((ArgumentList) constant.getArgumentList()))
+                    : new Type[0];
+
+            //Find corresponding enum constructor
+            MethodSymbol constructorSymbol = classSymbol.findEnumConstructor(types, classSymbol, constant);
+
+            //Generate instructions
+            generateCallSpecialMethod(constructorSymbol);
+            generatePutStaticField(classSymbol.findField(name, classSymbol));
+        }
     }
 
 
