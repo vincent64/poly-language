@@ -37,6 +37,10 @@ public class PrimitiveType extends Expression {
             kind = Primitive.Kind.CHAR;
     }
 
+    public void setKind(Primitive.Kind kind) {
+        this.kind = kind;
+    }
+
     public Primitive.Kind getKind() {
         return kind;
     }
