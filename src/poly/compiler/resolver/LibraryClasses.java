@@ -9,6 +9,7 @@ import poly.compiler.resolver.symbol.ClassSymbol;
 import poly.compiler.resolver.symbol.PackageSymbol;
 import poly.compiler.resolver.symbol.Symbol;
 import poly.compiler.util.ClassName;
+import poly.compiler.warning.GeneralWarning;
 
 import java.util.*;
 
@@ -28,20 +29,20 @@ public class LibraryClasses {
     public static void loadLibraries() {
         //Load Java runtime library
         for(LibraryFile libraryFile : LibraryReader.loadJavaLibraryFiles())
-            libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile);
+            addLibraryFile(libraryFile);
 
         //Load Poly standard library
         if(Parameters.getPolylibPath() != null) {
             LibraryReader polyLibraryReader = LibraryReader.fromPolyLibrary(Parameters.getPolylibPath());
             for(LibraryFile libraryFile : polyLibraryReader.getLibraryFiles())
-                libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile);
+                addLibraryFile(libraryFile);
         }
 
         //Load third-party libraries
         if(Parameters.getLibraryPath() != null) {
             LibraryReader libraryReader = LibraryReader.fromLibrary(Parameters.getLibraryPath());
             for(LibraryFile libraryFile : libraryReader.getLibraryFiles())
-                libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile);
+                addLibraryFile(libraryFile);
         }
 
         //Print the libraries for debugging
@@ -85,6 +86,16 @@ public class LibraryClasses {
             return null;
 
         return ClassLoader.load(libraryFile).read();
+    }
+
+    /**
+     * Adds the given library file to the library files mapping.
+     * This method throws a compilation warning if there are colliding class names.
+     * @param libraryFile the library file
+     */
+    private static void addLibraryFile(LibraryFile libraryFile) {
+        if(libraryFiles.put(libraryFile.getClassName().toQualifiedName(), libraryFile) != null)
+            new GeneralWarning.ClassCollision(libraryFile.getClassName().toQualifiedName());
     }
 
     /**
