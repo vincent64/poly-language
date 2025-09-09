@@ -11,10 +11,7 @@ import poly.compiler.error.AnalyzingError;
 import poly.compiler.parser.tree.*;
 import poly.compiler.parser.tree.expression.*;
 import poly.compiler.parser.tree.statement.*;
-import poly.compiler.parser.tree.variable.ArgumentList;
-import poly.compiler.parser.tree.variable.Parameter;
-import poly.compiler.parser.tree.variable.ParameterList;
-import poly.compiler.parser.tree.variable.VariableDeclaration;
+import poly.compiler.parser.tree.variable.*;
 import poly.compiler.resolver.ClassDefinition;
 import poly.compiler.resolver.Classes;
 import poly.compiler.resolver.LibraryClasses;
@@ -83,6 +80,10 @@ public final class Analyzer implements NodeModifier {
         //Visit every method
         for(Node node : classDeclaration.getMethods())
             node.accept(this);
+
+        //Visit every enum constant
+        if(classDeclaration.isEnum())
+            classDeclaration.setConstantList(classDeclaration.getConstantList().accept(this));
 
         return classDeclaration;
     }
