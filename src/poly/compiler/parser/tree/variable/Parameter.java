@@ -15,6 +15,7 @@ public class Parameter extends Node {
     private Node type;
     private String name;
     private boolean isConstant;
+    private boolean isAttribute;
 
     public Parameter(Meta meta) {
         super(meta);
@@ -36,6 +37,10 @@ public class Parameter extends Node {
         isConstant = true;
     }
 
+    public void setAttribute() {
+        isAttribute = true;
+    }
+
     public Node getType() {
         return type;
     }
@@ -46,6 +51,10 @@ public class Parameter extends Node {
 
     public boolean isConstant() {
         return isConstant;
+    }
+
+    public boolean isAttribute() {
+        return isAttribute;
     }
 
     @Override
@@ -62,7 +71,8 @@ public class Parameter extends Node {
     public String toString() {
         NodeStringifier string = new NodeStringifier("Parameter",
                 "name=" + name,
-                "isConstant=" + isConstant);
+                "isConstant=" + isConstant,
+                "isAttribute=" + isAttribute);
         string.addString("Type:");
         string.addNode(type);
 
