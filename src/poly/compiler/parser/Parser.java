@@ -1658,4 +1658,40 @@ public final class Parser {
 
         return node;
     }
+
+    private Node parseConstantList() {
+        EnumConstantList node = new EnumConstantList(Node.Meta.fromLeadingToken(currentToken));
+
+        //Return empty constants list
+        if(matches(SEMICOLON))
+            return node;
+
+        //Parse constants list
+        do {
+            node.addConstant(parseConstant());
+        } while(matches(COMMA));
+
+        //Match semicolon at the end
+        match(SEMICOLON);
+
+        return node;
+    }
+
+    private Node parseConstant() {
+        EnumConstant node = new EnumConstant(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse constant name
+        if(isMatchingType(Token.Type.IDENTIFIER)) {
+            node.setName(currentToken);
+            nextToken();
+        } else new ParsingError.UnexpectedToken(currentToken);
+
+        //Parse optional arguments list
+        if(matches(OPENING_PARENTHESIS)) {
+            node.setArgumentList(parseArgumentList());
+            match(CLOSING_PARENTHESIS);
+        }
+
+        return node;
+    }
 }
