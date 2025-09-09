@@ -1225,6 +1225,10 @@ public final class Analyzer implements NodeModifier {
         if(classSymbol.isInterface())
             new AnalyzingError.InterfaceCreation(classCreation);
 
+        //Make sure the class is not an enum
+        if(classSymbol.isEnum())
+            new AnalyzingError.EnumCreation(classCreation);
+
         //Make sure the class is not static
         if(classSymbol.isStatic())
             new AnalyzingError.StaticCreation(classCreation);
