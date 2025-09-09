@@ -178,6 +178,14 @@ public abstract class ResolvingError extends Error {
         }
     }
 
+    public static class InvalidEnumConstructor extends ResolvingError {
+        private static final String MESSAGE = "Constructor %s must be private inside an enum";
+
+        public InvalidEnumConstructor(Node node, MethodSymbol constructorSymbol) {
+            super(node, MESSAGE.formatted(MethodStringifier.stringify(constructorSymbol)));
+        }
+    }
+
     public static class UnresolvableClass extends ResolvingError {
         private static final String MESSAGE = "Cannot resolve class with name '%s'";
 
