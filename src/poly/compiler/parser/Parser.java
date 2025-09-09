@@ -8,10 +8,7 @@ import poly.compiler.parser.literal.StringParser;
 import poly.compiler.parser.tree.*;
 import poly.compiler.parser.tree.expression.*;
 import poly.compiler.parser.tree.statement.*;
-import poly.compiler.parser.tree.variable.ArgumentList;
-import poly.compiler.parser.tree.variable.Parameter;
-import poly.compiler.parser.tree.variable.ParameterList;
-import poly.compiler.parser.tree.variable.VariableDeclaration;
+import poly.compiler.parser.tree.variable.*;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.tokenizer.content.Operator;
 import poly.compiler.tokenizer.content.Symbol;
@@ -162,7 +159,7 @@ public final class Parser {
             node.addImport(parseImportStatement());
 
         //Parse class declarations
-        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_EXCEPTION))
+        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_ENUM) || isMatching(CLASS_EXCEPTION))
             node.addClass(parseClassDeclaration());
 
         //Throw an error if there are tokens left
@@ -201,14 +198,15 @@ public final class Parser {
     private Node parseClassDeclaration() {
         ClassDeclaration node = new ClassDeclaration(Node.Meta.fromLeadingToken(currentToken));
 
-        //Match class, interface, inner or exception keyword
-        if(matches(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION)) {
+        //Match class, interface, enum, inner or exception keyword
+        if(matches(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_ENUM)
+                || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION)) {
             if(matches(CLASS_INTERFACE))
                 node.setInterface();
-
+            if(matches(CLASS_ENUM))
+                node.setEnum();
             if(matches(CLASS_INNER))
                 node.setInner();
-
             if(matches(CLASS_EXCEPTION))
                 node.setException();
         }
@@ -247,6 +245,10 @@ public final class Parser {
         //Match opening bracket
         match(OPENING_CURLY_BRACKET);
 
+        //Parse enum constants list
+        if(node.isEnum())
+            node.setConstantList(parseConstantList());
+
         //Parse class fields
         while(isAccessModifierSymbol(currentToken)
                 || isMatching(VAR_CONST)
@@ -259,8 +261,9 @@ public final class Parser {
         while(isMatching(METHOD) || isMatching(METHOD_OPERATOR))
             node.addMethod(parseMethodDeclaration());
 
-        //Parse class innerclasses
-        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION))
+        //Parse class nested classes
+        while(isMatching(CLASS) || isMatching(CLASS_INTERFACE) || isMatching(CLASS_ENUM)
+                || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION))
             node.addNestedClass(parseClassDeclaration());
 
         //Match closing bracket
