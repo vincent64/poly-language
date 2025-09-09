@@ -281,4 +281,12 @@ public abstract class ResolvingError extends Error {
             super(node, MESSAGE);
         }
     }
+
+    public static class InvalidEnumSuperclass extends ResolvingError {
+        private static final String MESSAGE = "Enum cannot have superclass";
+
+        public InvalidEnumSuperclass(Node node) {
+            super(node, MESSAGE);
+        }
+    }
 }
