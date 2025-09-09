@@ -1616,6 +1616,37 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
+    public Node visitEnumConstantList(EnumConstantList constantList) {
+        isStaticContext = true;
+
+        //Visit every constant
+        List<Node> constants = constantList.getConstants();
+        for(int i = 0; i < constants.size(); i++)
+            constants.set(i, constants.get(i).accept(this));
+
+        return constantList;
+    }
+
+    @Override
+    public Node visitEnumConstant(EnumConstant constant) {
+        //Visit arguments list
+        if(constant.getArgumentList() != null)
+            constant.setArgumentList(constant.getArgumentList().accept(this));
+
+        ArgumentList argumentList = (ArgumentList) constant.getArgumentList();
+        Type[] types = argumentList != null ? getTypesFromArguments(argumentList) : new Type[0];
+
+        //Find corresponding enum constructor
+        MethodSymbol constructorSymbol = classSymbol.findEnumConstructor(types, classSymbol, constant);
+
+        //Make sure the constructor exists
+        if(constructorSymbol == null)
+            new AnalyzingError.UnresolvableConstructor(constant, types);
+
+        return constant;
+    }
+
+    @Override
     public Statement visitCaseStatement(CaseStatement caseStatement) {
         //Visit expression
         caseStatement.setExpression(caseStatement.getExpression().accept(this));
