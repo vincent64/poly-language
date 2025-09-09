@@ -294,6 +294,14 @@ public abstract class AnalyzingError extends Error {
         }
     }
 
+    public static class EnumCreation extends AnalyzingError {
+        private static final String MESSAGE = "Cannot instantiate enum";
+
+        public EnumCreation(Node node) {
+            super(node, MESSAGE);
+        }
+    }
+
     public static class StaticCreation extends AnalyzingError {
         private static final String MESSAGE = "Cannot instantiate static class";
 
