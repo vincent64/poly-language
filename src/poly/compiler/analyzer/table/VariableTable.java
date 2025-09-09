@@ -72,7 +72,7 @@ public class VariableTable {
      */
     public boolean isAlreadyDefined(String name) {
         for(Variable variable : variables) {
-            if(variable.getName().equals(name))
+            if(variable.getName().equals(name) && !name.isEmpty())
                 return true;
         }
 
