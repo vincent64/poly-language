@@ -139,8 +139,9 @@ public final class Analyzer implements NodeModifier {
         if(methodDeclaration.getReturnType() != null && !hasReturned)
             new AnalyzingError.MissingReturnStatement(methodDeclaration);
 
-        //Skip if method is not constructor
-        if(!methodDeclaration.isConstructor())
+        //Skip if method is not constructor or class is an enum
+        if(!methodDeclaration.isConstructor()
+                || classSymbol.isEnum())
             return methodDeclaration;
 
         //Check whether the constructor should call super
