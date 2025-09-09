@@ -163,9 +163,15 @@ public final class CodeGenerator implements NodeVisitor {
             }
         }
 
-        //Visit static field declarations
-        if(methodDeclaration.isStaticConstructor())
+        //Generate static constructor content
+        if(methodDeclaration.isStaticConstructor()) {
+            //Visit enum constants
+            if(classDeclaration.isEnum())
+                classDeclaration.getConstantList().accept(this);
+
+            //Visit static field declarations
             visitFieldDeclarations(true);
+        }
 
         StatementBlock statementBlock = (StatementBlock) methodDeclaration.getStatementBlock();
         List<Statement> statements = statementBlock.getStatements();
