@@ -79,6 +79,14 @@ public abstract class ResolvingError extends Error {
         }
     }
 
+    public static class InvalidStaticEnum extends ResolvingError {
+        private static final String MESSAGE = "Enum cannot be static";
+
+        public InvalidStaticEnum(Node node) {
+            super(node, MESSAGE);
+        }
+    }
+
     public static class InvalidInnerDeclaration extends ResolvingError {
         private static final String MESSAGE = "Inner class can only be declared inside class or inner class";
 
