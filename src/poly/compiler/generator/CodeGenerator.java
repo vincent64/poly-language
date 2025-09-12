@@ -186,6 +186,21 @@ public final class CodeGenerator implements NodeVisitor {
             generatePutInstanceField(classSymbol.findField(String.valueOf(Keyword.EXPRESSION_OUTER), classSymbol));
         }
 
+        //Call enum superclass constructor
+        if(classSymbol.isEnum() && methodDeclaration.isConstructor()
+                && !(!statements.isEmpty() && statements.getFirst() instanceof ThisStatement)) {
+            //Generate implicit instructions
+            addInstruction(ALOAD_0);
+            addInstruction(ALOAD_1);
+            addInstruction(ILOAD_2);
+
+            ClassSymbol superclassSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
+            generateCallSpecialMethod(superclassSymbol.findEnumConstructor(new Type[0], classSymbol, methodDeclaration));
+
+            //Update current class reference
+            localTable.setInitializedThis(classSymbol);
+        }
+
         //Visit method body
         methodDeclaration.getStatementBlock().accept(this);
 
