@@ -323,6 +323,43 @@ public final class SymbolResolver {
     }
 
     /**
+     * Adds an enum class constructor to the given class symbol.
+     * @param classSymbol the class symbol
+     */
+    private void addEnumConstructor(ClassSymbol classSymbol) {
+        MethodSymbol constructorSymbol = MethodSymbol.generateEnumConstructor(classSymbol);
+
+        //Generate implicit types
+        Expression stringType = QualifiedName.fromClassName(ClassName.STRING);
+        PrimitiveType integerType = new PrimitiveType(null);
+        integerType.setKind(Primitive.Kind.INTEGER);
+
+        //Generate implicit parameters
+        Parameter parameter1 = new Parameter(null);
+        parameter1.setName("");
+        parameter1.setType(stringType);
+        Parameter parameter2 = new Parameter(null);
+        parameter2.setName("");
+        parameter2.setType(integerType);
+
+        //Generate method parameters list
+        ParameterList parameterList = new ParameterList(null);
+        parameterList.addParameter(parameter1);
+        parameterList.addParameter(parameter2);
+
+        //Generate method declaration
+        MethodDeclaration methodDeclaration = new MethodDeclaration(null);
+        methodDeclaration.setStatementBlock(new StatementBlock(null));
+        methodDeclaration.setParameterList(parameterList);
+        methodDeclaration.setConstructor();
+
+        //Add the constructor to the class symbol
+        classSymbol.addSymbol(constructorSymbol);
+
+        classDefinition.addMethodDefinition(new MethodDefinition(methodDeclaration, constructorSymbol));
+    }
+
+    /**
      * Updates the implicit main method declaration.
      * @param methodDeclaration the method declaration
      */
