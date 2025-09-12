@@ -96,6 +96,14 @@ public abstract class AnalyzingError extends Error {
         }
     }
 
+    public static class UnresolvableField extends AnalyzingError {
+        private static final String MESSAGE = "Cannot resolve field with name '%s'";
+
+        public UnresolvableField(Node node, String name) {
+            super(node, MESSAGE.formatted(name));
+        }
+    }
+
     public static class UnresolvableSymbol extends AnalyzingError {
         private static final String MESSAGE = "Cannot resolve symbol with name '%s'";
 
