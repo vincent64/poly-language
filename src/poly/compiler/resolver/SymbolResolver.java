@@ -2,6 +2,7 @@ package poly.compiler.resolver;
 
 import poly.compiler.analyzer.content.SpecialMethod;
 import poly.compiler.analyzer.table.ImportTable;
+import poly.compiler.analyzer.type.Primitive;
 import poly.compiler.analyzer.type.Void;
 import poly.compiler.error.ResolvingError;
 import poly.compiler.output.content.AccessModifier;
@@ -10,12 +11,12 @@ import poly.compiler.parser.tree.FieldDeclaration;
 import poly.compiler.parser.tree.MethodDeclaration;
 import poly.compiler.parser.tree.Node;
 import poly.compiler.parser.tree.expression.ArrayType;
+import poly.compiler.parser.tree.expression.Expression;
+import poly.compiler.parser.tree.expression.PrimitiveType;
 import poly.compiler.parser.tree.expression.QualifiedName;
 import poly.compiler.parser.tree.statement.StatementBlock;
 import poly.compiler.parser.tree.statement.SuperStatement;
-import poly.compiler.parser.tree.variable.ArgumentList;
-import poly.compiler.parser.tree.variable.Parameter;
-import poly.compiler.parser.tree.variable.ParameterList;
+import poly.compiler.parser.tree.variable.*;
 import poly.compiler.resolver.symbol.*;
 import poly.compiler.tokenizer.content.Keyword;
 import poly.compiler.util.ClassName;
@@ -116,6 +117,21 @@ public final class SymbolResolver {
             resolveInnerReference(classSymbol);
 
         boolean hasStaticField = false;
+
+        //Resolve enum constants
+        if(classSymbol.isEnum()) {
+            EnumConstantList constants = (EnumConstantList) classDeclaration.getConstantList();
+
+            for(Node constant : constants.getConstants()) {
+                FieldSymbol fieldSymbol = FieldSymbol.fromEnumConstant((EnumConstant) constant, classSymbol);
+
+                //Add the constant to the class symbol
+                if(!classSymbol.addSymbol(fieldSymbol))
+                    new ResolvingError.DuplicateEnumConstant(constant, fieldSymbol.getName());
+
+                hasStaticField = true;
+            }
+        }
 
         //Resolve field symbols
         for(Node node : classDeclaration.getFields()) {
