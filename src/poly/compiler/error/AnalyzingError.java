@@ -286,6 +286,14 @@ public abstract class AnalyzingError extends Error {
         }
     }
 
+    public static class InvalidEnumSuperCall extends AnalyzingError {
+        private static final String MESSAGE = "Cannot call superclass constructor inside enum";
+
+        public InvalidEnumSuperCall(Node node) {
+            super(node, MESSAGE);
+        }
+    }
+
     public static class InterfaceCreation extends AnalyzingError {
         private static final String MESSAGE = "Cannot instantiate interface";
 
