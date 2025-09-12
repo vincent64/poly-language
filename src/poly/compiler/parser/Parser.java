@@ -1613,11 +1613,11 @@ public final class Parser {
     private Node parseArgumentList() {
         ArgumentList node = new ArgumentList(Node.Meta.fromLeadingToken(currentToken));
 
-        //Return empty argument list
+        //Return empty arguments list
         if(isMatching(CLOSING_PARENTHESIS))
             return node;
 
-        //Parse arguments
+        //Parse arguments list
         do {
             node.addArgument(parseExpression());
         } while(matches(COMMA));
@@ -1628,11 +1628,11 @@ public final class Parser {
     private Node parseParameterList() {
         ParameterList node = new ParameterList(Node.Meta.fromLeadingToken(currentToken));
 
-        //Return empty parameter list
+        //Return empty parameters list
         if(isMatching(CLOSING_PARENTHESIS))
             return node;
 
-        //Parse parameter list
+        //Parse parameters list
         do {
             node.addParameter(parseParameter());
         } while(matches(COMMA));
