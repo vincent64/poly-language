@@ -170,6 +170,17 @@ public final class SymbolResolver {
                 }
             }
 
+            //Make sure enum constructors are implicitly private
+            if(classSymbol.isEnum() && methodSymbol.isConstructor()) {
+                if(methodSymbol.getAccessModifier() != AccessModifier.PRIVATE
+                        && methodSymbol.getAccessModifier() != AccessModifier.DEFAULT)
+                    new ResolvingError.InvalidEnumConstructor(node, methodSymbol);
+                else {
+                    //Set constructor as implicitly private
+                    methodSymbol = methodSymbol.asPrivate();
+                }
+            }
+
             //Set method as static if class is static
             if(classSymbol.isStatic())
                 methodSymbol = methodSymbol.asStatic();
