@@ -216,12 +216,17 @@ public final class SymbolResolver {
         }
 
         //Make sure there is at least one constructor
-        if(!hasConstructor && !classSymbol.isInterface() && !classSymbol.isStatic())
+        if(!hasConstructor && !classSymbol.isInterface()
+                && !classSymbol.isStatic() && !classSymbol.isEnum())
             new ResolvingError.MissingConstructor(classDeclaration);
 
         //Add private constructor for static class
         if(classSymbol.isStatic())
             addConstructor(classSymbol);
+
+        //Add private constructor for enum class with no constructors
+        if(!hasConstructor && classSymbol.isEnum())
+            addEnumConstructor(classSymbol);
 
         //Add static constructor for static fields
         if(hasStaticField)
