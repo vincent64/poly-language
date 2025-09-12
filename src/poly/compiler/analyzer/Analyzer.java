@@ -557,6 +557,10 @@ public final class Analyzer implements NodeModifier {
         if(!currentMethod.isConstructor())
             new AnalyzingError.InvalidConstructorCall(superStatement);
 
+        //Make sure the class is not an enum
+        if(classSymbol.isEnum())
+            new AnalyzingError.InvalidEnumSuperCall(superStatement);
+
         //Visit argument list
         isInitialized = false;
         superStatement.setArgumentList(superStatement.getArgumentList().accept(this));
