@@ -338,4 +338,28 @@ public final class SymbolResolver {
         ParameterList parameterList = (ParameterList) methodDeclaration.getParameterList();
         parameterList.addParameter(parameter);
     }
+
+    /**
+     * Updates the given enum class constructor with the implicit parameters.
+     * @param methodDeclaration the method declaration
+     */
+    private void updateEnumConstructorParameter(MethodDeclaration methodDeclaration) {
+        //Generate implicit types
+        Expression stringType = QualifiedName.fromClassName(ClassName.STRING);
+        PrimitiveType integerType = new PrimitiveType(null);
+        integerType.setKind(Primitive.Kind.INTEGER);
+
+        //Generate implicit parameters
+        Parameter parameter1 = new Parameter(null);
+        parameter1.setName("");
+        parameter1.setType(stringType);
+        Parameter parameter2 = new Parameter(null);
+        parameter2.setName("");
+        parameter2.setType(integerType);
+
+        //Generate implicit enum parameters
+        ParameterList parameterList = (ParameterList) methodDeclaration.getParameterList();
+        parameterList.addFirstParameter(parameter2);
+        parameterList.addFirstParameter(parameter1);
+    }
 }
