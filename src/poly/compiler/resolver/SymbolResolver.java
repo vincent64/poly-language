@@ -199,6 +199,12 @@ public final class SymbolResolver {
                 updateMainMethodDeclaration((MethodDeclaration) node);
             }
 
+            //Add implicit parameters to constructor if class is an enum
+            if(classSymbol.isEnum() && ((MethodDeclaration) node).isConstructor()) {
+                methodSymbol = methodSymbol.asEnumConstructor();
+                updateEnumConstructorParameter((MethodDeclaration) node);
+            }
+
             //Add the method to the class symbol
             if(!classSymbol.addSymbol(methodSymbol))
                 new ResolvingError.DuplicateMethod(node, methodSymbol);
