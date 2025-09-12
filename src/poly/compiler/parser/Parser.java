@@ -1643,9 +1643,13 @@ public final class Parser {
     private Node parseParameter() {
         Parameter node = new Parameter(Node.Meta.fromLeadingToken(currentToken));
 
-        //Check if parameter is constant
-        if(matches(VAR_CONST))
-            node.setConstant();
+        //Match const or attribute keywords
+        if(isMatching(VAR_CONST) || isMatching(VAR_ATTRIBUTE)) {
+            if(matches(VAR_CONST))
+                node.setConstant();
+            if(matches(VAR_ATTRIBUTE))
+                node.setAttribute();
+        }
 
         //Parse parameter type
         node.setType(parseType());
