@@ -1608,14 +1608,28 @@ public final class Analyzer implements NodeModifier {
 
     @Override
     public Node visitParameter(Parameter parameter) {
+        String parameterName = parameter.getName();
+
         //Make sure the variable name is not already defined
-        if(variableTable.isAlreadyDefined(parameter.getName()))
+        if(variableTable.isAlreadyDefined(parameterName))
             new AnalyzingError.DuplicateVariable(parameter);
 
         Type type = getTypeFromNode(parameter.getType());
 
         //Add the variable to the table
-        variableTable.addVariable(type, parameter.getName(), parameter.isConstant());
+        variableTable.addVariable(type, parameterName, parameter.isConstant());
+
+        if(parameter.isAttribute()) {
+            FieldSymbol fieldSymbol = classSymbol.findField(parameterName, classSymbol);
+
+            //Make sure there is a corresponding field with the same name
+            if(fieldSymbol == null || !fieldSymbol.getClassSymbol().equals(classSymbol))
+                new AnalyzingError.UnresolvableField(parameter, parameterName);
+
+            //Make sure the field is not constant if method is not constructor
+            if(fieldSymbol.isConstant() && !currentMethod.isConstructor())
+                new AnalyzingError.InvalidConstantAssignment(parameter, parameterName);
+        }
 
         return parameter;
     }
