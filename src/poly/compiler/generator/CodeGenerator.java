@@ -488,7 +488,6 @@ public final class CodeGenerator implements NodeVisitor {
         addLineNumber(matchStatement);
 
         Branching branching = new Branching();
-
         List<Statement> cases = matchStatement.getCases();
 
         for(Node node : cases) {
@@ -516,6 +515,10 @@ public final class CodeGenerator implements NodeVisitor {
         //Resolve jumps to false-clause
         generateStackMapFrame();
         branching.resolveFalseJump(instructions, programCounter);
+
+        //Visit optional else case statement body
+        if(matchStatement.getElseCase() != null)
+            matchStatement.getElseCase().accept(this);
 
         generateStackMapFrame();
         branching.resolveJumps(instructions, programCounter);
