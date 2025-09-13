@@ -458,12 +458,29 @@ public final class CodeGenerator implements NodeVisitor {
             addInstruction(Instruction.forUnconditionalJump(programCounter));
         }
 
+        //Resolve else case branch
+        if(switchStatement.getElseCase() != null) {
+            //Resolve default jump index
+            generateStackMapFrame();
+            instructions.set(instructionOffset, new Instruction.Builder(4)
+                    .add(programCounter - switchOffset)
+                    .build());
+
+            //Visit else case statement block
+            switchStatement.getElseCase().accept(this);
+
+            branching.addJumpIndex(instructions.size(), programCounter);
+            addInstruction(Instruction.forUnconditionalJump(programCounter));
+        }
+
         //Resolve default jumps
         generateStackMapFrame();
         branching.resolveJumps(instructions, programCounter);
-        instructions.set(instructionOffset, new Instruction.Builder(4)
-                .add(programCounter - switchOffset)
-                .build());
+        if(switchStatement.getElseCase() == null) {
+            instructions.set(instructionOffset, new Instruction.Builder(4)
+                    .add(programCounter - switchOffset)
+                    .build());
+        }
     }
 
     @Override
