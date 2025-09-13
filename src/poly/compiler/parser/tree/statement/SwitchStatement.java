@@ -17,6 +17,7 @@ import java.util.List;
 public class SwitchStatement extends Statement {
     private Expression expression;
     private List<Statement> cases;
+    private Statement elseCase;
 
     public SwitchStatement(Meta meta) {
         super(meta);
@@ -33,12 +34,20 @@ public class SwitchStatement extends Statement {
         cases.add(node);
     }
 
+    public void setElseCase(Statement node) {
+        elseCase = node;
+    }
+
     public Expression getExpression() {
         return expression;
     }
 
     public List<Statement> getCases() {
         return cases;
+    }
+
+    public Statement getElseCase() {
+        return elseCase;
     }
 
     @Override
@@ -58,6 +67,8 @@ public class SwitchStatement extends Statement {
         string.addNode(expression);
         string.addString("Cases:");
         string.addNodes(cases);
+        string.addString("Else case:");
+        string.addNode(elseCase);
 
         return string.toString();
     }
