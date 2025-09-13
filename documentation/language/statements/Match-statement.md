@@ -19,6 +19,14 @@ match {
 The conditions must be boolean expressions.
 
 A match-statement can have any amount of cases.
+Moreover, it is possible to declare a default case using the `else` keyword, as such :
+```poly
+match {
+    ... cases ...
+    else statementBlock
+}
+```
+The default case is executed when all other defined cases don't match.
 
 
 ## Example
