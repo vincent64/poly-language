@@ -13,6 +13,7 @@ Below is the list of reserved keywords, alphabetically sorted.
 ````poly
 assert
 async
+attr
 await
 bool
 break
@@ -29,6 +30,7 @@ double
 else
 enum
 exception
+ext
 false
 float
 fn
