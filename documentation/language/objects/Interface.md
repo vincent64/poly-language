@@ -23,7 +23,7 @@ Every method in an interface can either be bodyless/empty (i.e. with no implemen
 A bodyless method must be implemented and given a content by the class implementing the interface.
 On the contrary, a method with a default implementation may or may not be overriden, similar to a superclass method.
 
-Every method are implicitely public, and non-public are not permitted.
+Every method is implicitely public, and non-public are not permitted.
 
 Furthermore, an interface cannot have instance fields.
 Every field declared in an interface are implicitly static and constant.
