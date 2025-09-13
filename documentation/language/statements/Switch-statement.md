@@ -15,10 +15,18 @@ switch(variable) {
 }
 ```
 
-The variable and values must be either an integer type or a string.
+The variable and values must be either an integer type, a string or an enum instance.
 The values must be literal values.
 
 A switch-statement can have any amount of cases.
+Moreover, it is possible to declare a default case using the `else` keyword, as such :
+```poly
+switch(variable) {
+    ... cases ...
+    else statementBlock
+}
+```
+The default case is executed when all other defined cases don't match.
 
 
 ## Example
@@ -30,6 +38,7 @@ switch(resultCode) {
     case(403) Console.println("Forbidden");
     case(418) Console.println("I'm a teapot");
     case(500) Console.println("Server issue");
+    else Console.println("Unknown result code");
 }
 ```
 
