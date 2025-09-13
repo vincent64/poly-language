@@ -659,6 +659,10 @@ public final class Parser {
         while(isMatching(STATEMENT_CASE))
             statement.addCase(parseCase());
 
+        //Parse else case statement
+        if(matches(STATEMENT_ELSE))
+            statement.setElseCase(parseStatementBlock());
+
         //Match closing bracket
         match(CLOSING_CURLY_BRACKET);
 
