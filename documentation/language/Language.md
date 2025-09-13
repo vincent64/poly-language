@@ -8,7 +8,7 @@ It does not refer to the Poly standard library.
 
 ## Sections
 ### [Primitives](primitives/Primitives.md)
-### [Classes](objects/Objects.md)
+### [Objects](objects/Objects.md)
 ### [Statements](statements/Statements.md)
 ### [Expressions](expressions/Expressions.md)
 ### [Concurrency](concurrency/Concurrency.md)
