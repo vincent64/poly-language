@@ -175,10 +175,10 @@ public abstract class AnalyzingError extends Error {
         }
     }
 
-    public static class ExpectedLiteralExpression extends AnalyzingError {
-        private static final String MESSAGE = "Literal expression expected";
+    public static class ExpectedConstantExpression extends AnalyzingError {
+        private static final String MESSAGE = "Constant expression expected";
 
-        public ExpectedLiteralExpression(Node node) {
+        public ExpectedConstantExpression(Node node) {
             super(node, MESSAGE);
         }
     }
