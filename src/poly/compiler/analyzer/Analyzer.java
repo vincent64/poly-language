@@ -386,6 +386,10 @@ public final class Analyzer implements NodeModifier {
             matchBooleanExpression(((CaseStatement) cases.get(i)).getExpression());
         }
 
+        //Visit optional else case statement
+        if(matchStatement.getElseCase() != null)
+            matchStatement.setElseCase(matchStatement.getElseCase().accept(this));
+
         return matchStatement;
     }
 
