@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class MatchStatement extends Statement {
     private List<Statement> cases;
+    private Statement elseCase;
 
     public MatchStatement(Meta meta) {
         super(meta);
@@ -27,8 +28,16 @@ public class MatchStatement extends Statement {
         cases.add(node);
     }
 
+    public void setElseCase(Statement node) {
+        elseCase = node;
+    }
+
     public List<Statement> getCases() {
         return cases;
+    }
+
+    public Statement getElseCase() {
+        return elseCase;
     }
 
     @Override
@@ -46,6 +55,8 @@ public class MatchStatement extends Statement {
         NodeStringifier string = new NodeStringifier("MatchStatement");
         string.addString("Cases:");
         string.addNodes(cases);
+        string.addString("Else case:");
+        string.addNode(elseCase);
 
         return string.toString();
     }
