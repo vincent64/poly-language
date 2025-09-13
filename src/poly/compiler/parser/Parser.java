@@ -203,11 +203,11 @@ public final class Parser {
                 || isMatching(CLASS_INNER) || isMatching(CLASS_EXCEPTION)) {
             if(matches(CLASS_INTERFACE))
                 node.setInterface();
-            if(matches(CLASS_ENUM))
+            else if(matches(CLASS_ENUM))
                 node.setEnum();
-            if(matches(CLASS_INNER))
+            else if(matches(CLASS_INNER))
                 node.setInner();
-            if(matches(CLASS_EXCEPTION))
+            else if(matches(CLASS_EXCEPTION))
                 node.setException();
         }
 
@@ -937,27 +937,27 @@ public final class Parser {
 
             if(matches(Symbol.EQUAL))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT);
-            if(matches(ASSIGN_ADD))
+            else if(matches(ASSIGN_ADD))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_ADDITION);
-            if(matches(ASSIGN_SUB))
+            else if(matches(ASSIGN_SUB))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SUBTRACTION);
-            if(matches(ASSIGN_MUL))
+            else if(matches(ASSIGN_MUL))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_MULTIPLICATION);
-            if(matches(ASSIGN_DIV))
+            else if(matches(ASSIGN_DIV))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_DIVISION);
-            if(matches(ASSIGN_MOD))
+            else if(matches(ASSIGN_MOD))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_MODULO);
-            if(matches(ASSIGN_BITWISE_AND))
+            else if(matches(ASSIGN_BITWISE_AND))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_BITWISE_AND);
-            if(matches(ASSIGN_BITWISE_XOR))
+            else if(matches(ASSIGN_BITWISE_XOR))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_BITWISE_XOR);
-            if(matches(ASSIGN_BITWISE_OR))
+            else if(matches(ASSIGN_BITWISE_OR))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_BITWISE_OR);
-            if(matches(ASSIGN_SHIFT_LEFT))
+            else if(matches(ASSIGN_SHIFT_LEFT))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SHIFT_LEFT);
-            if(matches(ASSIGN_SHIFT_RIGHT))
+            else if(matches(ASSIGN_SHIFT_RIGHT))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SHIFT_RIGHT);
-            if(matches(ASSIGN_SHIFT_RIGHT_ARITHMETIC))
+            else if(matches(ASSIGN_SHIFT_RIGHT_ARITHMETIC))
                 assignmentExpression.setKind(AssignmentExpression.Kind.ASSIGNMENT_SHIFT_RIGHT_ARITHMETIC);
 
             assignmentExpression.setVariable(expression);
@@ -1068,11 +1068,11 @@ public final class Parser {
 
             if(matches(Operator.EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.EQUALITY_EQUAL);
-            if(matches(NOT_EQUAL))
+            else if(matches(NOT_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.EQUALITY_NOT_EQUAL);
-            if(matches(REFERENCE_EQUAL))
+            else if(matches(REFERENCE_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.REFERENCE_EQUAL);
-            if(matches(REFERENCE_NOT_EQUAL))
+            else if(matches(REFERENCE_NOT_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.REFERENCE_NOT_EQUAL);
 
             binaryExpression.setFirst(expression);
@@ -1093,13 +1093,13 @@ public final class Parser {
 
             if(matches(GREATER))
                 binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_GREATER);
-            if(matches(LESS))
+            else if(matches(LESS))
                 binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_LESS);
-            if(matches(GREATER_EQUAL))
+            else if(matches(GREATER_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_GREATER_EQUAL);
-            if(matches(LESS_EQUAL))
+            else if(matches(LESS_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_LESS_EQUAL);
-            if(matches(SPACESHIP))
+            else if(matches(SPACESHIP))
                 binaryExpression.setKind(BinaryExpression.Kind.COMPARISON_SPACESHIP);
 
             binaryExpression.setFirst(expression);
@@ -1119,7 +1119,7 @@ public final class Parser {
 
             if(matches(TYPE_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.TYPE_EQUAL);
-            if(matches(TYPE_NOT_EQUAL))
+            else if(matches(TYPE_NOT_EQUAL))
                 binaryExpression.setKind(BinaryExpression.Kind.TYPE_NOT_EQUAL);
 
             binaryExpression.setFirst(expression);
@@ -1139,9 +1139,9 @@ public final class Parser {
 
             if(matches(SHIFT_LEFT))
                 binaryExpression.setKind(BinaryExpression.Kind.BITWISE_SHIFT_LEFT);
-            if(matches(SHIFT_RIGHT))
+            else if(matches(SHIFT_RIGHT))
                 binaryExpression.setKind(BinaryExpression.Kind.BITWISE_SHIFT_RIGHT);
-            if(matches(SHIFT_RIGHT_ARITHMETIC))
+            else if(matches(SHIFT_RIGHT_ARITHMETIC))
                 binaryExpression.setKind(BinaryExpression.Kind.BITWISE_SHIFT_RIGHT_ARITHMETIC);
 
             binaryExpression.setFirst(expression);
@@ -1161,7 +1161,7 @@ public final class Parser {
 
             if(matches(ADD))
                 binaryExpression.setKind(BinaryExpression.Kind.OPERATION_ADDITION);
-            if(matches(SUB))
+            else if(matches(SUB))
                 binaryExpression.setKind(BinaryExpression.Kind.OPERATION_SUBTRACTION);
 
             binaryExpression.setFirst(expression);
@@ -1181,9 +1181,9 @@ public final class Parser {
 
             if(matches(MUL))
                 binaryExpression.setKind(BinaryExpression.Kind.OPERATION_MULTIPLICATION);
-            if(matches(DIV))
+            else if(matches(DIV))
                 binaryExpression.setKind(BinaryExpression.Kind.OPERATION_DIVISION);
-            if(matches(MOD))
+            else if(matches(MOD))
                 binaryExpression.setKind(BinaryExpression.Kind.OPERATION_MODULO);
 
             binaryExpression.setFirst(expression);
@@ -1202,13 +1202,13 @@ public final class Parser {
 
             if(matches(SUB))
                 unaryExpression.setType(UnaryExpression.Kind.OPERATION_NEGATE);
-            if(matches(LOGICAL_NOT))
+            else if(matches(LOGICAL_NOT))
                 unaryExpression.setType(UnaryExpression.Kind.LOGICAL_NOT);
-            if(matches(BITWISE_NOT))
+            else if(matches(BITWISE_NOT))
                 unaryExpression.setType(UnaryExpression.Kind.BITWISE_NOT);
-            if(matches(INCREMENT))
+            else if(matches(INCREMENT))
                 unaryExpression.setType(UnaryExpression.Kind.PRE_INCREMENT);
-            if(matches(DECREMENT))
+            else if(matches(DECREMENT))
                 unaryExpression.setType(UnaryExpression.Kind.PRE_DECREMENT);
 
             unaryExpression.setExpression(parseExpressionUnary());
@@ -1228,7 +1228,7 @@ public final class Parser {
 
             if(matches(INCREMENT))
                 unaryExpression.setType(UnaryExpression.Kind.POST_INCREMENT);
-            if(matches(DECREMENT))
+            else if(matches(DECREMENT))
                 unaryExpression.setType(UnaryExpression.Kind.POST_DECREMENT);
 
             unaryExpression.setExpression(expression);
@@ -1515,17 +1515,17 @@ public final class Parser {
         if(isPrimitiveKeyword(currentToken) && !isMatching(PRIMITIVE_BOOLEAN)) {
             if(matches(PRIMITIVE_BYTE))
                 expression.setPrimitiveKind(Primitive.Kind.BYTE);
-            if(matches(PRIMITIVE_SHORT))
+            else if(matches(PRIMITIVE_SHORT))
                 expression.setPrimitiveKind(Primitive.Kind.SHORT);
-            if(matches(PRIMITIVE_CHAR))
+            else if(matches(PRIMITIVE_CHAR))
                 expression.setPrimitiveKind(Primitive.Kind.CHAR);
-            if(matches(PRIMITIVE_INTEGER))
+            else if(matches(PRIMITIVE_INTEGER))
                 expression.setPrimitiveKind(Primitive.Kind.INTEGER);
-            if(matches(PRIMITIVE_LONG))
+            else if(matches(PRIMITIVE_LONG))
                 expression.setPrimitiveKind(Primitive.Kind.LONG);
-            if(matches(PRIMITIVE_FLOAT))
+            else if(matches(PRIMITIVE_FLOAT))
                 expression.setPrimitiveKind(Primitive.Kind.FLOAT);
-            if(matches(PRIMITIVE_DOUBLE))
+            else if(matches(PRIMITIVE_DOUBLE))
                 expression.setPrimitiveKind(Primitive.Kind.DOUBLE);
         } else new ParsingError.UnexpectedToken(currentToken);
 
@@ -1536,11 +1536,11 @@ public final class Parser {
         if(isAttribute(currentToken)) {
             if(matches(BITS))
                 expression.setKind(PrimitiveAttribute.Kind.BITS);
-            if(matches(BYTES))
+            else if(matches(BYTES))
                 expression.setKind(PrimitiveAttribute.Kind.BYTES);
-            if(matches(MINIMUM))
+            else if(matches(MINIMUM))
                 expression.setKind(PrimitiveAttribute.Kind.MINIMUM);
-            if(matches(MAXIMUM))
+            else if(matches(MAXIMUM))
                 expression.setKind(PrimitiveAttribute.Kind.MAXIMUM);
         } else new ParsingError.UnexpectedToken(currentToken);
 
@@ -1647,7 +1647,7 @@ public final class Parser {
         if(isMatching(VAR_CONST) || isMatching(VAR_ATTRIBUTE)) {
             if(matches(VAR_CONST))
                 node.setConstant();
-            if(matches(VAR_ATTRIBUTE))
+            else if(matches(VAR_ATTRIBUTE))
                 node.setAttribute();
         }
 
