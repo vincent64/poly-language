@@ -66,6 +66,7 @@ public class Keyword {
 
     //Variable keywords
     public static final char[] VAR_CONST = {'c', 'o', 'n', 's', 't'};
+    public static final char[] VAR_ATTRIBUTE = {'a', 't', 't', 'r'};
 
     //Header keywords
     public static final char[] PACKAGE = {'p', 'a', 'c', 'k', 'a', 'g', 'e'};
@@ -89,7 +90,7 @@ public class Keyword {
             STATEMENT_TRY, STATEMENT_CATCH, STATEMENT_THROW,
             CLASS, CLASS_NEW, CLASS_INTERFACE, CLASS_ENUM, CLASS_INNER, CLASS_EXCEPTION,
             METHOD, METHOD_VOID, METHOD_CONSTRUCTOR, METHOD_OPERATOR, METHOD_NULLIFIER,
-            VAR_CONST,
+            VAR_CONST, VAR_ATTRIBUTE,
             PACKAGE, IMPORT, DEFINE,
             CONCURRENCY_ASYNC, CONCURRENCY_AWAIT, CONCURRENCY_THREAD
     };
