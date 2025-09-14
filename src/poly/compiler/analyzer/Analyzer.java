@@ -339,12 +339,8 @@ public final class Analyzer implements NodeModifier {
 
         Expression expression = switchStatement.getExpression();
 
-        //Make sure the expression is a variable expression
-        if(!isVariableExpression(expression))
-            new AnalyzingError.ExpectedVariableExpression(expression);
-
         //Make sure the expression is valid
-        if(!(expression.getExpressionType() instanceof Primitive primitive) || !primitive.isIntegerType())
+        if(!(expression.getExpressionType() instanceof Primitive primitive && primitive.isIntegerType()))
             new AnalyzingError.InvalidSwitchExpression(expression);
 
         List<Statement> cases = switchStatement.getCases();
