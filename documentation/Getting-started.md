@@ -49,7 +49,7 @@ Your Poly code needs an entry point to be executed. This entry point is referred
 The documentation for methods is available [here](language/objects/Method.md), but you don't need for now.
 The main method is a special method which can be declared in your main class as such :
 ```poly
-class+ HelloWorld {
+class+ # HelloWorld {
     fn+ void main() {
         
     }
@@ -68,7 +68,7 @@ In order to have a literal string, we need to add a `"` before and after the tex
 
 Printing hello world in our first Poly code would look like this :
 ```poly
-class+ HelloWorld {
+class+ # HelloWorld {
     fn+ void main() {
         Console.println("Hello World !");
     }
