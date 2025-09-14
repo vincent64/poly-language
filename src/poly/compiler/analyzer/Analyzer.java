@@ -353,8 +353,9 @@ public final class Analyzer implements NodeModifier {
             CaseStatement caseStatement = (CaseStatement) cases.get(i);
             Expression caseExpression = caseStatement.getExpression();
 
-            if(!(caseExpression instanceof Literal))
-                new AnalyzingError.ExpectedLiteralExpression(caseExpression);
+            //Make sure the case expression is constant
+            if(!isConstantExpression(caseExpression))
+                new AnalyzingError.ExpectedConstantExpression(caseExpression);
 
             //Make sure the case expression type is valid
             if(!caseExpression.getExpressionType().equals(expression.getExpressionType()))
@@ -2194,6 +2195,15 @@ public final class Analyzer implements NodeModifier {
                 || node instanceof QualifiedName
                 || (node instanceof MemberAccess memberAccess
                     && memberAccess.getAccessor() instanceof SimpleName);
+    }
+
+    /**
+     * Returns whether the given expression is a constant expression.
+     * @param expression the expression
+     * @return true if the expression is a constant expression
+     */
+    private boolean isConstantExpression(Expression expression) {
+        return expression instanceof Literal;
     }
 
     /**
