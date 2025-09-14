@@ -62,6 +62,7 @@ public class Keyword {
     public static final char[] METHOD_VOID = {'v', 'o', 'i', 'd'};
     public static final char[] METHOD_CONSTRUCTOR = {'c', 'o', 'n', 's', 't', 'r', 'u', 'c', 't', 'o', 'r'};
     public static final char[] METHOD_OPERATOR = {'o', 'p'};
+    public static final char[] METHOD_EXTERNAL = {'e', 'x', 't'};
     public static final char[] METHOD_NULLIFIER = {'n', 'u', 'l', 'l', 'i', 'f', 'i', 'e', 'r'};
 
     //Variable keywords
@@ -89,7 +90,7 @@ public class Keyword {
             STATEMENT_ASSERT, STATEMENT_CONTINUE, STATEMENT_BREAK, STATEMENT_FOREACH,
             STATEMENT_TRY, STATEMENT_CATCH, STATEMENT_THROW,
             CLASS, CLASS_NEW, CLASS_INTERFACE, CLASS_ENUM, CLASS_INNER, CLASS_EXCEPTION,
-            METHOD, METHOD_VOID, METHOD_CONSTRUCTOR, METHOD_OPERATOR, METHOD_NULLIFIER,
+            METHOD, METHOD_VOID, METHOD_CONSTRUCTOR, METHOD_OPERATOR, METHOD_EXTERNAL, METHOD_NULLIFIER,
             VAR_CONST, VAR_ATTRIBUTE,
             PACKAGE, IMPORT, DEFINE,
             CONCURRENCY_ASYNC, CONCURRENCY_AWAIT, CONCURRENCY_THREAD
