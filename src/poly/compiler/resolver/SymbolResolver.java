@@ -20,6 +20,7 @@ import poly.compiler.parser.tree.variable.*;
 import poly.compiler.resolver.symbol.*;
 import poly.compiler.tokenizer.content.Keyword;
 import poly.compiler.util.ClassName;
+import poly.compiler.warning.ResolverWarning;
 
 import java.util.List;
 
@@ -181,6 +182,10 @@ public final class SymbolResolver {
                         && methodSymbol.getAccessModifier() != AccessModifier.DEFAULT)
                     new ResolvingError.InvalidInterfaceMethod(node, methodSymbol);
                 else {
+                    //Warn if method is already public
+                    if(methodSymbol.getAccessModifier() == AccessModifier.PUBLIC)
+                        new ResolverWarning.RedundantPublicInterface(node);
+
                     //Set method as implicitly public
                     methodSymbol = methodSymbol.asPublic();
                 }
