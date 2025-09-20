@@ -87,6 +87,7 @@ public final class ClassSymbol extends Symbol {
      */
     public static ClassSymbol fromClassFile(ClassFile classFile, Symbol ownerSymbol, PackageSymbol packageSymbol) {
         ClassName className = ClassName.fromStringQualifiedName(classFile.getClassQualifiedName());
+        String superclassName = classFile.getSuperclassQualifiedName();
 
         return new ClassSymbol(classFile.getAccessModifier(),
                 classFile.isInterface() ? Kind.INTERFACE
@@ -97,7 +98,9 @@ public final class ClassSymbol extends Symbol {
                 false,
                 classFile.isConstant(),
                 className,
-                null,
+                superclassName == null
+                        ? null
+                        : ClassName.fromStringQualifiedName(superclassName),
                 new ArrayList<>(),
                 ownerSymbol,
                 packageSymbol);
