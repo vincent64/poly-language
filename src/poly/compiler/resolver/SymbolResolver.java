@@ -197,6 +197,10 @@ public final class SymbolResolver {
                         && methodSymbol.getAccessModifier() != AccessModifier.DEFAULT)
                     new ResolvingError.InvalidEnumConstructor(node, methodSymbol);
                 else {
+                    //Warn if constructor is already private
+                    if(methodSymbol.getAccessModifier() == AccessModifier.PRIVATE)
+                        new ResolverWarning.RedundantPrivateEnum(node);
+
                     //Set constructor as implicitly private
                     methodSymbol = methodSymbol.asPrivate();
                 }
