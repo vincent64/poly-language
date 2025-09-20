@@ -176,7 +176,7 @@ public final class DependencyResolver {
                 //Make sure the method is not constant
                 if(overridenMethod.isConstant()) {
                     new ResolvingError.InvalidConstantOverride(classDefinition.getClassDeclaration(),
-                            methodSymbol, classDefinition.getClassSymbol().getName());
+                            methodSymbol, overridenMethod.getClassSymbol().getClassQualifiedName());
                 }
 
                 //Replace the method
