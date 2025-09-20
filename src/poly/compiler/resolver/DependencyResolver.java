@@ -83,7 +83,7 @@ public final class DependencyResolver {
         //Make sure the exception superclass is a subtype of exception
         if(classDefinition.getClassDeclaration().isException()
                 && !((ClassSymbol) classSymbol.getSuperclassSymbol()).isSubtypeOf(LibraryClasses.findClass(ClassName.RUNTIME_EXCEPTION)))
-            throw new RuntimeException();
+            new ResolvingError.InvalidExceptionSuperclass(classDefinition.getClassDeclaration());
     }
 
     /**
