@@ -289,4 +289,12 @@ public abstract class ResolvingError extends Error {
             super(node, MESSAGE);
         }
     }
+
+    public static class InvalidExceptionSuperclass extends ResolvingError {
+        private static final String MESSAGE = "Superclass must be a subtype of java.lang.RuntimeException";
+
+        public InvalidExceptionSuperclass(Node node) {
+            super(node, MESSAGE);
+        }
+    }
 }
