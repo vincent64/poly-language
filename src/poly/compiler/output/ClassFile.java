@@ -364,6 +364,23 @@ public class ClassFile implements Byteable {
     }
 
     /**
+     * Returns the superclass qualified name.
+     * @return the superclass qualified name (null if root)
+     */
+    public String getSuperclassQualifiedName() {
+        //Return root class case
+        if(superclassIndex == 0)
+            return null;
+
+        //Get superclass constant
+        Constant classConstant = constantPool.getConstant(superclassIndex);
+        short nameIndex = ByteArray.getShortFromByteArray(classConstant.getContent());
+        //Get superclass name constant
+        Constant nameConstant = constantPool.getConstant(nameIndex);
+        return new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+    }
+
+    /**
      * Returns the class constant pool.
      * @return the constant pool
      */
