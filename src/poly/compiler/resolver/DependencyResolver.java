@@ -137,10 +137,14 @@ public final class DependencyResolver {
 
         //Check superclass overriden methods
         if(!classSymbol.isRoot()) {
-            if(inheritedMethods.containsKey(superclassSymbol)) {
+            //Get overridable methods from already checked superclass
+            if(inheritedMethods.containsKey(superclassSymbol))
                 overridableMethods.addAll(inheritedMethods.get(superclassSymbol));
-            } else if(!classSymbol.isInterface() || superclassSymbol.isInterface()) {
+
+            //Check superclass and get overridable methods
+            else if(!classSymbol.isInterface() || superclassSymbol.isInterface()) {
                 checkOverride(superclassSymbol);
+                overridableMethods.addAll(inheritedMethods.get(superclassSymbol));
             }
         }
 
@@ -148,11 +152,12 @@ public final class DependencyResolver {
         for(Symbol symbol : classSymbol.getInterfaceSymbols()) {
             ClassSymbol interfaceSymbol = (ClassSymbol) symbol;
 
-            if(inheritedMethods.containsKey(interfaceSymbol)) {
-                overridableMethods.addAll(inheritedMethods.get(interfaceSymbol));
-            } else {
+            //Check interface
+            if(!inheritedMethods.containsKey(interfaceSymbol))
                 checkOverride(interfaceSymbol);
-            }
+
+            //Get overridable methods from interface
+            overridableMethods.addAll(inheritedMethods.get(interfaceSymbol));
         }
 
         //Check class overriden methods
