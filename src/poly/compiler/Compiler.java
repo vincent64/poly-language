@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class Compiler {
     /** The compiler current version. */
-    public static final String VERSION = "0.3";
+    public static final String VERSION = "0.4";
 
     /** The compiler starting message. */
     private static final String HEADER = """
