@@ -1645,6 +1645,9 @@ public final class Analyzer implements NodeModifier {
     public Node visitEnumConstantList(EnumConstantList constantList) {
         isStaticContext = true;
 
+        //Clear local variables table
+        variableTable.clear();
+
         //Visit every constant
         List<Node> constants = constantList.getConstants();
         for(int i = 0; i < constants.size(); i++)
