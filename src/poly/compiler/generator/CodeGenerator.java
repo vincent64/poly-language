@@ -696,6 +696,12 @@ public final class CodeGenerator implements NodeVisitor {
         //Retrieve this reference
         addInstruction(ALOAD_0);
 
+        //Load implicit enum arguments
+        if(classSymbol.isEnum()) {
+            addInstruction(ALOAD_1);
+            addInstruction(ILOAD_2);
+        }
+
         //Visit arguments list
         thisStatement.getArgumentList().accept(this);
 
