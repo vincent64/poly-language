@@ -546,7 +546,9 @@ public final class Analyzer implements NodeModifier {
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) thisStatement.getArgumentList());
 
         //Find constructor in current class
-        MethodSymbol constructor = classSymbol.findConstructor(argumentTypes, classSymbol, thisStatement);
+        MethodSymbol constructor = !classSymbol.isEnum()
+                ? classSymbol.findConstructor(argumentTypes, classSymbol, thisStatement)
+                : classSymbol.findEnumConstructor(argumentTypes, classSymbol, thisStatement);
 
         //Make sure there is a valid constructor
         if(constructor == null)
