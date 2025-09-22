@@ -702,7 +702,9 @@ public final class CodeGenerator implements NodeVisitor {
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) thisStatement.getArgumentList());
 
         //Find constructor in current class
-        MethodSymbol constructorSymbol = classSymbol.findConstructor(argumentTypes, classSymbol, thisStatement);
+        MethodSymbol constructorSymbol = !classSymbol.isEnum()
+                ? classSymbol.findConstructor(argumentTypes, classSymbol, thisStatement)
+                : classSymbol.findEnumConstructor(argumentTypes, classSymbol, thisStatement);
 
         //Generate instructions
         generateCallSpecialMethod(constructorSymbol);
