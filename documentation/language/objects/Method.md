@@ -19,6 +19,29 @@ fn int myMethod(int a, int b) { }
 ```
 
 What's inside the curly brackets is commonly called the _method's content_, or _method's body_.
+If the method's body contains a single statement, it is possible to omit the curly brackets.
+
+
+## Parameters
+A parameter is a variable that is used inside the method's body and whose value is the value passed as argument when calling the method.
+A method can have any amount of parameters, including none.
+Similar to a variable, a parameter can be declared constant using the `const` keyword.
+
+An _attribute parameter_ is a parameter that is also used to define a class field with the same name, with the same value.
+A parameter can be declared as attribute by using the `attr` keyword before the parameter type.
+
+In the example below, the method declarations are equivalent.
+```poly
+fn void setValue(attr int value) { ... }
+```
+```poly
+fn void setValues(int value) {
+    this.value = value;
+    ...
+}
+```
+
+A parameter cannot be both constant and an attribute.
 
 
 ## Content
@@ -82,5 +105,4 @@ Below is a table of the possible behavior modifiers and their description.
 
 
 ## Related
-
 ### [Operator overloading](Operator-overloading.md)
