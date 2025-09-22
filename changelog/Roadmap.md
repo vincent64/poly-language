@@ -9,18 +9,21 @@ Note that this file can change and some planned features may be removed at any t
 ## In development
 Features that are currently being worked :
 
-- Enums
+- External methods
+- Expression blocks
+- Datums
 
 
 ## Planned
 Features that are planned and will get added in the future :
 
-- Enums
 - Concurrency
+- Lambda
 
 
 ## Implemented
 Features that were recently implemented includes :
 
+- Enums
 - Exceptions, throw-statement, try-catch-statement
 - Default array initialization (array literal)
