@@ -1518,8 +1518,15 @@ public final class CodeGenerator implements NodeVisitor {
         Type type = getTypeFromNode(parameter.getType());
 
         //Add the variable to the table
-        variableTable.addVariable(type, parameter.getName(), parameter.isConstant());
+        Variable variable = variableTable.addVariable(type, parameter.getName(), parameter.isConstant());
         localTable.addLocal(type);
+
+        //Generate implicit attribute definition
+        if(parameter.isAttribute()) {
+            addInstruction(ALOAD_0);
+            addInstruction(Instruction.forLoading(variable));
+            generatePutField(classSymbol.findField(parameter.getName(), classSymbol));
+        }
     }
 
     @Override
