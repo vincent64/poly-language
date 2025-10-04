@@ -216,7 +216,7 @@ public final class SymbolResolver {
 
             //Generate implicit main method
             if(methodSymbol.getName().equals(SpecialMethod.Name.MAIN)
-                    && methodSymbol.getAccessModifier() == AccessModifier.PUBLIC
+                    && methodSymbol.getAccessModifier() == AccessModifier.DEFAULT
                     && methodSymbol.isStatic()
                     && methodSymbol.getReturnType() instanceof Void
                     && methodSymbol.getParameterCount() == 0) {
