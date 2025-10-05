@@ -39,7 +39,7 @@ public class ReturnStatement extends Statement {
     public String toString() {
         NodeStringifier string = new NodeStringifier("ReturnStatement");
         string.addString("Expression:");
-        string.addString(expression.toString());
+        string.addNode(expression);
 
         return string.toString();
     }
