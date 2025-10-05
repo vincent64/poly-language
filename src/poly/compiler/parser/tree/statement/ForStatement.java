@@ -15,7 +15,7 @@ public class ForStatement extends Statement {
     private Statement statement;
     private Expression condition;
     private Statement expression;
-    private Statement statementBlock;
+    private Statement body;
 
     public ForStatement(Meta meta) {
         super(meta);
@@ -33,8 +33,8 @@ public class ForStatement extends Statement {
         expression = node;
     }
 
-    public void setStatementBlock(Statement node) {
-        statementBlock = node;
+    public void setBody(Statement node) {
+        body = node;
     }
 
     public Statement getStatement() {
@@ -49,8 +49,8 @@ public class ForStatement extends Statement {
         return expression;
     }
 
-    public Statement getStatementBlock() {
-        return statementBlock;
+    public Statement getBody() {
+        return body;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ForStatement extends Statement {
         string.addString("Expression:");
         string.addNode(expression);
         string.addString("Body:");
-        string.addNode(statementBlock);
+        string.addNode(body);
 
         return string.toString();
     }

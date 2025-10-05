@@ -291,7 +291,7 @@ public final class Analyzer implements NodeModifier {
 
         //Visit statement body
         currentLoopLevel++;
-        forStatement.setStatementBlock(forStatement.getStatementBlock().accept(this));
+        forStatement.setBody(forStatement.getBody().accept(this));
         currentLoopLevel--;
 
         //Remove local variables added in this for-statement
