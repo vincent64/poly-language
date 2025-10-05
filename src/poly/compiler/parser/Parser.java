@@ -380,23 +380,11 @@ public final class Parser {
 
     //Parsing statements
 
-    private Statement parseStatementBlock() {
-        StatementBlock statement = new StatementBlock(Node.Meta.fromLeadingToken(currentToken));
-
-        //Parse block of statements
-        if(matches(OPENING_CURLY_BRACKET)) {
-            while(!isMatching(CLOSING_CURLY_BRACKET))
-                statement.addStatement(parseStatement());
-
-            match(CLOSING_CURLY_BRACKET);
-        } else {
-            statement.addStatement(parseStatement());
-        }
-
-        return statement;
-    }
-
     private Statement parseStatement() {
+        //Parse statements block
+        if(isMatching(OPENING_CURLY_BRACKET))
+            return parseStatementBlock();
+
         //Parse statements starting with a keyword
         if(isKeyword(currentToken)) {
             //Parse if-statement
@@ -464,11 +452,23 @@ public final class Parser {
             }
         }
 
-        //Parse dangling statements block
-        if(isMatching(OPENING_CURLY_BRACKET))
-            return parseStatementBlock();
-
         return parseVariableStatement();
+    }
+
+    private Statement parseStatementBlock() {
+        StatementBlock statement = new StatementBlock(Node.Meta.fromLeadingToken(currentToken));
+
+        //Parse block of statements
+        if(matches(OPENING_CURLY_BRACKET)) {
+            while(!isMatching(CLOSING_CURLY_BRACKET))
+                statement.addStatement(parseStatement());
+
+            match(CLOSING_CURLY_BRACKET);
+        } else {
+            statement.addStatement(parseStatement());
+        }
+
+        return statement;
     }
 
     private Statement parseVariableStatement() {
