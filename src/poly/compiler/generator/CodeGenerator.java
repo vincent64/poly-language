@@ -411,7 +411,7 @@ public final class CodeGenerator implements NodeVisitor {
             Literal.Integer value = (Literal.Integer) caseStatement.getExpression();
 
             //Add literal value to values
-            caseValues.put(value.getValue(), caseStatement.getStatementBlock());
+            caseValues.put(value.getValue(), caseStatement.getBody());
         }
 
         //Generate instruction
@@ -501,7 +501,7 @@ public final class CodeGenerator implements NodeVisitor {
             branching.resolveTrueJump(instructions, programCounter);
 
             //Visit case statement body
-            caseStatement.getStatementBlock().accept(this);
+            caseStatement.getBody().accept(this);
 
             generateStackMapFrame();
             branching.addJumpIndex(instructions.size(), programCounter);
@@ -1532,7 +1532,7 @@ public final class CodeGenerator implements NodeVisitor {
     @Override
     public void visitCaseStatement(CaseStatement caseStatement) {
         //Visit statements block
-        caseStatement.getStatementBlock().accept(this);
+        caseStatement.getBody().accept(this);
     }
 
     @Override

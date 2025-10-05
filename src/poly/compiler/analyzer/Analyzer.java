@@ -1681,7 +1681,7 @@ public final class Analyzer implements NodeModifier {
         caseStatement.setExpression(caseStatement.getExpression().accept(this));
 
         //Visit statement block
-        caseStatement.setStatementBlock(caseStatement.getStatementBlock().accept(this));
+        caseStatement.setBody(caseStatement.getBody().accept(this));
 
         return caseStatement;
     }

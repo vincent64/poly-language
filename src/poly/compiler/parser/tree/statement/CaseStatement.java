@@ -12,7 +12,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class CaseStatement extends Statement {
     private Expression expression;
-    private Statement statementBlock;
+    private Statement body;
 
     public CaseStatement(Meta meta) {
         super(meta);
@@ -22,16 +22,16 @@ public class CaseStatement extends Statement {
         expression = node;
     }
 
-    public void setStatementBlock(Statement node) {
-        statementBlock = node;
+    public void setBody(Statement node) {
+        body = node;
     }
 
     public Expression getExpression() {
         return expression;
     }
 
-    public Statement getStatementBlock() {
-        return statementBlock;
+    public Statement getBody() {
+        return body;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CaseStatement extends Statement {
         string.addString("Expression:");
         string.addNode(expression);
         string.addString("Body:");
-        string.addNode(statementBlock);
+        string.addNode(body);
 
         return string.toString();
     }
