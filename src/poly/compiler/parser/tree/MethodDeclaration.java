@@ -18,7 +18,7 @@ public class MethodDeclaration extends Node {
     private String name;
     private Node returnType;
     private Node parameterList;
-    private Statement statementBlock;
+    private Statement body;
     private boolean isStatic, isConstant;
     private boolean isConstructor, isStaticConstructor, isOperator;
     private boolean isEmpty;
@@ -66,11 +66,11 @@ public class MethodDeclaration extends Node {
     }
 
     /**
-     * Sets the method declaration statements block node.
-     * @param node the statements block node
+     * Sets the method declaration body node.
+     * @param node the body node
      */
-    public void setStatementBlock(Statement node) {
-        statementBlock = node;
+    public void setBody(Statement node) {
+        body = node;
     }
 
     /**
@@ -152,11 +152,11 @@ public class MethodDeclaration extends Node {
     }
 
     /**
-     * Returns the method declaration statements block node.
-     * @return the method statements block node
+     * Returns the method declaration body node.
+     * @return the method body node
      */
-    public Statement getStatementBlock() {
-        return statementBlock;
+    public Statement getBody() {
+        return body;
     }
 
     /**
@@ -233,7 +233,7 @@ public class MethodDeclaration extends Node {
         string.addString("Parameters list:");
         string.addNode(parameterList);
         string.addString("Body:");
-        string.addNode(statementBlock);
+        string.addNode(body);
 
         return string.toString();
     }

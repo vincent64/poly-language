@@ -173,7 +173,7 @@ public final class CodeGenerator implements NodeVisitor {
             visitFieldDeclarations(true);
         }
 
-        StatementBlock statementBlock = (StatementBlock) methodDeclaration.getStatementBlock();
+        StatementBlock statementBlock = (StatementBlock) methodDeclaration.getBody();
         List<Statement> statements = statementBlock.getStatements();
 
         //Visit parameters list
@@ -202,7 +202,7 @@ public final class CodeGenerator implements NodeVisitor {
         }
 
         //Visit method body
-        methodDeclaration.getStatementBlock().accept(this);
+        methodDeclaration.getBody().accept(this);
 
         //Generate implicit return instruction
         if(statements.isEmpty() || !(statements.getLast() instanceof ReturnStatement

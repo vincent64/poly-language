@@ -122,9 +122,9 @@ public final class Analyzer implements NodeModifier {
         methodDeclaration.setParameterList(methodDeclaration.getParameterList().accept(this));
 
         //Visit method body
-        methodDeclaration.setStatementBlock(methodDeclaration.getStatementBlock().accept(this));
+        methodDeclaration.setBody(methodDeclaration.getBody().accept(this));
 
-        StatementBlock statementBlock = (StatementBlock) methodDeclaration.getStatementBlock();
+        StatementBlock statementBlock = (StatementBlock) methodDeclaration.getBody();
         List<Statement> statements = statementBlock.getStatements();
 
         boolean hasReturned = false;
