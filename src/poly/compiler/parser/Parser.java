@@ -349,7 +349,7 @@ public final class Parser {
         }
 
         //Parse method content
-        node.setStatementBlock(parseStatementBlock());
+        node.setBody(parseStatementBlock());
 
         return node;
     }
@@ -543,11 +543,11 @@ public final class Parser {
         match(CLOSING_PARENTHESIS);
 
         //Parse statement body
-        statement.setStatementBlock(parseStatementBlock());
+        statement.setBody(parseStatement());
 
         //Parse else statement body
         if(matches(STATEMENT_ELSE))
-            statement.setElseStatementBlock(parseStatementBlock());
+            statement.setElseBody(parseStatement());
 
         return statement;
     }
@@ -575,7 +575,7 @@ public final class Parser {
         match(CLOSING_PARENTHESIS);
 
         //Parse statement body
-        statement.setStatementBlock(parseStatementBlock());
+        statement.setBody(parseStatement());
 
         return statement;
     }
@@ -592,7 +592,7 @@ public final class Parser {
         match(CLOSING_PARENTHESIS);
 
         //Parse statement body
-        statement.setStatementBlock(parseStatementBlock());
+        statement.setBody(parseStatement());
 
         return statement;
     }
@@ -604,7 +604,7 @@ public final class Parser {
         match(STATEMENT_DO);
 
         //Parse statement body
-        statement.setStatementBlock(parseStatementBlock());
+        statement.setBody(parseStatement());
 
         //Match while keyword
         match(STATEMENT_WHILE);
@@ -640,7 +640,7 @@ public final class Parser {
 
         //Parse else case statement
         if(matches(STATEMENT_ELSE))
-            statement.setElseCase(parseStatementBlock());
+            statement.setElseCase(parseStatement());
 
         //Match closing bracket
         match(CLOSING_CURLY_BRACKET);
@@ -661,7 +661,7 @@ public final class Parser {
 
         //Parse else case statement
         if(matches(STATEMENT_ELSE))
-            statement.setElseCase(parseStatementBlock());
+            statement.setElseCase(parseStatement());
 
         //Match closing bracket
         match(CLOSING_CURLY_BRACKET);
@@ -697,7 +697,7 @@ public final class Parser {
         match(STATEMENT_TRY);
 
         //Parse statement body
-        statement.setStatementBlock(parseStatementBlock());
+        statement.setBody(parseStatement());
 
         //Match catch keyword
         match(STATEMENT_CATCH);
@@ -708,7 +708,7 @@ public final class Parser {
         match(CLOSING_PARENTHESIS);
 
         //Parse catch statement body
-        statement.setCatchStatementBlock(parseStatementBlock());
+        statement.setCatchBody(parseStatement());
 
         return statement;
     }
@@ -818,7 +818,7 @@ public final class Parser {
         match(CLOSING_PARENTHESIS);
 
         //Parse case body
-        statement.setStatementBlock(parseStatementBlock());
+        statement.setBody(parseStatement());
 
         return statement;
     }
