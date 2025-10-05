@@ -310,7 +310,7 @@ public final class Analyzer implements NodeModifier {
 
         //Visit statement body
         currentLoopLevel++;
-        whileStatement.setStatementBlock(whileStatement.getStatementBlock().accept(this));
+        whileStatement.setBody(whileStatement.getBody().accept(this));
         currentLoopLevel--;
 
         return whileStatement;
