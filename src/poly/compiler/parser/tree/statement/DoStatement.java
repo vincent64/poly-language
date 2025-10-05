@@ -13,7 +13,7 @@ import poly.compiler.util.NodeStringifier;
  */
 public class DoStatement extends Statement {
     private Expression condition;
-    private Statement statementBlock;
+    private Statement body;
 
     public DoStatement(Meta meta) {
         super(meta);
@@ -23,16 +23,16 @@ public class DoStatement extends Statement {
         condition = node;
     }
 
-    public void setStatementBlock(Statement node) {
-        statementBlock = node;
+    public void setBody(Statement node) {
+        body = node;
     }
 
     public Expression getCondition() {
         return condition;
     }
 
-    public Statement getStatementBlock() {
-        return statementBlock;
+    public Statement getBody() {
+        return body;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DoStatement extends Statement {
         string.addString("Condition:");
         string.addNode(condition);
         string.addString("Body:");
-        string.addNode(statementBlock);
+        string.addNode(body);
 
         return string.toString();
     }

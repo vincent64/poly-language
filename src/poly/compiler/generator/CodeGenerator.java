@@ -376,7 +376,7 @@ public final class CodeGenerator implements NodeVisitor {
 
         //Visit statement body
         loopStack.add(branching);
-        doStatement.getStatementBlock().accept(this);
+        doStatement.getBody().accept(this);
         loopStack.removeLast();
 
         //Resolve jumps to neutral-clause

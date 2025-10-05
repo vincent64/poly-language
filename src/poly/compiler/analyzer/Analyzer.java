@@ -326,7 +326,7 @@ public final class Analyzer implements NodeModifier {
 
         //Visit statement block
         currentLoopLevel++;
-        doStatement.setStatementBlock(doStatement.getStatementBlock().accept(this));
+        doStatement.setBody(doStatement.getBody().accept(this));
         currentLoopLevel--;
 
         return doStatement;
