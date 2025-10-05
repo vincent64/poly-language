@@ -584,7 +584,7 @@ public final class CodeGenerator implements NodeVisitor {
         int startProgramCounter = programCounter;
 
         //Visit statement body
-        tryStatement.getStatementBlock().accept(this);
+        tryStatement.getBody().accept(this);
 
         generateStackMapFrame();
         branching.addJumpIndex(instructions.size(), programCounter);
@@ -611,7 +611,7 @@ public final class CodeGenerator implements NodeVisitor {
         addInstruction(Instruction.forStoring(variableTable.getLastVariable()));
 
         //Visit catch statement body
-        tryStatement.getCatchStatementBlock().accept(this);
+        tryStatement.getCatchBody().accept(this);
 
         //Remove local variables added in this try-statement
         localTable.remove(localTable.getCount() - previousLocalCount);

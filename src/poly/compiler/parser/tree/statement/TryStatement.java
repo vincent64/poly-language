@@ -11,32 +11,32 @@ import poly.compiler.util.NodeStringifier;
  * @author Vincent Philippe (@vincent64)
  */
 public class TryStatement extends Statement {
-    private Statement statementBlock;
-    private Statement catchStatementBlock;
+    private Statement body;
+    private Statement catchBody;
     private Node exceptionParameter;
 
     public TryStatement(Meta meta) {
         super(meta);
     }
 
-    public void setStatementBlock(Statement node) {
-        statementBlock = node;
+    public void setBody(Statement node) {
+        body = node;
     }
 
-    public void setCatchStatementBlock(Statement node) {
-        catchStatementBlock = node;
+    public void setCatchBody(Statement node) {
+        catchBody = node;
     }
 
     public void setExceptionParameter(Node node) {
         exceptionParameter = node;
     }
 
-    public Statement getStatementBlock() {
-        return statementBlock;
+    public Statement getBody() {
+        return body;
     }
 
-    public Statement getCatchStatementBlock() {
-        return catchStatementBlock;
+    public Statement getCatchBody() {
+        return catchBody;
     }
 
     public Node getExceptionParameter() {
@@ -57,9 +57,9 @@ public class TryStatement extends Statement {
     public String toString() {
         NodeStringifier string = new NodeStringifier("TryStatement");
         string.addString("Body:");
-        string.addNode(statementBlock);
+        string.addNode(body);
         string.addString("Catch body:");
-        string.addNode(catchStatementBlock);
+        string.addNode(catchBody);
         string.addString("Exception:");
         string.addNode(exceptionParameter);
 

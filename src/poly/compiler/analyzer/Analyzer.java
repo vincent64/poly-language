@@ -426,7 +426,7 @@ public final class Analyzer implements NodeModifier {
     @Override
     public Statement visitTryStatement(TryStatement tryStatement) {
         //Visit statement block
-        tryStatement.setStatementBlock(tryStatement.getStatementBlock().accept(this));
+        tryStatement.setBody(tryStatement.getBody().accept(this));
 
         //Get the amount of previous local variables
         int previousVariableCount = variableTable.getVariableCount();
@@ -448,7 +448,7 @@ public final class Analyzer implements NodeModifier {
             new AnalyzingError.TypeConversion(parameter, type, new Object(classSymbol));
 
         //Visit catch statement block
-        tryStatement.setCatchStatementBlock(tryStatement.getCatchStatementBlock().accept(this));
+        tryStatement.setCatchBody(tryStatement.getCatchBody().accept(this));
 
         //Remove local variables added in this try-statement
         variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
