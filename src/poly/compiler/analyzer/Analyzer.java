@@ -267,11 +267,11 @@ public final class Analyzer implements NodeModifier {
         matchBooleanExpression(ifStatement.getCondition());
 
         //Visit statement body
-        ifStatement.setStatementBlock(ifStatement.getStatementBlock().accept(this));
+        ifStatement.setBody(ifStatement.getBody().accept(this));
 
         //Visit else statement body
-        if(ifStatement.getElseStatementBlock() != null)
-            ifStatement.setElseStatementBlock(ifStatement.getElseStatementBlock().accept(this));
+        if(ifStatement.getElseBody() != null)
+            ifStatement.setElseBody(ifStatement.getElseBody().accept(this));
 
         return ifStatement;
     }

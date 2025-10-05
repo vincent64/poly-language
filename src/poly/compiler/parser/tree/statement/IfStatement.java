@@ -12,8 +12,8 @@ import poly.compiler.util.NodeStringifier;
  */
 public class IfStatement extends Statement {
     private Expression condition;
-    private Statement statementBlock;
-    private Statement elseStatementBlock;
+    private Statement body;
+    private Statement elseBody;
 
     public IfStatement(Meta meta) {
         super(meta);
@@ -23,24 +23,24 @@ public class IfStatement extends Statement {
         condition = node;
     }
 
-    public void setStatementBlock(Statement node) {
-        statementBlock = node;
+    public void setBody(Statement node) {
+        body = node;
     }
 
-    public void setElseStatementBlock(Statement node) {
-        elseStatementBlock = node;
+    public void setElseBody(Statement node) {
+        elseBody = node;
     }
 
     public Expression getCondition() {
         return condition;
     }
 
-    public Statement getStatementBlock() {
-        return statementBlock;
+    public Statement getBody() {
+        return body;
     }
 
-    public Statement getElseStatementBlock() {
-        return elseStatementBlock;
+    public Statement getElseBody() {
+        return elseBody;
     }
 
     @Override
@@ -59,9 +59,9 @@ public class IfStatement extends Statement {
         string.addString("Condition:");
         string.addNode(condition);
         string.addString("Body:");
-        string.addNode(statementBlock);
+        string.addNode(body);
         string.addString("Else body:");
-        string.addNode(elseStatementBlock);
+        string.addNode(elseBody);
 
         return string.toString();
     }

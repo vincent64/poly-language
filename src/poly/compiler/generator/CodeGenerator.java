@@ -268,9 +268,9 @@ public final class CodeGenerator implements NodeVisitor {
         branching.resolveTrueJump(instructions, programCounter);
 
         //Visit statement body
-        ifStatement.getStatementBlock().accept(this);
+        ifStatement.getBody().accept(this);
 
-        if(ifStatement.getElseStatementBlock() != null) {
+        if(ifStatement.getElseBody() != null) {
             branching.addJumpIndex(instructions.size(), programCounter);
             addInstruction(Instruction.forUnconditionalJump(programCounter));
         }
@@ -280,8 +280,8 @@ public final class CodeGenerator implements NodeVisitor {
         branching.resolveFalseJump(instructions, programCounter);
 
         //Visit else statement body
-        if(ifStatement.getElseStatementBlock() != null)
-            ifStatement.getElseStatementBlock().accept(this);
+        if(ifStatement.getElseBody() != null)
+            ifStatement.getElseBody().accept(this);
 
         generateStackMapFrame();
         branching.resolveJumps(instructions, programCounter);
