@@ -7,7 +7,7 @@ package poly.compiler.util;
  * integer and short values to the byte array.
  * @author Vincent Philippe (@vincent64)
  */
-public class ByteArray {
+public final class ByteArray {
     private static final int CHUNK_SIZE = 32;
     private byte[] array;
     private int size;
