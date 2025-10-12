@@ -13,8 +13,8 @@ import poly.compiler.resolver.symbol.MethodSymbol;
 import poly.compiler.resolver.symbol.Symbol;
 import poly.compiler.util.ByteArray;
 import poly.compiler.util.ClassName;
+import poly.compiler.util.ModifiedUTF8;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -148,7 +148,7 @@ public class ClassFile implements Byteable {
         short nameIndex = ByteArray.getShortFromByteArray(classConstant.getContent());
         //Get class name constant
         Constant nameConstant = constantPool.getConstant(nameIndex);
-        classQualifiedName = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+        classQualifiedName = ModifiedUTF8.decodeString(nameConstant.getContent());
     }
 
     /**
@@ -377,7 +377,7 @@ public class ClassFile implements Byteable {
         short nameIndex = ByteArray.getShortFromByteArray(classConstant.getContent());
         //Get superclass name constant
         Constant nameConstant = constantPool.getConstant(nameIndex);
-        return new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+        return ModifiedUTF8.decodeString(nameConstant.getContent());
     }
 
     /**
