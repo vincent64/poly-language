@@ -14,8 +14,8 @@ import poly.compiler.parser.tree.variable.ParameterList;
 import poly.compiler.resolver.LibraryClasses;
 import poly.compiler.util.ClassName;
 import poly.compiler.util.MethodStringifier;
+import poly.compiler.util.ModifiedUTF8;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -95,10 +95,10 @@ public final class MethodSymbol extends Symbol implements Comparable<MethodSymbo
         Constant descriptorConstant = constantPool.getConstant(method.getDescriptorIndex());
 
         //Get name from constant
-        String name = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+        String name = ModifiedUTF8.decodeString(nameConstant.getContent());
 
         //Get descriptor from constant
-        String descriptor = new String(descriptorConstant.getContent(), StandardCharsets.UTF_8);
+        String descriptor = ModifiedUTF8.decodeString(descriptorConstant.getContent());
 
         //Parse descriptor to get method types
         Type[] types = Descriptor.getTypesFromMethodDescriptor(descriptor.toCharArray());
