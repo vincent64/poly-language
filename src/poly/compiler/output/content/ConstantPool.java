@@ -2,8 +2,8 @@ package poly.compiler.output.content;
 
 import poly.compiler.output.Byteable;
 import poly.compiler.util.ByteArray;
+import poly.compiler.util.ModifiedUTF8;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +112,7 @@ public class ConstantPool implements Byteable {
      */
     public int addUTF8Constant(String value) {
         //Get UTF-8 byte content from char array
-        byte[] utf8 = value.getBytes(StandardCharsets.UTF_8);
+        byte[] utf8 = ModifiedUTF8.encodeBytes(value);
 
         //Create byte array containing the constant content
         ByteArray byteArray = new ByteArray();
