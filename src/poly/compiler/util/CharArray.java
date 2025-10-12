@@ -1,13 +1,11 @@
 package poly.compiler.util;
 
-import java.lang.Character;
-
 /**
  * The CharArray class. This class is used to create a dynamic array of characters,
  * where the size of the array expands according to the characters added to it.
  * @author Vincent Philippe (@vincent64)
  */
-public class CharArray {
+public final class CharArray {
     private static final int CHUNK_SIZE = 32;
     private char[] array;
     private int size;
