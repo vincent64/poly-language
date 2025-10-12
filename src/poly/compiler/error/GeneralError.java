@@ -36,4 +36,12 @@ public abstract class GeneralError extends Error {
             super(MESSAGE.formatted(type));
         }
     }
+
+    public static class InvalidUTF8Encoding extends GeneralError {
+        private static final String MESSAGE = "Invalid UTF-8 encoding detected when decoding class file";
+
+        public InvalidUTF8Encoding() {
+            super(MESSAGE);
+        }
+    }
 }
