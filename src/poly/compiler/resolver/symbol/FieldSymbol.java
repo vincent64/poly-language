@@ -9,8 +9,7 @@ import poly.compiler.parser.tree.FieldDeclaration;
 import poly.compiler.parser.tree.variable.EnumConstant;
 import poly.compiler.parser.tree.variable.VariableDeclaration;
 import poly.compiler.tokenizer.content.Keyword;
-
-import java.nio.charset.StandardCharsets;
+import poly.compiler.util.ModifiedUTF8;
 
 /**
  * The FieldSymbol class. This class is the symbol representation of a field.
@@ -84,10 +83,10 @@ public final class FieldSymbol extends Symbol {
         Constant descriptorConstant = constantPool.getConstant(field.getDescriptorIndex());
 
         //Get name from constant
-        String name = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+        String name = ModifiedUTF8.decodeString(nameConstant.getContent());
 
         //Get descriptor from constant
-        String descriptor = new String(descriptorConstant.getContent(), StandardCharsets.UTF_8);
+        String descriptor = ModifiedUTF8.decodeString(descriptorConstant.getContent());
 
         //Parse descriptor to get field type
         Type type = Descriptor.getTypeFromFieldDescriptor(descriptor.toCharArray());
