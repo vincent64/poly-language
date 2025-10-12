@@ -8,8 +8,8 @@ import poly.compiler.resolver.LibraryClasses;
 import poly.compiler.resolver.symbol.*;
 import poly.compiler.util.ByteArray;
 import poly.compiler.util.ClassName;
+import poly.compiler.util.ModifiedUTF8;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -147,7 +147,7 @@ public class ClassReader {
         //Get name constant
         Constant nameConstant = constantPool.getConstant(nameIndex);
 
-        return ClassName.fromStringQualifiedName(new String(nameConstant.getContent(), StandardCharsets.UTF_8));
+        return ClassName.fromStringQualifiedName(ModifiedUTF8.decodeString(nameConstant.getContent()));
     }
 
     /**
@@ -207,7 +207,7 @@ public class ClassReader {
 
         for(int i = 0; i < attributeCount; i++) {
             Constant nameConstant = constantPool.getConstant(readShort());
-            String name = new String(nameConstant.getContent(), StandardCharsets.UTF_8);
+            String name = ModifiedUTF8.decodeString(nameConstant.getContent());
 
             //Add inner class attribute
             if(name.equals(InnerClassesAttribute.NAME)) {
