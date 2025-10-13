@@ -348,6 +348,22 @@ public final class Parser {
             return node;
         }
 
+        //Check if method is single-expression
+        if(matches(Symbol.EQUAL)) {
+            ReturnStatement statement = new ReturnStatement(Node.Meta.fromLeadingToken(currentToken));
+            StatementBlock statementBlock = new StatementBlock(Node.Meta.fromLeadingToken(currentToken));
+
+            //Parse expression
+            statement.setExpression(parseExpression());
+            statementBlock.addStatement(statement);
+            node.setBody(statementBlock);
+
+            //Match semicolon at the end
+            match(SEMICOLON);
+
+            return node;
+        }
+
         //Parse method content
         node.setBody(parseStatementBlock());
 
