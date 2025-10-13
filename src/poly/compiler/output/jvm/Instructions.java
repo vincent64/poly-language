@@ -29,6 +29,9 @@ public class Instructions {
         public static final int JAVA_20 = 0x0000_0040;
         public static final int JAVA_21 = 0x0000_0041;
         public static final int JAVA_22 = 0x0000_0042;
+        public static final int JAVA_23 = 0x0000_0043;
+        public static final int JAVA_24 = 0x0000_0044;
+        public static final int JAVA_25 = 0x0000_0045;
     }
 
     /** No operation. */
