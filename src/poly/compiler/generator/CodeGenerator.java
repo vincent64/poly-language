@@ -1297,6 +1297,10 @@ public final class CodeGenerator implements NodeVisitor {
 
         //Generate instructions
         generateCallSpecialMethod(constructorSymbol);
+
+        //Replace uninitialized object reference
+        operandStack.pop(1);
+        operandStack.push(classType);
     }
 
     @Override
