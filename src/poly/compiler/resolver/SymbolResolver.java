@@ -328,7 +328,7 @@ public final class SymbolResolver {
 
         //Generate method declaration
         MethodDeclaration methodDeclaration = new MethodDeclaration(null);
-        methodDeclaration.setStatementBlock(statementBlock);
+        methodDeclaration.setBody(statementBlock);
         methodDeclaration.setParameterList(new ParameterList(null));
         methodDeclaration.setConstructor();
 
@@ -347,7 +347,7 @@ public final class SymbolResolver {
 
         //Generate static method declaration
         MethodDeclaration methodDeclaration = new MethodDeclaration(null);
-        methodDeclaration.setStatementBlock(new StatementBlock(null));
+        methodDeclaration.setBody(new StatementBlock(null));
         methodDeclaration.setParameterList(new ParameterList(null));
         methodDeclaration.setStaticConstructor();
         methodDeclaration.setStatic();
@@ -385,7 +385,7 @@ public final class SymbolResolver {
 
         //Generate method declaration
         MethodDeclaration methodDeclaration = new MethodDeclaration(null);
-        methodDeclaration.setStatementBlock(new StatementBlock(null));
+        methodDeclaration.setBody(new StatementBlock(null));
         methodDeclaration.setParameterList(parameterList);
         methodDeclaration.setConstructor();
 
