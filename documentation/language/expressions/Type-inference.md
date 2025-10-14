@@ -41,6 +41,16 @@ Matrix matrix = new(...):Matrix;
 ```
 
 
+## If-expression
+An if-expression will propagate the inferred type to its subexpressions when possible.
+The type is propagated only if it is an object type.
+
+In the example below, the type `Vector` is propagated to allow omiting the class construction type in the subexpressions :
+```poly
+Vector vector = if(isIdentity) new(1f, 0f, 0f) else new(0f);
+```
+
+
 ---
 
 
