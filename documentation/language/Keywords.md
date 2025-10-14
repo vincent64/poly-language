@@ -1,5 +1,5 @@
-# Reserved keywords
-**Reserved keywords** are keywords that cannot be used as identifier.
+# Keywords
+**Keywords** are words that are reserved and cannot be used as identifier.
 Most reserved keywords have a usage in the language, such as the `if` keyword, used to declare an _if-statement_.
 However, some reserved keyword do not have any current usage.
 
