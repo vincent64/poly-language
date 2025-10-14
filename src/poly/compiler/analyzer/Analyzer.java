@@ -2147,6 +2147,13 @@ public final class Analyzer implements NodeModifier {
             if(classCreation.getType() == null)
                 classCreation.setExpressionType(type);
         }
+
+        //Propagate type to if-expression
+        if(expression instanceof IfExpression ifExpression
+                && type.getKind() == Type.Kind.OBJECT) {
+            ifExpression.getExpression().setExpressionType(type);
+            ifExpression.getElseExpression().setExpressionType(type);
+        }
     }
 
     /**
