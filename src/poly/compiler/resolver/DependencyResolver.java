@@ -19,8 +19,8 @@ import java.util.*;
  * @author Vincent Philippe (@vincent64)
  */
 public final class DependencyResolver {
-    private static final HashMap<ClassSymbol, List<MethodSymbol>> inheritedMethods = new HashMap<>();
-    private static final HashMap<ClassSymbol, List<MethodSymbol>> implementationMethods = new HashMap<>();
+    private static final Map<ClassSymbol, List<MethodSymbol>> inheritedMethods = new HashMap<>();
+    private static final Map<ClassSymbol, List<MethodSymbol>> implementationMethods = new HashMap<>();
     private final ClassDefinition classDefinition;
 
     private DependencyResolver(ClassDefinition classDefinition) {
