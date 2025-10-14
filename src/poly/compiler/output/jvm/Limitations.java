@@ -12,4 +12,6 @@ public class Limitations {
     public static final int MAX_IDENTIFIER_LENGTH = 0xFFFF;
     public static final int MAX_PARAMETERS_COUNT = 0xFF;
     public static final int MAX_CONSTANT_POOL_ENTRY_COUNT = 0xFFFF;
+
+    private Limitations() { }
 }
