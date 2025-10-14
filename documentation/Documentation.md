@@ -15,7 +15,7 @@ This means that the documentation may change anytime there is an update.
 
 ## Sections
 ### [Language](language/Language.md)
-### [Poly standard libary](standard-library/Standard-library.md)
+### [Poly standard library](standard-library/Standard-library.md)
 
 
 ## Subsections
