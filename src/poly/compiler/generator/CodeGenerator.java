@@ -130,6 +130,13 @@ public final class CodeGenerator implements NodeVisitor {
     }
 
     /**
+     * Generates a stack map frame at the current program counter.
+     */
+    private void generateStackMapFrame() {
+        stackMapTable.addFrame(operandStack, localTable, programCounter);
+    }
+
+    /**
      * Generates and returns the bytecode for the given method declaration.
      * @param methodDeclaration the method declaration
      * @return the bytecode
@@ -2280,13 +2287,6 @@ public final class CodeGenerator implements NodeVisitor {
 
             case FLOAT -> addInstruction(F2D);
         }
-    }
-
-    /**
-     * Generates a stack map frame at the current program counter.
-     */
-    private void generateStackMapFrame() {
-        stackMapTable.addFrame(operandStack, localTable, programCounter);
     }
 
     /**
