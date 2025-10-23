@@ -1,0 +1,10 @@
+¦ The ScalarField interface describes a scalar field function definition
+¦ with a double vector as input and a double scalar value as output.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version 0.5
+interface+ ScalarField {
+    ¦ Calls the scalar field definition with the given double vector.
+    ¦ @param vector the double vector
+    ¦ @returns the output value
+    op double call(DoubleVector vector);
+}
