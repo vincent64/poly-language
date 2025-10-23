@@ -121,6 +121,15 @@ public final class CodeGenerator implements NodeVisitor {
     }
 
     /**
+     * Restores the given local variables state.
+     * @param variableState the variables state
+     */
+    private void restoreVariableState(VariableState variableState) {
+        localTable.remove(localTable.getCount() - variableState.getLocalCount());
+        variableTable.removeVariables(variableTable.getVariableCount() - variableState.getVariableCount());
+    }
+
+    /**
      * Generates and returns the bytecode for the given method declaration.
      * @param methodDeclaration the method declaration
      * @return the bytecode
@@ -256,9 +265,8 @@ public final class CodeGenerator implements NodeVisitor {
         for(Node node : statementBlock.getStatements())
             node.accept(this);
 
-        //Remove local variables added in this statement block
-        localTable.remove(localTable.getCount() - previousLocalCount);
-        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+        //Restore the variables state
+        restoreVariableState(variableState);
     }
 
     @Override
@@ -330,9 +338,8 @@ public final class CodeGenerator implements NodeVisitor {
 
         addInstruction(Instruction.forUnconditionalJump(jumpOffset - programCounter));
 
-        //Remove local variables added in this statement block
-        localTable.remove(localTable.getCount() - previousLocalCount);
-        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+        //Restore the variables state
+        restoreVariableState(variableState);
 
         //Resolve jumps to false-clause
         generateStackMapFrame();
@@ -619,8 +626,7 @@ public final class CodeGenerator implements NodeVisitor {
         tryStatement.getCatchBody().accept(this);
 
         //Remove local variables added in this try-statement
-        localTable.remove(localTable.getCount() - previousLocalCount);
-        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+        restoreVariableState(variableState);
 
         //Resolve unconditonal jump
         generateStackMapFrame();
@@ -1429,9 +1435,8 @@ public final class CodeGenerator implements NodeVisitor {
 
         addInstruction(Instruction.forUnconditionalJump(jumpOffset - programCounter));
 
-        //Remove local variables added in this statement block
-        localTable.remove(localTable.getCount() - previousLocalCount);
-        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+        //Restore the variables state
+        restoreVariableState(variableState);
 
         //Resolve jumps to false-clause
         generateStackMapFrame();
@@ -1476,9 +1481,8 @@ public final class CodeGenerator implements NodeVisitor {
 
         addInstruction(Instruction.forUnconditionalJump(jumpOffset - programCounter));
 
-        //Remove local variables added in this statement block
-        localTable.remove(localTable.getCount() - previousLocalCount);
-        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+        //Restore the variables state
+        restoreVariableState(variableState);
 
         //Resolve jumps to false-clause
         generateStackMapFrame();
