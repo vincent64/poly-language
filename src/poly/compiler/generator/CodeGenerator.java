@@ -113,6 +113,14 @@ public final class CodeGenerator implements NodeVisitor {
     }
 
     /**
+     * Retrieves the current local variables state to restore it later.
+     * @return the variables state
+     */
+    private VariableState retrieveVariableState() {
+        return new VariableState(localTable.getCount(), variableTable.getVariableCount());
+    }
+
+    /**
      * Generates and returns the bytecode for the given method declaration.
      * @param methodDeclaration the method declaration
      * @return the bytecode
@@ -241,9 +249,8 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitStatementBlock(StatementBlock statementBlock) {
         addLineNumber(statementBlock);
 
-        //Get the amount of previous local variables
-        int previousLocalCount = localTable.getCount();
-        int previousVariableCount = variableTable.getVariableCount();
+        //Retrieve the current variables state
+        VariableState variableState = retrieveVariableState();
 
         //Visit every statement
         for(Node node : statementBlock.getStatements())
@@ -291,9 +298,8 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitForStatement(ForStatement forStatement) {
         addLineNumber(forStatement);
 
-        //Get the amount of previous local variables
-        int previousLocalCount = localTable.getCount();
-        int previousVariableCount = variableTable.getVariableCount();
+        //Retrieve the current variables state
+        VariableState variableState = retrieveVariableState();
 
         //Visit variable initialization
         forStatement.getStatement().accept(this);
@@ -592,9 +598,8 @@ public final class CodeGenerator implements NodeVisitor {
 
         int endProgramCounter = programCounter;
 
-        //Get the amount of previous local variables
-        int previousLocalCount = localTable.getCount();
-        int previousVariableCount = variableTable.getVariableCount();
+        //Retrieve the current variables state
+        VariableState variableState = retrieveVariableState();
 
         Parameter parameter = (Parameter) tryStatement.getExceptionParameter();
         Object catchType = (Object) getTypeFromNode(parameter.getType());
@@ -1389,9 +1394,8 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitSumExpression(SumExpression sumExpression) {
         addLineNumber(sumExpression);
 
-        //Get the amount of previous local variables
-        int previousLocalCount = localTable.getCount();
-        int previousVariableCount = variableTable.getVariableCount();
+        //Retrieve the current variables state
+        VariableState variableState = retrieveVariableState();
 
         //Visit variable initialization
         sumExpression.getVariableInitialization().accept(this);
@@ -1438,9 +1442,8 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitProdExpression(ProdExpression prodExpression) {
         addLineNumber(prodExpression);
 
-        //Get the amount of previous local variables
-        int previousLocalCount = localTable.getCount();
-        int previousVariableCount = variableTable.getVariableCount();
+        //Retrieve the current variables state
+        VariableState variableState = retrieveVariableState();
 
         //Visit variable initialization
         prodExpression.getVariableInitialization().accept(this);
