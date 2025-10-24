@@ -127,16 +127,9 @@ public final class Analyzer implements NodeModifier {
         StatementBlock statementBlock = (StatementBlock) methodDeclaration.getBody();
         List<Statement> statements = statementBlock.getStatements();
 
-        boolean hasReturned = false;
-        for(Node statement : statements) {
-            if(statement instanceof ReturnStatement) {
-                hasReturned = true;
-                break;
-            }
-        }
-
         //Make sure there is a return statement
-        if(methodDeclaration.getReturnType() != null && !hasReturned)
+        if(methodDeclaration.getReturnType() != null
+                && (statements.isEmpty() || !isTerminalStatement(statements.getLast())))
             new AnalyzingError.MissingReturnStatement(methodDeclaration);
 
         //Skip if method is not constructor or class is an enum
@@ -2273,5 +2266,51 @@ public final class Analyzer implements NodeModifier {
             new AnalyzingError.UnresolvableClass(expression, ClassName.THROWABLE.toString());
 
         return type.isAssignableTo(new Object(classSymbol));
+    }
+
+    /**
+     * Returns whether the given statement is a terminal statement.
+     * A statement is terminal if it always terminates with either a return-statement or a throw-statement.
+     * @param statement the statement
+     * @return true if the statement is terminal
+     */
+    private boolean isTerminalStatement(Statement statement) {
+        //Return true for simple return/throw statement
+        if(statement instanceof ReturnStatement || statement instanceof ThrowStatement)
+            return true;
+
+        //Check if the last statement of statement block is terminal
+        else if(statement instanceof StatementBlock statementBlock && !statementBlock.getStatements().isEmpty())
+            return isTerminalStatement(statementBlock.getStatements().getLast());
+
+        //Check if body and else-body are both terminal
+        else if(statement instanceof IfStatement ifStatement && ifStatement.getElseBody() != null)
+            return isTerminalStatement(ifStatement.getBody()) && isTerminalStatement(ifStatement.getElseBody());
+
+        //Check if body and catch-body are both terminal
+        else if(statement instanceof TryStatement tryStatement)
+            return isTerminalStatement(tryStatement.getBody()) && isTerminalStatement(tryStatement.getCatchBody());
+
+            //Check if cases and else-case are all terminal
+        else if(statement instanceof SwitchStatement switchStatement && switchStatement.getElseCase() != null) {
+            for(Statement caseStatement : switchStatement.getCases()) {
+                if(!isTerminalStatement(((CaseStatement) caseStatement).getBody()))
+                    return false;
+            }
+
+            return isTerminalStatement(switchStatement.getElseCase());
+        }
+
+        //Check if cases and else-case are all terminal
+        else if(statement instanceof MatchStatement matchStatement && matchStatement.getElseCase() != null) {
+            for(Statement caseStatement : matchStatement.getCases()) {
+                if(!isTerminalStatement(((CaseStatement) caseStatement).getBody()))
+                    return false;
+            }
+
+            return isTerminalStatement(matchStatement.getElseCase());
+        }
+
+        return false;
     }
 }
