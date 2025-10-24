@@ -1,0 +1,115 @@
+¦ The Acceleration class represents a physical measure of acceleration.
+¦ It provides convenient operations between accelerations and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the acceleration value.
+¦ The default unit of an acceleration is the meter per second squared.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Acceleration(Measure) {
+    ¦ The constant acceleration of the Earth's gravity.
+    +# const Acceleration EARTH_GRAVITY = new(1d, Unit.G);
+    ¦ The constant acceleration of the Moon's gravity.
+    +# const Acceleration MOON_GRAVITY = new(0.1654d, Unit.G);
+
+    ¦ Constructs an acceleration with the given value and unit.
+    ¦ @param value the acceleration value
+    ¦ @param unit the acceleration unit
+    fn+ constructor(const double value, Unit unit)
+        super(value * unit.factor);
+    
+    ¦ Constructs an acceleration with the given value in the default unit.
+    ¦ @param value the acceleration value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current acceleration with the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns the resulting acceleration
+    op+ Acceleration +(Acceleration that) = new(value + that.value);
+
+    ¦ Subtracts the current acceleration to the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns the resulting acceleration
+    op+ Acceleration -(Acceleration that) = new(value - that.value);
+
+    ¦ Multiplies the current acceleration with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting acceleration
+    op+ Acceleration *(double value) = new(this.value * value);
+
+    ¦ Divides the current acceleration with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting acceleration
+    op+ Acceleration /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current acceleration with the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns the resulting acceleration
+    op+ Acceleration %(Acceleration that) = new(value % that.value);
+
+    ¦ Multiplies the current acceleration with the given mass.
+    ¦ @param that the mass
+    ¦ @returns the resulting force
+    op+ Force *(Mass that) = new(value * that.value);
+
+    ¦ Returns whether the current acceleration is equal to the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns true if the accelerations are equal
+    op+ bool ==(Acceleration that) = value == that.value;
+
+    ¦ Returns whether the current acceleration is not equal to the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns true if the accelerations are not equal
+    op+ bool !=(Acceleration that) = value != that.value;
+
+    ¦ Returns whether the current acceleration is greater than the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns true if the current acceleration is greater
+    op+ bool >(Acceleration that) = value > that.value;
+
+    ¦ Returns whether the current acceleration is less than the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns true if the current acceleration is less
+    op+ bool <(Acceleration that) = value < that.value;
+
+    ¦ Returns whether the current acceleration is greater or equal that the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns true if the current acceleration is greater or equal
+    op+ bool >=(Acceleration that) = value >= that.value;
+
+    ¦ Returns whether the current acceleration is less or equal than the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns true if the current acceleration is less or equal
+    op+ bool <=(Acceleration that) = value <= that.value;
+
+    ¦ Returns the acceleration value in the given unit.
+    ¦ @param unit the acceleration unit
+    ¦ @returns the acceleration value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the acceleration with the given unit.
+    ¦ @param unit the acceleration unit
+    ¦ @returns the acceleration string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the acceleration with the default unit (meter).
+    ¦ @returns the acceleration string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Acceleration && this == object:Acceleration;
+
+    ¦ The Acceleration.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the acceleration value.
+    ¦ The default unit of an acceleration value is the meter per second squared.
+    enum+ Unit {
+        METER_PER_SECOND_2(1d, "m/s²"),
+        FEET_PER_SECOND_2(3.280_839_9d, "ft/s²"),
+        G(9.806_65d, "g"),
+        GAL(0.01d, "Gal");
+
+        ~# const Unit DEFAULT = METER_PER_SECOND_2;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+}

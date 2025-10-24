@@ -1,0 +1,116 @@
+¦ The Force class represents a physical measure of force.
+¦ It provides convenient operations between forces and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the force value.
+¦ The default unit of a force value is the newton.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Force(Measure) {
+    ¦ Constructs a force with the given value and unit.
+    ¦ @param value the force value
+    ¦ @param unit the force unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativeForceException();
+    }
+    
+    ¦ Constructs a force with the given value in the default unit.
+    ¦ @param value the force value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current force with the given force.
+    ¦ @param that the force
+    ¦ @returns the resulting force
+    op+ Force +(Force that) = new(value + that.value);
+
+    ¦ Subtracts the current force to the given force.
+    ¦ @param that the force
+    ¦ @returns the resulting force
+    op+ Force -(Force that) = new(value - that.value);
+
+    ¦ Multiplies the current force with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting force
+    op+ Force *(double value) = new(this.value * value);
+
+    ¦ Divides the current force with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting force
+    op+ Force /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current force with the given force.
+    ¦ @param that the force
+    ¦ @returns the resulting force
+    op+ Force %(Force that) = new(value % that.value);
+
+    ¦ Multiplies the current force with the given speed.
+    ¦ @param that the speed
+    ¦ @returns the resulting energy
+    op+ Energy *(Speed that) = new(value * that.value);
+
+    ¦ Returns whether the current force is equal to the given force.
+    ¦ @param that the force
+    ¦ @returns true if the forces are equal
+    op+ bool ==(Force that) = value == that.value;
+
+    ¦ Returns whether the current force is not equal to the given force.
+    ¦ @param that the force
+    ¦ @returns true if the forces are not equal
+    op+ bool !=(Force that) = value != that.value;
+
+    ¦ Returns whether the current force is greater than the given force.
+    ¦ @param that the force
+    ¦ @returns true if the current force is greater
+    op+ bool >(Force that) = value > that.value;
+
+    ¦ Returns whether the current force is less than the given force.
+    ¦ @param that the force
+    ¦ @returns true if the current force is less
+    op+ bool <(Force that) = value < that.value;
+
+    ¦ Returns whether the current force is greater or equal that the given force.
+    ¦ @param that the force
+    ¦ @returns true if the current force is greater or equal
+    op+ bool >=(Force that) = value >= that.value;
+
+    ¦ Returns whether the current force is less or equal than the given force.
+    ¦ @param that the force
+    ¦ @returns true if the current force is less or equal
+    op+ bool <=(Force that) = value <= that.value;
+
+    ¦ Returns the force value in the given unit.
+    ¦ @param unit the force unit
+    ¦ @returns the force value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the force with the given unit.
+    ¦ @param unit the force unit
+    ¦ @returns the force string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the force with the default unit.
+    ¦ @returns the force string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Force && this == object:Force;
+
+    ¦ The Force.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the force value.
+    ¦ The default unit of a force value is the newton.
+    enum+ Unit {
+        NEWTON(1d, "N"),
+        DYNE(0.00001d, "dyn");
+
+        ~# const Unit DEFAULT = NEWTON;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Force.NegativeForceException exception is thrown when there is an attempt
+    ¦ to construct a force with a negative value.
+    exception~ NegativeForceException {
+        fn~ constructor() super("Negative force");
+    }
+}

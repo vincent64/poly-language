@@ -1,0 +1,155 @@
+import poly.math.Math;
+
+¦ The Volume class represents a physical measure of volume.
+¦ It provides convenient operations between volumes and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the volume value.
+¦ The default unit of a volume value is the meter cubed.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Volume(Measure) {
+    ¦ Constructs a volume with the given value and unit.
+    ¦ @param value the volume value
+    ¦ @param unit the volume unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativeVolumeException();
+    }
+    
+    ¦ Constructs a volume with the given value in the default unit.
+    ¦ @param value the volume value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current volume with the given volume.
+    ¦ @param that the volume
+    ¦ @returns the resulting volume
+    op+ Volume +(Volume that) = new(value + that.value);
+
+    ¦ Subtracts the current volume to the given volume.
+    ¦ @param that the volume
+    ¦ @returns the resulting volume
+    op+ Volume -(Volume that) = new(value - that.value);
+
+    ¦ Multiplies the current volume with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting volume
+    op+ Volume *(double value) = new(this.value * value);
+
+    ¦ Divides the current volume with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting volume
+    op+ Volume /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current volume with the given volume.
+    ¦ @param that the volume
+    ¦ @returns the resulting volume
+    op+ Volume %(Volume that) = new(value % that.value);
+
+    ¦ Divides the current volume with the given length.
+    ¦ @param that the length
+    ¦ @returns the resulting area
+    op+ Area /(Length that) = new(value / that.value);
+
+    ¦ Divides the current volume with the given area.
+    ¦ @param that the area
+    ¦ @returns the resulting length
+    op+ Length /(Area that) = new(value / that.value);
+
+    ¦ Returns whether the current volume is equal to the given volume.
+    ¦ @param that the volume
+    ¦ @returns true if the volumes are equal
+    op+ bool ==(Volume that) = value == that.value;
+
+    ¦ Returns whether the current volume is not equal to the given volume.
+    ¦ @param that the volume
+    ¦ @returns true if the volumes are not equal
+    op+ bool !=(Volume that) = value != that.value;
+
+    ¦ Returns whether the current volume is greater than the given volume.
+    ¦ @param that the volume
+    ¦ @returns true if the current volume is greater
+    op+ bool >(Volume that) = value > that.value;
+
+    ¦ Returns whether the current volume is less than the given volume.
+    ¦ @param that the volume
+    ¦ @returns true if the current volume is less
+    op+ bool <(Volume that) = value < that.value;
+
+    ¦ Returns whether the current volume is greater or equal that the given volume.
+    ¦ @param that the volume
+    ¦ @returns true if the current volume is greater or equal
+    op+ bool >=(Volume that) = value >= that.value;
+
+    ¦ Returns whether the current volume is less or equal than the given volume.
+    ¦ @param that the volume
+    ¦ @returns true if the current volume is less or equal
+    op+ bool <=(Volume that) = value <= that.value;
+
+    ¦ Returns the volume value in the given unit.
+    ¦ @param unit the volume unit
+    ¦ @returns the volume value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the volume with the given unit.
+    ¦ @param unit the volume unit
+    ¦ @returns the volume string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the volume with the default unit.
+    ¦ @returns the volume string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Volume && this == object:Volume;
+
+    ¦ Returns the volume of a cube with the given length.
+    ¦ @param length the length
+    ¦ @returns the volume of the cube
+    fn+ # Volume ofCube(Length length) = new(length.value * length.value * length.value);
+
+    ¦ Returns the volume of a sphere with the given radius.
+    ¦ @param radius the radius
+    ¦ @returns the volume of the sphere
+    fn+ # Volume ofSphere(Length radius) = new(radius.value * radius.value * radius.value * Math.PI * (4d / 3d));
+
+    ¦ Returns the volume of a cone with the given radius and height.
+    ¦ @param radius the radius
+    ¦ @param height the height
+    ¦ @returns the volume of the cone
+    fn+ # Volume ofCone(Length radius, Length height) = new(radius.value * radius.value * height.value * Math.PI * (1d / 3d));
+
+    ¦ Returns the volume of a cylinder with the given radius and height.
+    ¦ @param radius the radius
+    ¦ @param height the height
+    ¦ @returns the volume of the cylinder
+    fn+ # Volume ofCylinder(Length radius, Length height) = new(radius.value * radius.value * height.value * Math.PI);
+
+    ¦ The Volume.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the volume value.
+    ¦ The default unit of a volume value is the meter cubed.
+    enum+ Unit {
+        METER_3(1d, "m³"),
+        MILLIMETER_3(0.000_000_001d, "mm³"),
+        CENTIMETER_3(0.000_001d, "cm³"),
+        DECIMETER_3(0.001d, "dm³"),
+        DECAMETER_3(1000d, "dam³"),
+        HECTOMETER_3(1_000_000d, "hm³"),
+        KILOMETER_3(1_000_000_000d, "km³"),
+        LITER(0.001d, "L"),
+        INCH_3(0.000_016_387_064d, "in³"),
+        FOOT_3(0.028_316_846_592d, "ft³"),
+        YARD_3(0.764_554_857_984d, "yd³"),
+        MILE_3(4_168_200_000d, "mi³");
+
+        ~# const Unit DEFAULT = METER_3;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Volume.NegativeVolumeException exception is thrown when there is an attempt
+    ¦ to construct a volume with a negative value.
+    exception~ NegativeVolumeException {
+        fn~ constructor() super("Negative volume");
+    }
+}

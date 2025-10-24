@@ -1,0 +1,126 @@
+¦ The Mass class represents a physical measure of mass.
+¦ It provides convenient operations between masses and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the mass value.
+¦ The default unit of a mass value is the kilogram.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Mass(Measure) {
+    ¦ Constructs a mass with the given value and unit.
+    ¦ @param value the mass value
+    ¦ @param unit the mass unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativeMassException();
+    }
+    
+    ¦ Constructs a mass with the given value in the default unit (meter).
+    ¦ @param value the mass value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current mass with the given mass.
+    ¦ @param that the mass
+    ¦ @returns the resulting mass
+    op+ Mass +(Mass that) = new(value + that.value);
+
+    ¦ Subtracts the current mass to the given mass.
+    ¦ @param that the mass
+    ¦ @returns the resulting mass
+    op+ Mass -(Mass that) = new(value - that.value);
+
+    ¦ Multiplies the current mass with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting mass
+    op+ Mass *(double value) = new(this.value * value);
+
+    ¦ Divides the current mass with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting mass
+    op+ Mass /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current mass with the given mass.
+    ¦ @param that the mass
+    ¦ @returns the resulting mass
+    op+ Mass %(Mass that) = new(value % that.value);
+
+    ¦ Multiplies the current mass with the given acceleration.
+    ¦ @param that the acceleration
+    ¦ @returns the resulting force
+    op+ Force *(Acceleration that) = new(value * that.value);
+
+    ¦ Multiplies the current mass with the given speed.
+    ¦ @param that the speed
+    ¦ @returns the resulting momentum
+    op+ Momentum *(Speed that) = new(value * that.value);
+
+    ¦ Returns whether the current mass is equal to the given mass.
+    ¦ @param that the mass
+    ¦ @returns true if the masss are equal
+    op+ bool ==(Mass that) = value == that.value;
+
+    ¦ Returns whether the current mass is not equal to the given mass.
+    ¦ @param that the mass
+    ¦ @returns true if the masss are not equal
+    op+ bool !=(Mass that) = value != that.value;
+
+    ¦ Returns whether the current mass is greater than the given mass.
+    ¦ @param that the mass
+    ¦ @returns true if the current mass is greater
+    op+ bool >(Mass that) = value > that.value;
+
+    ¦ Returns whether the current mass is less than the given mass.
+    ¦ @param that the mass
+    ¦ @returns true if the current mass is less
+    op+ bool <(Mass that) = value < that.value;
+
+    ¦ Returns whether the current mass is greater or equal that the given mass.
+    ¦ @param that the mass
+    ¦ @returns true if the current mass is greater or equal
+    op+ bool >=(Mass that) = value >= that.value;
+
+    ¦ Returns whether the current mass is less or equal than the given mass.
+    ¦ @param that the mass
+    ¦ @returns true if the current mass is less or equal
+    op+ bool <=(Mass that) = value <= that.value;
+
+    ¦ Returns the mass value in the given unit.
+    ¦ @param unit the mass unit
+    ¦ @returns the mass value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the mass with the given unit.
+    ¦ @param unit the mass unit
+    ¦ @returns the mass string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the mass with the default unit.
+    ¦ @returns the mass string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Mass && this == object:Mass;
+
+    ¦ The Mass.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the mass value.
+    ¦ The default unit of a mass value is the kilogram.
+    enum+ Unit {
+        KILOGRAM(1d, "kg"),
+        MICROGRAM(0.000_000_001d, "μg"),
+        MILLIGRAM(0.000_001d, "mg"),
+        GRAM(0.001d, "g"),
+        TON(1000d, "t"),
+        OUNCE(28d, "oz"),
+        POUND(453.6d, "lb");
+
+        ~# const Unit DEFAULT = KILOGRAM;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Mass.NegativeMassException exception is thrown when there is an attempt
+    ¦ to construct a mass with a negative value.
+    exception~ NegativeMassException {
+        fn~ constructor() super("Negative mass");
+    }
+}

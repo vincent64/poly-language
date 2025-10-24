@@ -1,0 +1,116 @@
+¦ The Power class represents a physical measure of power.
+¦ It provides convenient operations between powers and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the power value.
+¦ The default unit of a power value is the watt.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Power(Measure) {
+    ¦ Constructs a power with the given value and unit.
+    ¦ @param value the power value
+    ¦ @param unit the power unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativePowerException();
+    }
+    
+    ¦ Constructs a power with the given value in the default unit.
+    ¦ @param value the power value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current power with the given power.
+    ¦ @param that the power
+    ¦ @returns the resulting power
+    op+ Power +(Power that) = new(value + that.value);
+
+    ¦ Subtracts the current power to the given power.
+    ¦ @param that the power
+    ¦ @returns the resulting power
+    op+ Power -(Power that) = new(value - that.value);
+
+    ¦ Multiplies the current power with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting power
+    op+ Power *(double value) = new(this.value * value);
+
+    ¦ Divides the current power with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting power
+    op+ Power /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current power with the given power.
+    ¦ @param that the power
+    ¦ @returns the resulting power
+    op+ Power %(Power that) = new(value % that.value);
+
+    ¦ Returns whether the current power is equal to the given power.
+    ¦ @param that the power
+    ¦ @returns true if the powers are equal
+    op+ bool ==(Power that) = value == that.value;
+
+    ¦ Returns whether the current power is not equal to the given power.
+    ¦ @param that the power
+    ¦ @returns true if the powers are not equal
+    op+ bool !=(Power that) = value != that.value;
+
+    ¦ Returns whether the current power is greater than the given power.
+    ¦ @param that the power
+    ¦ @returns true if the current power is greater
+    op+ bool >(Power that) = value > that.value;
+
+    ¦ Returns whether the current power is less than the given power.
+    ¦ @param that the power
+    ¦ @returns true if the current power is less
+    op+ bool <(Power that) = value < that.value;
+
+    ¦ Returns whether the current power is greater or equal that the given power.
+    ¦ @param that the power
+    ¦ @returns true if the current power is greater or equal
+    op+ bool >=(Power that) = value >= that.value;
+
+    ¦ Returns whether the current power is less or equal than the given power.
+    ¦ @param that the power
+    ¦ @returns true if the current power is less or equal
+    op+ bool <=(Power that) = value <= that.value;
+
+    ¦ Returns the power value in the given unit.
+    ¦ @param unit the power unit
+    ¦ @returns the power value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the power with the given unit.
+    ¦ @param unit the power unit
+    ¦ @returns the power string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the power with the default unit.
+    ¦ @returns the power string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Power && this == object:Power;
+
+    ¦ The Power.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the power value.
+    ¦ The default unit of a power value is the watt.
+    enum+ Unit {
+        WATT(1d, "W"),
+        MILLIWATT(0.001d, "mW"),
+        KILOWATT(1000d, "kW"),
+        MEGAWATT(1_000_000d, "MW"),
+        GIGAWATT(1_000_000_000d, "GW"),
+        TERAWATT(1_000_000_000_000d, "TW"),
+        HORSEPOWER(745.7d, "hp");
+
+        ~# const Unit DEFAULT = WATT;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Power.NegativePowerException exception is thrown when there is an attempt
+    ¦ to construct a power with a negative value.
+    exception~ NegativePowerException {
+        fn~ constructor() super("Negative power");
+    }
+}

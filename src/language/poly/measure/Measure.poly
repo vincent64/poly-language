@@ -1,0 +1,16 @@
+¦ The Measure class is the base class of every measure class.
+¦ A measure class is a class which represents a real-life measure with a value and a unit.
+¦ Internally, the value of a measure uses double-precision floating point.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Measure {
+    ~ const double value;
+
+    ¦ Constructs a measure with the given value.
+    ¦ @param value the value
+    fn~ constructor(attr double value) { }
+
+    ¦ Returns the measure value in the default unit.
+    ¦ @returns the measure value
+    fn+ double value() = value;
+}

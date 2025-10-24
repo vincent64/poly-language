@@ -1,0 +1,131 @@
+¦ The Speed class represents a physical measure of speed.
+¦ It provides convenient operations between speeds and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the speed value.
+¦ The default unit of a speed value is the meter per second.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Speed(Measure) {
+    ¦ Constructs a speed with the given value and unit.
+    ¦ @param value the speed value
+    ¦ @param unit the speed unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativeSpeedException();
+    }
+    
+    ¦ Constructs a speed with the given value in the default unit.
+    ¦ @param value the speed value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current speed with the given speed.
+    ¦ @param that the speed
+    ¦ @returns the resulting speed
+    op+ Speed +(Speed that) = new(value + that.value);
+
+    ¦ Subtracts the current speed to the given speed.
+    ¦ @param that the speed
+    ¦ @returns the resulting speed
+    op+ Speed -(Speed that) = new(value - that.value);
+
+    ¦ Multiplies the current speed with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting speed
+    op+ Speed *(double value) = new(this.value * value);
+
+    ¦ Divides the current speed with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting speed
+    op+ Speed /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current speed with the given speed.
+    ¦ @param that the speed
+    ¦ @returns the resulting speed
+    op+ Speed %(Speed that) = new(value % that.value);
+
+    ¦ Multiplies the current speed with the given duration.
+    ¦ @param that the duration
+    ¦ @returns the resulting length
+    op+ Length *(Duration that) = new(value * that.value);
+
+    ¦ Divides the current speed with the given duration.
+    ¦ @param that the duration
+    ¦ @returns the resulting acceleration
+    op+ Acceleration /(Duration that) = new(value / that.value);
+
+    ¦ Multiplies the current speed with the given mass.
+    ¦ @param that the mass
+    ¦ @returns the resulting momentum
+    op+ Momentum *(Mass that) = new(value * that.value);
+
+    ¦ Returns whether the current speed is equal to the given speed.
+    ¦ @param that the speed
+    ¦ @returns true if the speeds are equal
+    op+ bool ==(Speed that) = value == that.value;
+
+    ¦ Returns whether the current speed is not equal to the given speed.
+    ¦ @param that the speed
+    ¦ @returns true if the speeds are not equal
+    op+ bool !=(Speed that) = value != that.value;
+
+    ¦ Returns whether the current speed is greater than the given speed.
+    ¦ @param that the speed
+    ¦ @returns true if the current speed is greater
+    op+ bool >(Speed that) = value > that.value;
+
+    ¦ Returns whether the current speed is less than the given speed.
+    ¦ @param that the speed
+    ¦ @returns true if the current speed is less
+    op+ bool <(Speed that) = value < that.value;
+
+    ¦ Returns whether the current speed is greater or equal that the given speed.
+    ¦ @param that the speed
+    ¦ @returns true if the current speed is greater or equal
+    op+ bool >=(Speed that) = value >= that.value;
+
+    ¦ Returns whether the current speed is less or equal than the given speed.
+    ¦ @param that the speed
+    ¦ @returns true if the current speed is less or equal
+    op+ bool <=(Speed that) = value <= that.value;
+
+    ¦ Returns the speed value in the given unit.
+    ¦ @param unit the speed unit
+    ¦ @returns the speed value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the speed with the given unit.
+    ¦ @param unit the speed unit
+    ¦ @returns the speed string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the speed with the default unit.
+    ¦ @returns the speed string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Speed && this == object:Speed;
+
+    ¦ The Speed.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the speed value.
+    ¦ The default unit for speeds is meter per second.
+    enum+ Unit {
+        METER_PER_SECOND(1d, "m/s"),
+        METER_PER_HOUR(1d, "m/h"),
+        KILOMETER_PER_SECOND(1d, "km/s"),
+        KILOMETER_PER_HOUR(0.277777777d, "km/h"),
+        FOOT_PER_SECOND(0.3048d, "ft/s"),
+        MILE_PER_HOUR(0.447d, "mi/h"),
+        KNOT(1.94384d, "kn");
+
+        ~# const Unit DEFAULT = METER_PER_SECOND;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Speed.NegativeSpeedException exception is thrown when there is an attempt
+    ¦ to construct a speed with a negative value.
+    exception~ NegativeSpeedException {
+        fn~ constructor() super("Negative speed");
+    }
+}

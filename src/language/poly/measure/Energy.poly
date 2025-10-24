@@ -1,0 +1,123 @@
+¦ The Energy class represents a physical measure of energy.
+¦ It provides convenient operations between energies and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the energy value.
+¦ The default unit of an energy value is the joule.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Energy(Measure) {
+    ¦ Constructs an energy with the given value and unit.
+    ¦ @param value the energy value
+    ¦ @param unit the energy unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativeEnergyException();
+    }
+    
+    ¦ Constructs an energy with the given value in the default unit.
+    ¦ @param value the energy value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current energy with the given energy.
+    ¦ @param that the energy
+    ¦ @returns the resulting energy
+    op+ Energy +(Energy that) = new(value + that.value);
+
+    ¦ Subtracts the current energy to the given energy.
+    ¦ @param that the energy
+    ¦ @returns the resulting energy
+    op+ Energy -(Energy that) = new(value - that.value);
+
+    ¦ Multiplies the current energy with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting energy
+    op+ Energy *(double value) = new(this.value * value);
+
+    ¦ Divides the current energy with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting energy
+    op+ Energy /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current energy with the given energy.
+    ¦ @param that the energy
+    ¦ @returns the resulting energy
+    op+ Energy %(Energy that) = new(value % that.value);
+
+    ¦ Divides the current energy with the given duration.
+    ¦ @param that the duration
+    ¦ @returns the resulting power
+    op+ Power /(Duration that) = new(value / that.value);
+
+    ¦ Returns whether the current energy is equal to the given energy.
+    ¦ @param that the energy
+    ¦ @returns true if the energies are equal
+    op+ bool ==(Energy that) = value == that.value;
+
+    ¦ Returns whether the current energy is not equal to the given energy.
+    ¦ @param that the energy
+    ¦ @returns true if the energies are not equal
+    op+ bool !=(Energy that) = value != that.value;
+
+    ¦ Returns whether the current energy is greater than the given energy.
+    ¦ @param that the energy
+    ¦ @returns true if the current energy is greater
+    op+ bool >(Energy that) = value > that.value;
+
+    ¦ Returns whether the current energy is less than the given energy.
+    ¦ @param that the energy
+    ¦ @returns true if the current energy is less
+    op+ bool <(Energy that) = value < that.value;
+
+    ¦ Returns whether the current energy is greater or equal that the given energy.
+    ¦ @param that the energy
+    ¦ @returns true if the current energy is greater or equal
+    op+ bool >=(Energy that) = value >= that.value;
+
+    ¦ Returns whether the current energy is less or equal than the given energy.
+    ¦ @param that the energy
+    ¦ @returns true if the current energy is less or equal
+    op+ bool <=(Energy that) = value <= that.value;
+
+    ¦ Returns the energy value in the given unit.
+    ¦ @param unit the energy unit
+    ¦ @returns the energy value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the energy with the given unit.
+    ¦ @param unit the energy unit
+    ¦ @returns the energy string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the energy with the default unit.
+    ¦ @returns the energy string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Energy && this == object:Energy;
+
+    ¦ The Energy.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the energy value.
+    ¦ The default unit of an energy value is the joule.
+    enum+ Unit {
+        JOULE(1d, "J"),
+        KILOJOULE(1000d, "kJ"),
+        MEGAJOULE(1_000_000d, "MJ"),
+        CALORIE(4.184d, "cal"),
+        KILOCALORIE(4184d, "kcal"),
+        KILOWATT_HOUR(3_600_000d, "kWh"),
+        MEGAWATT_HOUR(3_600_000_000d, "MWh"),
+        GIGAWATT_HOUR(3_600_000_000_000d, "GWh"),
+        TERAWATT_HOUR(3_600_000_000_000_000d, "TWh");
+
+        ~# const Unit DEFAULT = JOULE;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Energy.NegativeEnergyException exception is thrown when there is an attempt
+    ¦ to construct an energy with a negative value.
+    exception~ NegativeEnergyException {
+        fn~ constructor() super("Negative energy");
+    }
+}

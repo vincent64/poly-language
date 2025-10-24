@@ -1,0 +1,142 @@
+¦ The Length class represents a physical measure of length.
+¦ It provides convenient operations between lengths and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the length value.
+¦ The default unit of a length value is the meter.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Length(Measure) {
+    ¦ Constructs a length with the given value and unit.
+    ¦ @param value the length value
+    ¦ @param unit the length unit
+    fn+ constructor(const double value, Unit unit) {
+        super(value * unit.factor);
+        assert(value >= 0d): new NegativeLengthException();
+    }
+    
+    ¦ Constructs a length with the given value in the default unit.
+    ¦ @param value the length value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current length with the given length.
+    ¦ @param that the length
+    ¦ @returns the resulting length
+    op+ Length +(Length that) = new(value + that.value);
+
+    ¦ Subtracts the current length to the given length.
+    ¦ @param that the length
+    ¦ @returns the resulting length
+    op+ Length -(Length that) = new(value - that.value);
+
+    ¦ Multiplies the current length with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting length
+    op+ Length *(double value) = new(this.value * value);
+
+    ¦ Divides the current length with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting length
+    op+ Length /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current length with the given length.
+    ¦ @param that the length
+    ¦ @returns the resulting length
+    op+ Length %(Length that) = new(value % that.value);
+
+    ¦ Multiplies the current length with the given length.
+    ¦ @param that the length
+    ¦ @returns the resulting area
+    op+ Area *(Length that) = new(value * that.value);
+
+    ¦ Multiplies the current length with the given area.
+    ¦ @param that the area
+    ¦ @returns the resulting volume
+    op+ Volume *(Area that) = new(value * that.value);
+
+    ¦ Divides the current length with the given duration.
+    ¦ @param that the duration
+    ¦ @returns the resulting speed
+    op+ Speed /(Duration that) = new(value / that.value);
+
+    ¦ Multiplies the current length with the given angle.
+    ¦ @param that the angle
+    ¦ @returns the resulting length
+    op+ Length *(Angle that) = new(value * that.value);
+
+    ¦ Returns whether the current length is equal to the given length.
+    ¦ @param that the length
+    ¦ @returns true if the lengths are equal
+    op+ bool ==(Length that) = value == that.value;
+
+    ¦ Returns whether the current length is not equal to the given length.
+    ¦ @param that the length
+    ¦ @returns true if the lengths are not equal
+    op+ bool !=(Length that) = value != that.value;
+
+    ¦ Returns whether the current length is greater than the given length.
+    ¦ @param that the length
+    ¦ @returns true if the current length is greater
+    op+ bool >(Length that) = value > that.value;
+
+    ¦ Returns whether the current length is less than the given length.
+    ¦ @param that the length
+    ¦ @returns true if the current length is less
+    op+ bool <(Length that) = value < that.value;
+
+    ¦ Returns whether the current length is greater or equal that the given length.
+    ¦ @param that the length
+    ¦ @returns true if the current length is greater or equal
+    op+ bool >=(Length that) = value >= that.value;
+
+    ¦ Returns whether the current length is less or equal than the given length.
+    ¦ @param that the length
+    ¦ @returns true if the current length is less or equal
+    op+ bool <=(Length that) = value <= that.value;
+
+    ¦ Returns the length value in the given unit.
+    ¦ @param unit the length unit
+    ¦ @returns the length value
+    fn+ double value(Unit unit) = value / unit.factor;
+
+    ¦ Returns the string representation of the length with the given unit.
+    ¦ @param unit the length unit
+    ¦ @returns the length string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the length with the default unit.
+    ¦ @returns the length string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Length && this == object:Length;
+
+    ¦ The Length.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the length value.
+    ¦ The default unit of a length value is the meter.
+    enum+ Unit {
+        METER(1d, "m"),
+        NANOMETER(0.000_000_001d, "nm"),
+        MICROMETER(0.000_001d, "μm"),
+        MILLIMETER(0.001d, "mm"),
+        CENTIMETER(0.01d, "cm"),
+        DECIMETER(0.1d, "dm"),
+        DECAMETER(10d, "dam"),
+        HECTOMETER(100d, "hm"),
+        KILOMETER(1000d, "km"),
+        INCH(0.0254d, "in"),
+        FOOT(0.3048d, "ft"),
+        YARD(0.9144d, "yd"),
+        MILE(1609.344d, "mi");
+
+        ~# const Unit DEFAULT = METER;
+        ~ const double factor;
+        ~ const String symbol;
+
+        fn constructor(attr double factor, attr String symbol) { }
+    }
+
+    ¦ The Length.NegativeLengthException exception is thrown when there is an attempt
+    ¦ to construct a length with a negative value.
+    exception~ NegativeLengthException {
+        fn~ constructor() super("Negative length");
+    }
+}

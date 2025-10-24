@@ -1,0 +1,116 @@
+¦ The Temperature class represents a physical measure of temperature.
+¦ It provides convenient operations between temperatures and other measurements,
+¦ and prevents unit mistakes by explicitly requesting the unit when
+¦ providing and retrieving the temperature value.
+¦ The default unit of a temperature value is the kelvin.
+¦ @author Vincent Philippe (@vincent64)
+¦ @version v0.5
+class+ Temperature(Measure) {
+    ¦ Constructs a temperature with the given value and unit.
+    ¦ @param value the temperature value
+    ¦ @param unit the temperature unit
+    fn+ constructor(const double value, Unit unit) {
+        super(if(unit === Unit.CELCIUS) value + 273.5d
+              else if(unit === Unit.FAHRENHEIT) (value + 459.67d) / 1.8d
+              else value);
+        assert(this.value >= 0): new NegativeTemperatureException();
+    }
+    
+    ¦ Constructs a temperature with the given value in the default unit.
+    ¦ @param value the temperature value
+    fn+ constructor(const double value) this(value, Unit.DEFAULT);
+
+    ¦ Adds the current temperature with the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns the resulting temperature
+    op+ Temperature +(Temperature that) = new(value + that.value);
+
+    ¦ Subtracts the current temperature to the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns the resulting temperature
+    op+ Temperature -(Temperature that) = new(value - that.value);
+
+    ¦ Multiplies the current temperature with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting temperature
+    op+ Temperature *(double value) = new(this.value * value);
+
+    ¦ Divides the current temperature with the given double value.
+    ¦ @param value the double value
+    ¦ @returns the resulting temperature
+    op+ Temperature /(double value) = new(this.value / value);
+
+    ¦ Returns the remainder of the current temperature with the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns the resulting temperature
+    op+ Temperature %(Temperature that) = new(value % that.value);
+
+    ¦ Returns whether the current temperature is equal to the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns true if the temperatures are equal
+    op+ bool ==(Temperature that) = value == that.value;
+
+    ¦ Returns whether the current temperature is not equal to the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns true if the temperatures are not equal
+    op+ bool !=(Temperature that) = value != that.value;
+
+    ¦ Returns whether the current temperature is greater than the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns true if the current temperature is greater
+    op+ bool >(Temperature that) = value > that.value;
+
+    ¦ Returns whether the current temperature is less than the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns true if the current temperature is less
+    op+ bool <(Temperature that) = value < that.value;
+
+    ¦ Returns whether the current temperature is greater or equal that the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns true if the current temperature is greater or equal
+    op+ bool >=(Temperature that) = value >= that.value;
+
+    ¦ Returns whether the current temperature is less or equal than the given temperature.
+    ¦ @param that the temperature
+    ¦ @returns true if the current temperature is less or equal
+    op+ bool <=(Temperature that) = value <= that.value;
+
+    ¦ Returns the temperature value in the given unit.
+    ¦ @param unit the temperature unit
+    ¦ @returns the temperature value
+    fn+ double value(Unit unit) =
+        if(unit === Unit.CELCIUS) value - 273.15d
+        else if(unit === Unit.FAHRENHEIT) value * 1.8d - 459.67d
+        else value;
+
+    ¦ Returns the string representation of the temperature with the given unit.
+    ¦ @param unit the temperature unit
+    ¦ @returns the temperature string representation
+    fn+ String toString(Unit unit) = String.valueOf(value(unit)) + " " + unit.symbol;
+
+    ¦ Returns the string representation of the temperature with the default unit.
+    ¦ @returns the temperature string representation
+    fn+ String toString() = toString(Unit.DEFAULT);
+
+    fn+ bool equals(Object object) = object ==: Temperature && this == object:Temperature;
+
+    ¦ The Temperature.Unit enum contains every unit that can be used
+    ¦ when providing or retrieving the temperature value.
+    ¦ The default unit of a temperature value is the kelvin.
+    enum+ Unit {
+        KELVIN("K"),
+        CELCIUS("°C"),
+        FAHRENHEIT("°F");
+
+        ~# const Unit DEFAULT = KELVIN;
+        ~ const String symbol;
+
+        fn constructor(attr String symbol) { }
+    }
+
+    ¦ The Temperature.NegativeTemperatureException exception is thrown when there is an attempt
+    ¦ to construct a temperature with a negative value.
+    exception~ NegativeTemperatureException {
+        fn~ constructor() super("Negative temperature (below absolute zero)");
+    }
+}
