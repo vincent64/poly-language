@@ -75,6 +75,25 @@ public final class Transformer {
     }
 
     /**
+     * Transforms the given method call to an operation overload method invocation.
+     * @param methodCall the method call
+     * @return the transformed node
+     */
+    Expression transformExpressionCallOperationOverload(MethodCall methodCall) {
+        //Generate operation method invocation
+        MethodCall methodInvocation = new MethodCall(methodCall.getMeta());
+        methodInvocation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
+        methodInvocation.setArgumentList(methodCall.getArgumentList());
+
+        //Transform operation to member access
+        MemberAccess memberAccess = new MemberAccess(methodCall.getMeta());
+        memberAccess.setMember(methodCall.getMethod());
+        memberAccess.setAccessor(methodInvocation);
+
+        return memberAccess.accept(analyzer);
+    }
+
+    /**
      * Transforms the given member access class creation node to an inner class creation node.
      * @param memberAccess the member access node
      * @param classCreation the class creation node

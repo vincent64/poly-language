@@ -1887,17 +1887,7 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.InvalidObjectCall(methodCall, argumentTypes);
 
-        //Transform expression to method call
-        MethodCall methodInvocation = new MethodCall(methodCall.getMeta());
-        methodInvocation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
-        methodInvocation.setArgumentList(methodCall.getArgumentList());
-
-        //Transform method call to member access
-        MemberAccess memberAccess = new MemberAccess(methodCall.getMeta());
-        memberAccess.setMember(member);
-        memberAccess.setAccessor(methodInvocation);
-
-        return memberAccess.accept(this);
+        return transformer.transformExpressionCallOperationOverload(methodCall);
     }
 
     /**
