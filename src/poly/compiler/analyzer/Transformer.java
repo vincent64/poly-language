@@ -1,5 +1,6 @@
 package poly.compiler.analyzer;
 
+import poly.compiler.analyzer.content.OperatorMethod;
 import poly.compiler.analyzer.type.Object;
 import poly.compiler.analyzer.type.Primitive;
 import poly.compiler.analyzer.type.Type;
@@ -48,6 +49,27 @@ public final class Transformer {
         MemberAccess memberAccess = new MemberAccess(node.getMeta());
         memberAccess.setMember(expression);
         memberAccess.setAccessor(methodCall);
+
+        return memberAccess.accept(analyzer);
+    }
+
+    /**
+     * Transforms the given method call to an operation overload method invocation.
+     * @param methodCall the method call
+     * @return the transformed node
+     */
+    Expression transformMethodCallOperationOverload(MethodCall methodCall) {
+        //Generate operation method invocation
+        MethodCall methodInvocation = new MethodCall(methodCall.getMeta());
+        methodInvocation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
+        methodInvocation.setArgumentList(methodCall.getArgumentList());
+
+        //Transform operation to member access
+        MemberAccess memberAccess = new MemberAccess(methodCall.getMeta());
+        SimpleName simpleName = new SimpleName(methodCall.getMeta());
+        simpleName.setName(methodCall.getMethodName());
+        memberAccess.setMember(simpleName);
+        memberAccess.setAccessor(methodInvocation);
 
         return memberAccess.accept(analyzer);
     }

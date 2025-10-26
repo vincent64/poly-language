@@ -1857,19 +1857,7 @@ public final class Analyzer implements NodeModifier {
         if(methodSymbol == null)
             new AnalyzingError.UnresolvableMethod(methodCall, methodName, argumentTypes);
 
-        //Transform expression to method call
-        MethodCall methodInvokation = new MethodCall(methodCall.getMeta());
-        methodInvokation.setMethodName(OperatorMethod.Name.METHOD_INVOCATION);
-        methodInvokation.setArgumentList(methodCall.getArgumentList());
-
-        //Transform method call to member access
-        MemberAccess memberAccess = new MemberAccess(methodCall.getMeta());
-        SimpleName simpleName = new SimpleName(methodCall.getMeta());
-        simpleName.setName(methodName);
-        memberAccess.setMember(simpleName);
-        memberAccess.setAccessor(methodInvokation);
-
-        return memberAccess.accept(this);
+        return transformer.transformMethodCallOperationOverload(methodCall);
     }
 
     /**
