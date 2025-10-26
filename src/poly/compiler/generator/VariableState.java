@@ -6,16 +6,27 @@ package poly.compiler.generator;
  * @author Vincent Philippe (@vincent64)
  */
 final class VariableState {
+    private final int programCounter;
     private final int localCount, variableCount;
 
     /**
-     * Constructs a variable state with the given locals count and variables count.
+     * Constructs a variable state with the given program counter, locals count and variables count.
+     * @param programCounter the program counter
      * @param localCount the local count
      * @param variableCount the variable count
      */
-    public VariableState(int localCount, int variableCount) {
+    public VariableState(int programCounter, int localCount, int variableCount) {
+        this.programCounter = programCounter;
         this.localCount = localCount;
         this.variableCount = variableCount;
+    }
+
+    /**
+     * Returns the program counter.
+     * @return the program counter
+     */
+    public int getProgramCounter() {
+        return programCounter;
     }
 
     /**

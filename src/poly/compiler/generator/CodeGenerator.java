@@ -117,7 +117,7 @@ public final class CodeGenerator implements NodeVisitor {
      * @return the variables state
      */
     private VariableState retrieveVariableState() {
-        return new VariableState(localTable.getCount(), variableTable.getVariableCount());
+        return new VariableState(programCounter, localTable.getCount(), variableTable.getVariableCount());
     }
 
     /**
