@@ -382,6 +382,14 @@ public abstract class AnalyzingError extends Error {
         }
     }
 
+    public static class DuplicateSwitchCase extends AnalyzingError {
+        private static final String MESSAGE = "Duplicate switch case";
+
+        public DuplicateSwitchCase(Node node) {
+            super(node, MESSAGE);
+        }
+    }
+
     public static class ExpectedNumericalExpression extends AnalyzingError {
         private static final String MESSAGE = "Numerical expression expected";
 
