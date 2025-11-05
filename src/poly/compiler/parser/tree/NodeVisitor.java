@@ -27,6 +27,7 @@ public interface NodeVisitor {
     default void visitDoStatement(DoStatement doStatement) {}
     default void visitExpressionStatement(ExpressionStatement expressionStatement) {}
     default void visitForStatement(ForStatement forStatement) {}
+    default void visitForeachStatement(ForeachStatement foreachStatement) {}
     default void visitIfStatement(IfStatement ifStatement) {}
     default void visitImportStatement(ImportStatement importStatement) {}
     default void visitMatchStatement(MatchStatement matchStatement) {}
