@@ -419,6 +419,10 @@ public final class Parser {
             if(isMatching(STATEMENT_DO))
                 return parseDoStatement();
 
+            //Parse foreach-statement
+            if(isMatching(STATEMENT_FOREACH))
+                return parseForeachStatement();
+
             //Parse switch-statement
             if(isMatching(STATEMENT_SWITCH))
                 return parseSwitchStatement();
@@ -632,6 +636,31 @@ public final class Parser {
 
         //Match semicolon at the end
         match(SEMICOLON);
+
+        return statement;
+    }
+
+    private Statement parseForeachStatement() {
+        ForeachStatement statement = new ForeachStatement(Node.Meta.fromLeadingToken(currentToken));
+
+        //Match foreach keyword and opening parenthesis
+        match(STATEMENT_FOREACH);
+        match(OPENING_PARENTHESIS);
+
+        //Parse variable declaration
+        statement.setVariableDeclaration(parseVariableDeclaration());
+
+        //Match colon
+        match(COLON);
+
+        //Parse iterable expression
+        statement.setExpression(parseExpression());
+
+        //Match closing parenthesis
+        match(CLOSING_PARENTHESIS);
+
+        //Parse statement body
+        statement.setBody(parseStatement());
 
         return statement;
     }
