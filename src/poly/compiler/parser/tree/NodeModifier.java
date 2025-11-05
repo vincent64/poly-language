@@ -30,6 +30,7 @@ public interface NodeModifier {
     default Statement visitDoStatement(DoStatement doStatement) { return doStatement; }
     default Statement visitExpressionStatement(ExpressionStatement expressionStatement) { return expressionStatement; }
     default Statement visitForStatement(ForStatement forStatement) { return forStatement; }
+    default Statement visitForeachStatement(ForeachStatement foreachStatement) { return foreachStatement; }
     default Statement visitIfStatement(IfStatement ifStatement) { return ifStatement; }
     default Statement visitImportStatement(ImportStatement importStatement) { return importStatement; }
     default Statement visitMatchStatement(MatchStatement matchStatement) { return matchStatement; }
