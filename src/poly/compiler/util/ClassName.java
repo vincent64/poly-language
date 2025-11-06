@@ -14,7 +14,7 @@ import java.util.Objects;
  * class name. It also contains methods to transform the class name into a qualified name string.
  * @author Vincent Philippe (@vincent64)
  */
-public class ClassName {
+public final class ClassName {
     /** The Object class' class name. */
     public static final ClassName OBJECT = ClassName.fromStringQualifiedName("java/lang/Object");
     /** The String class' class name. */
@@ -28,8 +28,9 @@ public class ClassName {
     /** The Enum class' class name. */
     public static final ClassName ENUM = ClassName.fromStringQualifiedName("java/lang/Enum");
 
-    public static final String PACKAGE_SEPARATOR = "/";
-    public static final String CLASS_SEPARATOR = "$";
+    private static final String PACKAGE_SEPARATOR = "/";
+    private static final String CLASS_SEPARATOR = "$";
+    private static final String DOT = ".";
     private final List<String> packageNames;
     private final List<String> classNames;
 
@@ -131,14 +132,14 @@ public class ClassName {
 
     /**
      * Adds the given class name and returns a new class name.
-     * @param className the class name
+     * @param name the class name
      * @return a new class name
      */
-    public ClassName addClassName(String className) {
-        ClassName newClassName = new ClassName(this);
-        newClassName.classNames.add(className);
+    public ClassName addClassName(String name) {
+        ClassName className = new ClassName(this);
+        className.classNames.add(name);
 
-        return newClassName;
+        return className;
     }
 
     /**
@@ -197,13 +198,13 @@ public class ClassName {
 
         //Add package names
         for(int i = 0; i < packageNames.size(); i++) {
-            if(i > 0) string.append(".");
+            if(i > 0) string.append(DOT);
             string.append(packageNames.get(i));
         }
 
         //Add class names
         for(String className : classNames) {
-            if(!packageNames.isEmpty()) string.append(".");
+            if(!packageNames.isEmpty()) string.append(DOT);
             string.append(className);
         }
 
