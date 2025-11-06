@@ -213,6 +213,7 @@ public final class ClassSymbol extends Symbol {
      */
     private void findMethodCandidates(String name, Type[] types, List<MethodSymbol> methodCandidates,
                                       ClassSymbol sourceClass, boolean includeSuperclass) {
+        //Find candidates in current class
         for(Symbol symbol : symbols) {
             if(symbol instanceof MethodSymbol methodSymbol) {
                 //Add method as candidate
