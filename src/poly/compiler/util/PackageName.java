@@ -7,7 +7,8 @@ import java.util.List;
  * The PackageName class. This class is used to store the full package name of a class.
  * @author Vincent Philippe (@vincent64)
  */
-public class PackageName {
+public final class PackageName {
+    private static final String SEPARATOR = "/";
     private final List<String> names;
 
     /**
@@ -36,22 +37,15 @@ public class PackageName {
     }
 
     /**
-     * Constructs a package name with the given package name and name.
-     * @param packageName the package name
-     * @param name the name
-     */
-    private PackageName(PackageName packageName, char[] name) {
-        this.names = new ArrayList<>(packageName.names);
-        names.add(String.valueOf(name));
-    }
-
-    /**
      * Adds the given name and returns a new package name.
      * @param name the name
      * @return a new package name
      */
-    public PackageName addName(char[] name) {
-        return new PackageName(this, name);
+    public PackageName addName(String name) {
+        PackageName packageName = new PackageName(this);
+        packageName.names.add(name);
+
+        return packageName;
     }
 
     /**
@@ -97,7 +91,7 @@ public class PackageName {
         string.append(names.getFirst());
 
         for(int i = 1; i < names.size(); i++)
-            string.append("/").append(names.get(i));
+            string.append(SEPARATOR).append(names.get(i));
 
         return string.toString();
     }
