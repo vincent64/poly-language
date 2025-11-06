@@ -255,33 +255,6 @@ public final class ClassName {
     }
 
     /**
-     * Returns whether the current class name is similar to the given class name.
-     * Two class names are similar if they have the same size and the same names.
-     * @param that the class name
-     * @return true if the class names are equal
-     */
-    public boolean isSimilarTo(ClassName that) {
-        //Make sure they have the same size
-        if(this.size() != that.size())
-            return false;
-
-        //Compare every name one-by-one
-        for(int i = 0; i < this.size(); i++) {
-            String thisName = (i >= this.packageNames.size())
-                    ? this.classNames.get(i - this.packageNames.size())
-                    : this.packageNames.get(i);
-            String thatName = (i >= that.packageNames.size())
-                    ? that.classNames.get(i - that.packageNames.size())
-                    : that.packageNames.get(i);
-
-            if(!thisName.equals(thatName))
-                return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Returns the class name size (i.e. the names count in the qualified name).
      * @return the class name size
      */
