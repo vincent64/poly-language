@@ -23,6 +23,9 @@ class Matrix {
 }
 ```
 
+> If you wish to call the current object using the overloaded call operator,
+> you have to put the `this` keyword inside parentheses to avoid ambiguity with the `this(...)` constructor.
+
 
 ## Implicit reference
 If the method to call or the field to access is present in the same class, it is possible to omit the `this` keyword.
