@@ -324,7 +324,7 @@ public final class Analyzer implements NodeModifier {
         //Make sure the condition is a boolean expression
         matchBooleanExpression(doStatement.getCondition());
 
-        //Visit statement block
+        //Visit statement body
         currentLoopLevel++;
         doStatement.setBody(doStatement.getBody().accept(this));
         currentLoopLevel--;
@@ -425,7 +425,7 @@ public final class Analyzer implements NodeModifier {
 
     @Override
     public Statement visitTryStatement(TryStatement tryStatement) {
-        //Visit statement block
+        //Visit statement body
         tryStatement.setBody(tryStatement.getBody().accept(this));
 
         //Get the amount of previous local variables
@@ -447,7 +447,7 @@ public final class Analyzer implements NodeModifier {
         if(!(type instanceof Object object && object.getClassSymbol().isSubtypeOf(classSymbol)))
             new AnalyzingError.TypeConversion(parameter, type, new Object(classSymbol));
 
-        //Visit catch statement block
+        //Visit catch statement body
         tryStatement.setCatchBody(tryStatement.getCatchBody().accept(this));
 
         //Remove local variables added in this try-statement
@@ -493,7 +493,6 @@ public final class Analyzer implements NodeModifier {
             returnStatement.setExpression(returnStatement.getExpression().accept(this));
 
             expression = returnStatement.getExpression();
-
             Type expressionType = expression.getExpressionType();
 
             //Make sure the expression type is valid if null
@@ -546,14 +545,13 @@ public final class Analyzer implements NodeModifier {
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) thisStatement.getArgumentList());
 
         //Find constructor in current class
-        MethodSymbol constructor = !classSymbol.isEnum()
+        MethodSymbol constructorSymbol = !classSymbol.isEnum()
                 ? classSymbol.findConstructor(argumentTypes, classSymbol, thisStatement)
                 : classSymbol.findEnumConstructor(argumentTypes, classSymbol, thisStatement);
 
         //Make sure there is a valid constructor
-        if(constructor == null)
+        if(constructorSymbol == null)
             new AnalyzingError.UnresolvableConstructor(thisStatement, argumentTypes);
-
 
         return thisStatement;
     }
@@ -574,7 +572,6 @@ public final class Analyzer implements NodeModifier {
         isInitialized = true;
 
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) superStatement.getArgumentList());
-
         ClassSymbol superclassSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
 
         //Make sure the class has a superclass
@@ -582,10 +579,10 @@ public final class Analyzer implements NodeModifier {
             new AnalyzingError.UnknownSuperReference(superStatement);
 
         //Find constructor in superclass
-        MethodSymbol constructor = superclassSymbol.findConstructor(argumentTypes, classSymbol, superStatement);
+        MethodSymbol constructorSymbol = superclassSymbol.findConstructor(argumentTypes, classSymbol, superStatement);
 
         //Make sure there is a valid constructor
-        if(constructor == null)
+        if(constructorSymbol == null)
             new AnalyzingError.UnresolvableConstructor(superStatement, argumentTypes);
 
         return superStatement;
@@ -596,10 +593,8 @@ public final class Analyzer implements NodeModifier {
         //Visit expression
         expressionStatement.setExpression(expressionStatement.getExpression().accept(this));
 
-        Expression expression = expressionStatement.getExpression();
-
         //Make sure the expression is a valid statement
-        if(!isExpressionStatement(expression))
+        if(!isExpressionStatement(expressionStatement.getExpression()))
             new AnalyzingError.NotAStatement(expressionStatement);
 
         return expressionStatement;
@@ -1181,10 +1176,10 @@ public final class Analyzer implements NodeModifier {
             Type[] argumentTypes = getTypesFromArguments((ArgumentList) classCreation.getArgumentList());
 
             //Find constructor in class creation symbol
-            MethodSymbol constructor = innerClassSymbol.findConstructor(argumentTypes, classSymbol, memberAccess);
+            MethodSymbol constructorSymbol = innerClassSymbol.findConstructor(argumentTypes, classSymbol, memberAccess);
 
             //Make sure the constructor exists
-            if(constructor == null)
+            if(constructorSymbol == null)
                 new AnalyzingError.UnresolvableConstructor(classCreation, argumentTypes);
 
             //Define resulting type
@@ -1255,10 +1250,10 @@ public final class Analyzer implements NodeModifier {
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) classCreation.getArgumentList());
 
         //Find constructor in class symbol
-        MethodSymbol constructor = classSymbol.findConstructor(argumentTypes, this.classSymbol, classCreation);
+        MethodSymbol constructorSymbol = classSymbol.findConstructor(argumentTypes, this.classSymbol, classCreation);
 
         //Make sure the constructor exists
-        if(constructor == null)
+        if(constructorSymbol == null)
             new AnalyzingError.UnresolvableConstructor(classCreation, argumentTypes);
 
         return classCreation;
@@ -2237,7 +2232,7 @@ public final class Analyzer implements NodeModifier {
     }
 
     /**
-     * Returns whether the given exception is a throwable expression.
+     * Returns whether the given expression is a throwable expression.
      * An expression is throwable if its resulting type is assignable to Throwable.
      * @param expression the expression node
      * @return true if the expression is throwable
