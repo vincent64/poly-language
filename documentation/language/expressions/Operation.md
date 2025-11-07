@@ -53,21 +53,21 @@ The following table describes every mathematical operation :
 Logical operations are operations that produces a boolean result.
 The following table describes every logical operation :
 
-| Operation                | Operator | Operands | Notes                                                                                                  |
-|--------------------------|----------|----------|--------------------------------------------------------------------------------------------------------|
-| Equality                 | `==`     | 2        |                                                                                                        |
-| Inequality               | `!=`     | 2        |                                                                                                        |
-| Greater than             | `>`      | 2        |                                                                                                        |
-| Less than                | `<`      | 2        |                                                                                                        |
-| Greater or equal than    | `>=`     | 2        |                                                                                                        |
-| Less or equal than       | `<=`     | 2        |                                                                                                        |
-| Logical AND              | `&&`     | 2        |                                                                                                        |
-| Logical AND              | `\|\|`   | 2        |                                                                                                        |
-| Logical NOT              | `!`      | 1        |                                                                                                        |
-| Reference equality       | `===`    | 2        | Returns `true` if both object have the reference (i.e. they are exactly the same). Not overloadable.   |
-| Reference inequality     | `!==`    | 2        | Not overloadable.                                                                                      |
-| Instance type equality   | `==:`    | 2        | Returns `true` if the given object is the same type or a subtype of the given class. Not overloadable. |
-| Instance type inequality | `!=:`    | 2        | Not overloadable.                                                                                      |
+| Operation                | Operator | Operands | Notes                                                                                                     |
+|--------------------------|----------|----------|-----------------------------------------------------------------------------------------------------------|
+| Equality                 | `==`     | 2        |                                                                                                           |
+| Inequality               | `!=`     | 2        |                                                                                                           |
+| Greater than             | `>`      | 2        |                                                                                                           |
+| Less than                | `<`      | 2        |                                                                                                           |
+| Greater or equal than    | `>=`     | 2        |                                                                                                           |
+| Less or equal than       | `<=`     | 2        |                                                                                                           |
+| Logical AND              | `&&`     | 2        |                                                                                                           |
+| Logical AND              | `\|\|`   | 2        |                                                                                                           |
+| Logical NOT              | `!`      | 1        |                                                                                                           |
+| Reference equality       | `===`    | 2        | Returns `true` if both object have the same reference (i.e. they are exactly the same). Not overloadable. |
+| Reference inequality     | `!==`    | 2        | Not overloadable.                                                                                         |
+| Instance type equality   | `==:`    | 2        | Returns `true` if the given object is the same type or a subtype of the given class. Not overloadable.    |
+| Instance type inequality | `!=:`    | 2        | Not overloadable.                                                                                         |
 
 
 
@@ -81,8 +81,8 @@ The following table describes every bitwise operation :
 | Bitwise OR             | `\|`     | 2        |                                                                                                                    |
 | Bitwise XOR            | `^`      | 2        |                                                                                                                    |
 | Bitwise NOT            | `~`      | 1        |                                                                                                                    |
-| Shift left             | `<<`     | 2        |                                                                                                                    |
-| Shift right            | `>>`     | 2        |                                                                                                                    |
+| Shift left logical     | `<<`     | 2        |                                                                                                                    |
+| Shift right logical    | `>>`     | 2        |                                                                                                                    |
 | Shift right arithmetic | `>>>`    | 2        | Unlike Java, this operator perform the arithmetic right shift. This is done intentionally to align with C and C++. |
 
 
