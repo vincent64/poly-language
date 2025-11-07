@@ -127,9 +127,16 @@ public final class Analyzer implements NodeModifier {
         StatementBlock statementBlock = (StatementBlock) methodDeclaration.getBody();
         List<Statement> statements = statementBlock.getStatements();
 
+        boolean hasReturned = false;
+        for(Node statement : statements) {
+            if(statement instanceof ReturnStatement) {
+                hasReturned = true;
+                break;
+            }
+        }
+
         //Make sure there is a return statement
-        if(methodDeclaration.getReturnType() != null
-                && (statements.isEmpty() || !isTerminalStatement(statements.getLast())))
+        if(methodDeclaration.getReturnType() != null && !hasReturned)
             new AnalyzingError.MissingReturnStatement(methodDeclaration);
 
         //Skip if method is not constructor or class is an enum
