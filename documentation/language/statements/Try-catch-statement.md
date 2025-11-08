@@ -14,7 +14,7 @@ try statementBlock catch(exceptionParameter) statementBlock
 ```
 
 The exception parameter must be a parameter with the type of the exception to catch.
-The exception type must be a subtype of the `Throwable` class.
+The exception type must be a subtype of the [`Throwable`](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Throwable.html) class.
 If the exception is not assignable to the parameter type, the exception is not caught.
 
 

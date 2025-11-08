@@ -16,16 +16,16 @@ To declare a class, the name of the class must be preceded by the `class` keywor
 class MyClass { }
 ```
 
-What's inside the curly brackets is called the _class content_.
+What's inside the curly brackets is called the _class' content_.
 
 
 ## Content
-A class can contain 3 different structure inside itself :
+A class can contain 3 different structures :
 - [Fields](Field.md) (variables, represent the class state)
 - [Methods](Method.md) (functions, used to perform procedures)
 - [Nested/inner classes](Nested-inner-class.md)
 
-The declaration of these must be done in the same order as written above.
+Their declaration must be done in the same order as written above.
 Poly forces you to declare them in this order for practical reasons, as well as to improve
 readability and maintainability.
 Please note that the declaration order does not change the way fields, methods and inner classes interact.

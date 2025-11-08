@@ -2,7 +2,7 @@
 An **exception** is a class that represents an exceptional event during runtime.
 An exception can be thrown by the program during execution, and can also be caught using a [try-catch-statement](../statements/Try-catch-statement.md).
 
-Every exception extends from the `RuntimeException` exception.
+Every exception extends from the [`RuntimeException`](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/RuntimeException.html) exception.
 
 In Poly, every exception are unchecked, meaning the compiler does not enforce catching exceptions.
 

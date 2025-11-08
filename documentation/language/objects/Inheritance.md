@@ -9,7 +9,7 @@ In Poly, a class can inherit from a single class, unlike in C++ where _multiple 
 This is a deliberate design choice, as multiple inheritance can cause issues and lead to problems that are hard to track down.
 _Interfaces_ can be used to provide similar features.
 
-> Every class inherit from the `Object` class.
+> Every class inherit from the [`Object`](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Object.html) class.
 
 
 ---
@@ -41,7 +41,7 @@ Furthermore, the overriding method cannot have a weaker access modifier
 If the superclass' method is private, the current class' method cannot be an overriding method.
 
 
-### Constructor overriding
+### Constructor
 While the constructor is a special method, it can also be overriden.
 However, unlike regular methods, an overriding constructor can have a weaker access modifier.
 

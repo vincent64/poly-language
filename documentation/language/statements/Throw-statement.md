@@ -12,7 +12,7 @@ throw expression;
 ```
 
 The expression must have the type of the exception to throw.
-The exception type must be a subtype of the `Throwable` class.
+The exception type must be a subtype of the [`Throwable`](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Throwable.html) class.
 
 
 ## Example

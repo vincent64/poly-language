@@ -19,7 +19,7 @@ It is also possible to provide the exception to throw when the condition is not 
 ```poly
 assert(condition) : expression;
 ```
-The expression type must be a subtype of the `Throwable` class.
+The expression type must be a subtype of the [`Throwable`](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Throwable.html) class.
 
 
 ## Example

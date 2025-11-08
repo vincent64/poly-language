@@ -2,7 +2,7 @@
 A **string** is an array (or sequence) of characters making up a piece of text.
 Strings are commonly used to store human-readable text and information.
 
-The documentation for strings can be viewed [here](https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/String.html).
+The documentation for strings can be viewed [here](https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html).
 
 
 ---
