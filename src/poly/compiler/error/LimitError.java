@@ -99,4 +99,14 @@ public abstract class LimitError extends Error {
                     classDefinition.getClassSymbol().getClassQualifiedName(), MESSAGE);
         }
     }
+
+    public static class ArrayDimension extends LimitError {
+        private static final String MESSAGE = "Array dimension exceeded (max. %d)"
+                .formatted(Limitations.MAX_ARRAY_DIMENSION);
+
+        public ArrayDimension(ClassDefinition classDefinition) {
+            super(classDefinition.getClassDeclaration().getMeta().getFileName(),
+                    classDefinition.getClassSymbol().getClassQualifiedName(), MESSAGE);
+        }
+    }
 }
