@@ -303,7 +303,7 @@ public final class Parser {
         if(matches(SHARP)) node.setStatic();
 
         //Parse variable declaration
-        node.setVariable(parseVariableDeclaration());
+        node.setVariable(parseVariableDeclaration(true));
 
         //Match semicolon at the end
         match(SEMICOLON);
@@ -388,7 +388,7 @@ public final class Parser {
         return node;
     }
 
-    private Statement parseVariableDeclaration() {
+    private Statement parseVariableDeclaration(boolean withExpression) {
         VariableDeclaration statement = new VariableDeclaration(Node.Meta.fromLeadingToken(currentToken));
 
         //Check if variable is constant
@@ -404,7 +404,7 @@ public final class Parser {
         } else new ParsingError.UnexpectedToken(currentToken);
 
         //Parse variable initialization
-        if(matches(Symbol.EQUAL))
+        if(withExpression && matches(Symbol.EQUAL))
             statement.setInitializationExpression(parseExpression());
 
         return statement;
@@ -483,7 +483,7 @@ public final class Parser {
 
             //Parse variable declaration
             if(isPrimitiveKeyword(currentToken) || isMatching(VAR_CONST)) {
-                Statement statement = parseVariableDeclaration();
+                Statement statement = parseVariableDeclaration(true);
                 match(SEMICOLON);
 
                 return statement;
@@ -514,7 +514,7 @@ public final class Parser {
         if(isMatchingType(Token.Type.IDENTIFIER)) {
             //Parse variable declaration
             if(isPeekMatchingType(Token.Type.IDENTIFIER)) {
-                Statement statement = parseVariableDeclaration();
+                Statement statement = parseVariableDeclaration(true);
                 match(SEMICOLON);
 
                 return statement;
@@ -664,7 +664,7 @@ public final class Parser {
         match(OPENING_PARENTHESIS);
 
         //Parse variable declaration
-        statement.setVariableDeclaration(parseVariableDeclaration());
+        statement.setVariableDeclaration(parseVariableDeclaration(false));
 
         //Match colon
         match(COLON);
@@ -947,7 +947,7 @@ public final class Parser {
         match(OPENING_PARENTHESIS);
 
         //Parse variable initialiation
-        expression.setVariableInitialization(parseVariableDeclaration());
+        expression.setVariableInitialization(parseVariableDeclaration(true));
         match(SEMICOLON);
 
         //Parse condition
@@ -976,7 +976,7 @@ public final class Parser {
         match(OPENING_PARENTHESIS);
 
         //Parse variable initialiation
-        expression.setVariableInitialization(parseVariableDeclaration());
+        expression.setVariableInitialization(parseVariableDeclaration(true));
         match(SEMICOLON);
 
         //Parse condition
