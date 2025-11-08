@@ -194,7 +194,7 @@ public final class Parser {
         match(IMPORT);
 
         //Parse import alias name
-        if(isMatchingType(Token.Type.IDENTIFIER) && Character.isSameString(peekToken().getContent(), COLON)) {
+        if(isMatchingType(Token.Type.IDENTIFIER) && isPeekMatching(COLON)) {
             node.setAliasName(currentToken);
             nextToken();
             match(COLON);
@@ -512,10 +512,8 @@ public final class Parser {
     private Statement parseVariableStatement() {
         //Parse statement starting with identifier
         if(isMatchingType(Token.Type.IDENTIFIER)) {
-            Token nextToken = peekToken();
-
             //Parse variable declaration
-            if(nextToken.getType() == Token.Type.IDENTIFIER) {
+            if(isPeekMatchingType(Token.Type.IDENTIFIER)) {
                 Statement statement = parseVariableDeclaration();
                 match(SEMICOLON);
 
@@ -828,7 +826,7 @@ public final class Parser {
     }
 
     private Statement parseThisStatement() {
-        if(Character.isSameString(peekToken().getContent(), OPENING_PARENTHESIS)) {
+        if(isPeekMatching(OPENING_PARENTHESIS)) {
             ThisStatement statement = new ThisStatement(Node.Meta.fromLeadingToken(currentToken));
 
             //Match this keyword
@@ -849,7 +847,7 @@ public final class Parser {
     }
 
     private Statement parseSuperStatement() {
-        if(Character.isSameString(peekToken().getContent(), OPENING_PARENTHESIS)) {
+        if(isPeekMatching(OPENING_PARENTHESIS)) {
             SuperStatement statement = new SuperStatement(Node.Meta.fromLeadingToken(currentToken));
 
             //Match super keyword
@@ -1368,12 +1366,9 @@ public final class Parser {
         while(isMatching(DOT) || isMatching(OPENING_SQUARE_BRACKET) || isMatching(OPENING_PARENTHESIS)) {
             //Parse member access
             if(matches(DOT)) {
-                //Retrieve next token
-                Token nextToken = peekToken();
-
                 if((expression instanceof QualifiedName || expression instanceof SimpleName)
                         && isMatchingType(Token.Type.IDENTIFIER)
-                        && !isSameString(nextToken.getContent(), OPENING_PARENTHESIS)) {
+                        && !isPeekMatching(OPENING_PARENTHESIS)) {
                     //Parse qualified name
                     QualifiedName qualifiedName = new QualifiedName(Node.Meta.fromLeadingToken(currentToken));
                     qualifiedName.setQualifiedName(expression);
@@ -1392,7 +1387,7 @@ public final class Parser {
             //Parse array access
             else if(isMatching(OPENING_SQUARE_BRACKET)) {
                 //Check if start of array declaration
-                if(isSameString(peekToken().getContent(), CLOSING_SQUARE_BRACKET))
+                if(isPeekMatching(CLOSING_SQUARE_BRACKET))
                     return expression;
 
                 //Match opening bracket
@@ -1473,7 +1468,7 @@ public final class Parser {
 
     private Expression parseIdentifier() {
         //Parse method call
-        if(Character.isSameString(peekToken().getContent(), OPENING_PARENTHESIS))
+        if(isPeekMatching(OPENING_PARENTHESIS))
             return parseMethodCall();
 
         //Parse identifier
