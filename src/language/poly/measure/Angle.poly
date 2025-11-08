@@ -12,7 +12,7 @@ class+ Angle(Measure) {
     ¦ @param value the angle value
     ¦ @param unit the angle unit
     fn+ constructor(const double value, Unit unit)
-        super((value * unit.factor) % 1d);
+        super((((value * unit.factor) % 1d) + 1d) % 1d);
     
     ¦ Constructs a angle with the given value in the default unit (turn).
     ¦ @param value the angle value
@@ -42,6 +42,10 @@ class+ Angle(Measure) {
     ¦ @param that the angle
     ¦ @returns the resulting angle
     op+ Angle %(Angle that) = new(value % that.value);
+
+    ¦ Returns the inverse of the current angle.
+    ¦ @returns the resulting angle
+    op+ Angle -() = new(-value);
 
     ¦ Returns whether the current angle is equal to the given angle.
     ¦ @param that the angle
