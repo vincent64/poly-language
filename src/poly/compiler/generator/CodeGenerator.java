@@ -6,6 +6,7 @@ import poly.compiler.analyzer.table.VariableTable;
 import poly.compiler.analyzer.type.Object;
 import poly.compiler.analyzer.type.Void;
 import poly.compiler.analyzer.type.*;
+import poly.compiler.error.LimitError;
 import poly.compiler.output.attribute.CodeAttribute;
 import poly.compiler.output.attribute.LineNumberTableAttribute;
 import poly.compiler.output.attribute.StackMapTableAttribute;
@@ -13,6 +14,7 @@ import poly.compiler.output.content.Attributes;
 import poly.compiler.output.content.ConstantPool;
 import poly.compiler.output.content.Descriptor;
 import poly.compiler.output.jvm.Instruction;
+import poly.compiler.output.jvm.Limitations;
 import poly.compiler.parser.tree.*;
 import poly.compiler.parser.tree.expression.*;
 import poly.compiler.parser.tree.statement.*;
@@ -43,6 +45,7 @@ public final class CodeGenerator implements NodeVisitor {
     private final LineNumberTable lineNumberTable;
     private final StackMapTable stackMapTable;
     private final ExceptionTable exceptionTable;
+    private final ClassDefinition classDefinition;
     private final ClassDeclaration classDeclaration;
     private final ClassSymbol classSymbol;
     private final VariableTable variableTable;
@@ -54,6 +57,7 @@ public final class CodeGenerator implements NodeVisitor {
     private CodeGenerator(ClassDefinition classDefinition, ConstantPool constantPool, ImportTable importTable) {
         this.constantPool = constantPool;
         this.importTable = importTable;
+        this.classDefinition = classDefinition;
 
         classDeclaration = classDefinition.getClassDeclaration();
         classSymbol = classDefinition.getClassSymbol();
@@ -144,6 +148,14 @@ public final class CodeGenerator implements NodeVisitor {
     public CodeAttribute generate(MethodDeclaration methodDeclaration) {
         //Visit method declaration
         methodDeclaration.accept(this);
+
+        //Make sure the operand stack does not overflow
+        if(operandStack.getMaxStack() > Limitations.MAX_OPERAND_STACK_SIZE)
+            new LimitError.OperandStackOverflow(classDefinition);
+
+        //Make sure there is not too many local variables
+        if(localTable.getMaxCount() > Limitations.MAX_LOCAL_VARIABLES_COUNT)
+            new LimitError.LocalVariableCount(classDefinition);
 
         //Generate bytes from instructions
         ByteArray byteArray = new ByteArray();
