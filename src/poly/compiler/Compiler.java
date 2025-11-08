@@ -60,8 +60,6 @@ public class Compiler {
         //Print header message
         System.out.println(HEADER.formatted(VERSION));
         System.out.flush();
-        System.out.println(HEADER_INFORMATION);
-        System.out.flush();
 
         //Print help message if no arguments
         if(arguments.length == 0) {
