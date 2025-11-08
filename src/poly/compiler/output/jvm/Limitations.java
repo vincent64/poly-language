@@ -14,6 +14,7 @@ public class Limitations {
     public static final int MAX_CONSTANT_POOL_ENTRY_COUNT = 0xFFFF;
     public static final int MAX_LOCAL_VARIABLES_COUNT = 0xFFFF;
     public static final int MAX_OPERAND_STACK_SIZE = 0xFFFF;
+    public static final int MAX_ARRAY_DIMENSION = 0xFF;
 
     private Limitations() { }
 }
