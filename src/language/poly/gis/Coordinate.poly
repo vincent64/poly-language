@@ -1,5 +1,6 @@
 import poly.util.Equatable;
 import poly.math.Math;
+import poly.measure.Length;
 
 ¦ The Coordinate class represents a geographical coordinate with latitude and longitude.
 ¦ @author Vincent Philippe (@vincent64)
@@ -33,7 +34,7 @@ class+ const Coordinate : Equatable {
     ¦ the Earth is a perfect sphere.
     ¦ @returns the distance between the coordinates (in kilometers)
     ¦
-    fn+ double distanceTo(Coordinate that) {
+    fn+ Length distanceTo(Coordinate that) {
         //Average earth radius
         const double EARTH_RADIUS = 6371.0d;
 
@@ -49,7 +50,7 @@ class+ const Coordinate : Equatable {
         double hav = hav_latitude + Math.cos(Math.toRadians(latitude))
                      * Math.cos(Math.toRadians(that.latitude)) * hav_longitude;
 
-        return 2.0d * EARTH_RADIUS * Math.arcsin(Math.sqrt(hav));
+        return new(2.0d * EARTH_RADIUS * Math.arcsin(Math.sqrt(hav)), Length.Unit.KILOMETER);
     }
 
     ¦ Returns the geographical URI (Uniform Resource Identifier) of the current coordinate.
