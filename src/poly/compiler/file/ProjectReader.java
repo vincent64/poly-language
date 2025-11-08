@@ -63,7 +63,7 @@ public class ProjectReader {
                     readFile(file, packageName);
 
             } else if(file.isDirectory()) {
-                readDirectory(file, packageName.addName(file.getName().toCharArray()));
+                readDirectory(file, packageName.addName(file.getName()));
             }
         }
     }
