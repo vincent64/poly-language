@@ -10,7 +10,7 @@ interface+ Queue(Deque) {
     ¦ Pushes the given object to the queue.
     ¦ @param the object
     ¦
-    fn void push(Object obj);
+    fn push(Object obj);
 
     ¦ Pops the first object off the queue and returns it.
     ¦ @returns the topmost object

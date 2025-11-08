@@ -9,11 +9,11 @@ interface+ Equatable {
     ¦ @param object the object
     ¦ @returns true if the objects are equal
     ¦
-    op+ bool ==(Object object);
+    op bool ==(Object object);
 
     ¦ Returns whether the current object is not equal to the given object.
     ¦ @param object the object
     ¦ @returns true if the objects are not equal
     ¦
-    op+ bool !=(Object object);
+    op bool !=(Object object);
 }

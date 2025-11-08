@@ -10,7 +10,7 @@ interface+ Stack(Deque) {
     ¦ Pushes the given object on top of the stack.
     ¦ @param the object
     ¦
-    fn void push(Object obj);
+    fn push(Object obj);
 
     ¦ Pops the topmost object off the stack and returns it.
     ¦ @returns the topmost object

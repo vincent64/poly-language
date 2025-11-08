@@ -9,7 +9,7 @@ class+ const LinkedStack : Stack {
 
     fn+ constructor() { }
 
-    fn+ void push(Object object) {
+    fn+ push(Object object) {
         top = new(top, object);
         size++;
     }
@@ -30,7 +30,7 @@ class+ const LinkedStack : Stack {
         return top.object;
     }
 
-    fn+ void clear() {
+    fn+ clear() {
         size = 0;
         top = null;
     }

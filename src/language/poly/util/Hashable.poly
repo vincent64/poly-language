@@ -7,5 +7,5 @@ interface+ Hashable {
     ¦ Returns the object integer hash.
     ¦ @returns the hash
     ¦
-    fn+ int getHash();
+    fn int getHash();
 }

@@ -14,7 +14,7 @@ class+ const ArrayQueue : Queue {
 
     fn+ constructor() { }
 
-    fn+ void push(Object object) {
+    fn+ push(Object object) {
         assert(size < int.max) : new Queue.QueueOverflowException();
 
         allocate();
@@ -40,7 +40,7 @@ class+ const ArrayQueue : Queue {
         return array[firstIndex];
     }
 
-    fn+ void clear() {
+    fn+ clear() {
         size = 0;
         array = new[INITIAL_CAPACITY];
     }
@@ -49,7 +49,7 @@ class+ const ArrayQueue : Queue {
         return size;
     }
 
-    fn- void allocate() while(size >= array.size) {
+    fn- allocate() while(size >= array.size) {
         Object[] new_array = new[array.size * 2];
 
         //Copy the array by parts according to indices

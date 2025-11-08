@@ -8,7 +8,7 @@ interface+ Collection {
 
     ¦ Removes every element from the collection.
     ¦
-    fn void clear();
+    fn clear();
 
     ¦ Returns the size of the collection.
     ¦ @returns the collection size

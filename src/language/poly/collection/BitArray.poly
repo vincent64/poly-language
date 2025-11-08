@@ -26,7 +26,7 @@ class+ BitArray {
     ¦ @param index the index
     ¦ @param value the bit boolean value
     ¦
-    fn+ void set(int index, bool value) {
+    fn+ set(int index, bool value) {
         assert(index < size);
 
         //Compute indices
@@ -55,7 +55,7 @@ class+ BitArray {
 
     ¦ Resets the bit array and set every bit to zero (false).
     ¦
-    fn+ void reset() {
+    fn+ reset() {
         for(int i = 0; i < array.size; i++)
             array[i] = 0L;
     }

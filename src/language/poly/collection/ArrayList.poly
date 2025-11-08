@@ -12,12 +12,12 @@ class+ const ArrayList : List {
 
     fn+ constructor() { }
 
-    fn+ void add(Object object) {
+    fn+ add(Object object) {
         allocate();
         array[size++] = object;
     }
 
-    fn+ void insert(int index, Object object) {
+    fn+ insert(int index, Object object) {
         assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         allocate();
@@ -61,7 +61,7 @@ class+ const ArrayList : List {
         return false;
     }
 
-    fn+ void clear() {
+    fn+ clear() {
         size = 0;
         array = new[INITIAL_CAPACITY];
     }
@@ -74,7 +74,7 @@ class+ const ArrayList : List {
         return get(index);
     }
 
-    fn- void allocate() {
+    fn- allocate() {
         while(size >= array.size) {
             Object[] new_array = new[array.size * 2];
             System.arraycopy(array, 0, new_array, 0, size);

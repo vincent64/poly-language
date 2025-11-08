@@ -9,7 +9,7 @@ class+ # Program {
     ¦ Exits the current program with the given exit code.
     ¦ @param code the exit code
     ¦
-    fn+ void exit(int code) {
+    fn+ exit(int code) {
         System.exit(code);
     }
 }

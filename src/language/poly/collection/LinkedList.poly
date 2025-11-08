@@ -9,7 +9,7 @@ class+ const LinkedList : List {
 
     fn+ constructor() { }
 
-    fn+ void add(Object object) {
+    fn+ add(Object object) {
         if(isEmpty()) {
             first = new(first, object);
         } else {
@@ -19,7 +19,7 @@ class+ const LinkedList : List {
         size++;
     }
 
-    fn+ void insert(int index, Object object) {
+    fn+ insert(int index, Object object) {
         assert(0 <= index && index < size) : new List.IndexOutOfBoundsException();
 
         if(index == 0) {
@@ -76,7 +76,7 @@ class+ const LinkedList : List {
         return false;
     }
 
-    fn+ void clear() {
+    fn+ clear() {
         size = 0;
         first = null;
     }

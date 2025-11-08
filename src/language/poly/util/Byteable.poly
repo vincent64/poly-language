@@ -7,5 +7,5 @@ interface+ Byteable {
     ¦ Returns the object bytes array content.
     ¦ @returns the bytes array
     ¦
-    fn+ byte[] getBytes();
+    fn byte[] getBytes();
 }

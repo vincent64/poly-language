@@ -10,7 +10,7 @@ class+ const LinkedQueue : Queue {
 
     fn+ constructor() { }
 
-    fn+ void push(Object object) {
+    fn+ push(Object object) {
         if(isEmpty()) {
             first = last = new(last, object);
         } else {
@@ -35,7 +35,7 @@ class+ const LinkedQueue : Queue {
         return first.object;
     }
 
-    fn+ void clear() {
+    fn+ clear() {
         size = 0;
         first = null;
         last = null;

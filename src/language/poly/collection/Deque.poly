@@ -9,7 +9,7 @@ interface+ Deque(Collection) {
     ¦ Pushes the given object to the deque.
     ¦ @param the object
     ¦
-    fn void push(Object obj);
+    fn push(Object obj);
 
     ¦ Pops the first object off the deque and returns it.
     ¦ @returns the topmost object

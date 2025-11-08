@@ -12,7 +12,7 @@ class+ const ArrayStack : Stack {
 
     fn+ constructor() { }
 
-    fn+ void push(Object object) {
+    fn+ push(Object object) {
         assert(size < int.max) : new Stack.StackOverflowException();
 
         allocate();
@@ -34,7 +34,7 @@ class+ const ArrayStack : Stack {
         return array[size - 1];
     }
 
-    fn+ void clear() {
+    fn+ clear() {
         size = 0;
         array = new[INITIAL_CAPACITY];
     }
@@ -43,7 +43,7 @@ class+ const ArrayStack : Stack {
         return size;
     }
 
-    fn- void allocate() {
+    fn- allocate() {
         while(size >= array.size) {
             Object[] new_array = new[array.size * 2];
             System.arraycopy(array, 0, new_array, 0, size);

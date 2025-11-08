@@ -9,124 +9,124 @@ class+ # Console {
     ¦ Prints the given string in the console, and adds a new line.
     ¦ @param string the string
     ¦
-    fn+ void println(String string) {
+    fn+ println(String string) {
         System.out.println(string);
     }
 
     ¦ Prints the string representation of the given object in the console, and adds a new line.
     ¦ @param object the object
     ¦
-    fn+ void println(Object object) {
+    fn+ println(Object object) {
         System.out.println(object.toString());
     }
 
     ¦ Prints the given integer value in the console, and adds a new line.
     ¦ @param value the integer value
     ¦
-    fn+ void println(int value) {
+    fn+ println(int value) {
         System.out.println(String.valueOf(value));
     }
 
     ¦ Prints the given long value in the console, and adds a new line.
     ¦ @param value the long value
     ¦
-    fn+ void println(long value) {
+    fn+ println(long value) {
         System.out.println(String.valueOf(value));
     }
 
     ¦ Prints the given float value in the console, and adds a new line.
     ¦ @param value the float value
     ¦
-    fn+ void println(float value) {
+    fn+ println(float value) {
         System.out.println(String.valueOf(value));
     }
 
     ¦ Prints the given double value in the console, and adds a new line.
     ¦ @param value the double value
     ¦
-    fn+ void println(double value) {
+    fn+ println(double value) {
         System.out.println(String.valueOf(value));
     }
 
     ¦ Prints the given boolean value in the console, and adds a new line.
     ¦ @param value the boolean value
     ¦
-    fn+ void println(bool value) {
+    fn+ println(bool value) {
         System.out.println(String.valueOf(value));
     }
 
     ¦ Prints the given character in the console, and adds a new line.
     ¦ @param value the character
     ¦
-    fn+ void println(char value) {
+    fn+ println(char value) {
         System.out.println(String.valueOf(value));
     }
 
     ¦ Prints a new line in the console.
     ¦
-    fn+ void println() {
+    fn+ println() {
         System.out.println();
     }
 
     ¦ Prints the given string in the console.
     ¦ @param string the string
     ¦
-    fn+ void print(String string) {
+    fn+ print(String string) {
         System.out.print(string);
     }
 
     ¦ Prints the string representation of the given object in the console.
     ¦ @param object the object
     ¦
-    fn+ void print(Object object) {
+    fn+ print(Object object) {
         System.out.print(object.toString());
     }
 
     ¦ Prints the given integer value in the console.
     ¦ @param value the integer value
     ¦
-    fn+ void print(int value) {
+    fn+ print(int value) {
         System.out.print(String.valueOf(value));
     }
 
     ¦ Prints the given long value in the console.
     ¦ @param value the long value
     ¦
-    fn+ void print(long value) {
+    fn+ print(long value) {
         System.out.print(String.valueOf(value));
     }
 
     ¦ Prints the given float value in the console.
     ¦ @param value the float value
     ¦
-    fn+ void print(float value) {
+    fn+ print(float value) {
         System.out.print(String.valueOf(value));
     }
 
     ¦ Prints the given double value in the console.
     ¦ @param value the double value
     ¦
-    fn+ void print(double value) {
+    fn+ print(double value) {
         System.out.print(String.valueOf(value));
     }
 
     ¦ Prints the given boolean value in the console.
     ¦ @param value the boolean value
     ¦
-    fn+ void print(bool value) {
+    fn+ print(bool value) {
         System.out.print(String.valueOf(value));
     }
 
     ¦ Prints the given character in the console.
     ¦ @param value the character
     ¦
-    fn+ void print(char value) {
+    fn+ print(char value) {
         System.out.print(String.valueOf(value));
     }
 
     ¦ Flushes the console output stream (i.e. force print).
     ¦
-    fn+ void flush() {
+    fn+ flush() {
         System.out.flush();
     }
 
@@ -185,7 +185,7 @@ class+ # Console {
 
         ¦ Closes the console input.
         ¦
-        fn+ void close() {
+        fn+ close() {
             isClosed = true;
             scanner.close();
         }

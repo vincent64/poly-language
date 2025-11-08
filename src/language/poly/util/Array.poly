@@ -111,7 +111,7 @@ class+ # Array {
     ¦ @param array the integer array
     ¦ @param value the integer value
     ¦
-    fn+ void fill(int[] array, int value) {
+    fn+ fill(int[] array, int value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -120,7 +120,7 @@ class+ # Array {
     ¦ @param array the long array
     ¦ @param value the long value
     ¦
-    fn+ void fill(long[] array, long value) {
+    fn+ fill(long[] array, long value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -129,7 +129,7 @@ class+ # Array {
     ¦ @param array the float array
     ¦ @param value the float value
     ¦
-    fn+ void fill(float[] array, float value) {
+    fn+ fill(float[] array, float value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -138,7 +138,7 @@ class+ # Array {
     ¦ @param array the double array
     ¦ @param value the double value
     ¦
-    fn+ void fill(double[] array, double value) {
+    fn+ fill(double[] array, double value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -147,7 +147,7 @@ class+ # Array {
     ¦ @param array the boolean array
     ¦ @param value the boolean value
     ¦
-    fn+ void fill(bool[] array, bool value) {
+    fn+ fill(bool[] array, bool value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -156,7 +156,7 @@ class+ # Array {
     ¦ @param array the byte array
     ¦ @param value the byte value
     ¦
-    fn+ void fill(byte[] array, byte value) {
+    fn+ fill(byte[] array, byte value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -165,7 +165,7 @@ class+ # Array {
     ¦ @param array the short array
     ¦ @param value the short value
     ¦
-    fn+ void fill(short[] array, short value) {
+    fn+ fill(short[] array, short value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -174,7 +174,7 @@ class+ # Array {
     ¦ @param array the char array
     ¦ @param value the char value
     ¦
-    fn+ void fill(char[] array, char value) {
+    fn+ fill(char[] array, char value) {
         for(int i = 0; i < array.size; i++)
             array[i] = value;
     }
@@ -183,7 +183,7 @@ class+ # Array {
     ¦ @param array the object array
     ¦ @param value the object
     ¦
-    fn+ void fill(Object[] array, Object object) {
+    fn+ fill(Object[] array, Object object) {
         for(int i = 0; i < array.size; i++)
             array[i] = object;
     }
@@ -191,7 +191,7 @@ class+ # Array {
     ¦ Reverses the given integer array.
     ¦ @param array the integer array
     ¦
-    fn+ void reverse(int[] array) {
+    fn+ reverse(int[] array) {
         int element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -203,7 +203,7 @@ class+ # Array {
     ¦ Reverses the given long array.
     ¦ @param array the long array
     ¦
-    fn+ void reverse(long[] array) {
+    fn+ reverse(long[] array) {
         long element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -215,7 +215,7 @@ class+ # Array {
     ¦ Reverses the given float array.
     ¦ @param array the float array
     ¦
-    fn+ void reverse(float[] array) {
+    fn+ reverse(float[] array) {
         float element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -227,7 +227,7 @@ class+ # Array {
     ¦ Reverses the given double array.
     ¦ @param array the double array
     ¦
-    fn+ void reverse(double[] array) {
+    fn+ reverse(double[] array) {
         double element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -239,7 +239,7 @@ class+ # Array {
     ¦ Reverses the given boolean array.
     ¦ @param array the boolean array
     ¦
-    fn+ void reverse(bool[] array) {
+    fn+ reverse(bool[] array) {
         bool element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -251,7 +251,7 @@ class+ # Array {
     ¦ Reverses the given byte array.
     ¦ @param array the byte array
     ¦
-    fn+ void reverse(byte[] array) {
+    fn+ reverse(byte[] array) {
         byte element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -263,7 +263,7 @@ class+ # Array {
     ¦ Reverses the given short array.
     ¦ @param array the short array
     ¦
-    fn+ void reverse(short[] array) {
+    fn+ reverse(short[] array) {
         short element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -275,7 +275,7 @@ class+ # Array {
     ¦ Reverses the given char array.
     ¦ @param array the char array
     ¦
-    fn+ void reverse(char[] array) {
+    fn+ reverse(char[] array) {
         char element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];
@@ -287,7 +287,7 @@ class+ # Array {
     ¦ Reverses the given object array.
     ¦ @param array the object array
     ¦
-    fn+ void reverse(Object[] array) {
+    fn+ reverse(Object[] array) {
         Object element;
         for(int i = 0; i < array.size / 2; i++) {
             element = array[i];

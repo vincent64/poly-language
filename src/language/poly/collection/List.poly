@@ -11,13 +11,13 @@ interface+ List(Collection) {
     ¦ Adds the given object to the list.
     ¦ @param object the object
     ¦
-    fn void add(Object object);
+    fn add(Object object);
 
     ¦ Inserts the given object at the given index in the list.
     ¦ @param index the index
     ¦ @param object the object
     ¦
-    fn void insert(int index, Object object);
+    fn insert(int index, Object object);
 
     ¦ Replaces the given object at the given index in the list and returns the previous object at that index.
     ¦ @param index the index

@@ -9,5 +9,5 @@ interface+ Stringable {
     ¦ Returns the string representation of the object.
     ¦ @returns the object string representation
     ¦
-    fn+ String toString();
+    fn String toString();
 }
