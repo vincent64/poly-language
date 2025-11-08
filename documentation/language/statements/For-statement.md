@@ -46,5 +46,5 @@ Finally, the expression is a variable incrementation.
 
 ## Related
 ### [While-statement](While-statement.md)
-### [Do-while-statement](Do-while-statement.md)
+### [Foreach-statement](Foreach-statement.md)
 ### [Sum-expression](../expressions/Sum-expression.md)
