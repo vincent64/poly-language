@@ -93,7 +93,7 @@ public class MethodDeclaration extends Node {
      */
     public void setConstructor() {
         isConstructor = true;
-        name = String.valueOf(SpecialMethod.Name.CONSTRUCTOR);
+        name = SpecialMethod.Name.CONSTRUCTOR;
     }
 
     /**
@@ -102,7 +102,7 @@ public class MethodDeclaration extends Node {
      */
     public void setStaticConstructor() {
         isStaticConstructor = true;
-        name = String.valueOf(SpecialMethod.Name.STATIC_CONSTRUCTOR);
+        name = SpecialMethod.Name.STATIC_CONSTRUCTOR;
     }
 
     /**
