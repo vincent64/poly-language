@@ -251,14 +251,13 @@ public final class CodeGenerator implements NodeVisitor {
         addLineNumber(variableDeclaration);
 
         Type variableType = getTypeFromNode(variableDeclaration.getType());
-
         Expression expression = variableDeclaration.getInitializationExpression();
 
         if(expression != null) {
             //Visit initialization expression
             visitExpression(expression);
         } else {
-            //Generate default variable initialization value
+            //Load default variable initialization value
             addInstruction(variableType instanceof Primitive primitive
                     ? Instruction.forConstantZero(primitive)
                     : new Instruction(ACONST_NULL));
@@ -267,7 +266,7 @@ public final class CodeGenerator implements NodeVisitor {
         //Add variable to variable table
         Variable variable = variableTable.addVariable(variableType, variableDeclaration.getName(), variableDeclaration.isConstant());
 
-        //Generate instructions
+        //Store variable
         addInstruction(Instruction.forStoring(variable));
 
         localTable.addLocal(variableType);
@@ -483,7 +482,7 @@ public final class CodeGenerator implements NodeVisitor {
                     .add(programCounter - entry.getValue())
                     .build());
 
-            //Visit case statement block
+            //Visit case statement body
             value.getValue().accept(this);
 
             branching.addJumpIndex(instructions.size(), programCounter);
@@ -498,7 +497,7 @@ public final class CodeGenerator implements NodeVisitor {
                     .add(programCounter - switchOffset)
                     .build());
 
-            //Visit else case statement block
+            //Visit else case statement body
             switchStatement.getElseCase().accept(this);
 
             branching.addJumpIndex(instructions.size(), programCounter);
@@ -590,11 +589,11 @@ public final class CodeGenerator implements NodeVisitor {
 
             MethodSymbol methodSymbol = classSymbol.findConstructor(new Type[0], this.classSymbol, assertStatement);
 
-            //Generate instructions
+            //Call exception constructor
             generateCallSpecialMethod(methodSymbol);
         }
 
-        //Generate instructions
+        //Generate instruction
         addInstruction(ATHROW);
 
         generateStackMapFrame();
@@ -663,7 +662,7 @@ public final class CodeGenerator implements NodeVisitor {
         //Visit throw expression
         throwStatement.getExpression().accept(this);
 
-        //Generate instructions
+        //Generate instruction
         addInstruction(ATHROW);
     }
 
@@ -682,7 +681,7 @@ public final class CodeGenerator implements NodeVisitor {
         //Visit return expression
         visitExpression(expression);
 
-        //Generate return instructions
+        //Generate return instruction
         if(expression.getExpressionType() instanceof Primitive primitive) {
             switch(primitive.getPrimitiveKind()) {
                 case BOOLEAN, BYTE, SHORT, CHAR, INTEGER -> addInstruction(IRETURN);
@@ -723,7 +722,7 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitThisStatement(ThisStatement thisStatement) {
         addLineNumber(thisStatement);
 
-        //Retrieve this reference
+        //Load this reference
         addInstruction(ALOAD_0);
 
         //Load implicit enum arguments
@@ -742,7 +741,7 @@ public final class CodeGenerator implements NodeVisitor {
                 ? classSymbol.findConstructor(argumentTypes, classSymbol, thisStatement)
                 : classSymbol.findEnumConstructor(argumentTypes, classSymbol, thisStatement);
 
-        //Generate instructions
+        //Call this constructor
         generateCallSpecialMethod(constructorSymbol);
 
         //Update current class reference
@@ -753,20 +752,19 @@ public final class CodeGenerator implements NodeVisitor {
     public void visitSuperStatement(SuperStatement superStatement) {
         addLineNumber(superStatement);
 
-        //Retrieve this reference
+        //Load this reference
         addInstruction(ALOAD_0);
 
         //Visit arguments list
         superStatement.getArgumentList().accept(this);
 
         Type[] argumentTypes = getTypesFromArguments((ArgumentList) superStatement.getArgumentList());
-
         ClassSymbol superclassSymbol = (ClassSymbol) classSymbol.getSuperclassSymbol();
 
         //Find constructor in superclass
         MethodSymbol constructorSymbol = superclassSymbol.findConstructor(argumentTypes, this.classSymbol, superStatement);
 
-        //Generate instructions
+        //Call super constructor
         generateCallSpecialMethod(constructorSymbol);
 
         //Update current class reference
@@ -877,7 +875,7 @@ public final class CodeGenerator implements NodeVisitor {
             //Add string constant to constant pool
             short index = (short) constantPool.addStringConstant(String.valueOf(string.getValue()));
 
-            //Generate instructions
+            //Load constant from constant pool
             addInstruction(new Instruction.Builder(LDC_W, 3)
                     .add(index)
                     .build());
@@ -1103,7 +1101,7 @@ public final class CodeGenerator implements NodeVisitor {
         else if(expressionType instanceof Object) {
             ClassSymbol classSymbol = ((Object) castType).getClassSymbol();
 
-            //Generate instructions
+            //Generate instruction
             addInstruction(new Instruction.Builder(CHECKCAST, 3)
                     .add((short) constantPool.addClassConstant(classSymbol.getClassInternalQualifiedName()))
                     .build());
@@ -1116,7 +1114,7 @@ public final class CodeGenerator implements NodeVisitor {
             //Generate array descriptor
             String arrayDescriptor = String.valueOf(Descriptor.getDescriptorFromType(array));
 
-            //Generate instructions
+            //Generate instruction
             addInstruction(new Instruction.Builder(CHECKCAST, 3)
                     .add((short) constantPool.addClassConstant(arrayDescriptor))
                     .build());
@@ -2116,11 +2114,9 @@ public final class CodeGenerator implements NodeVisitor {
 
             //Load variable
             addInstruction(Instruction.forLoading(variable));
-
             //Visit increment
             visitIncrement(unaryExpression, primitive, isResultNeeded, false, false);
-
-            //Generate instruction
+            //Store variable
             addInstruction(Instruction.forStoring(variable));
         }
 
@@ -2139,8 +2135,7 @@ public final class CodeGenerator implements NodeVisitor {
 
             //Visit increment
             visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, !fieldSymbol.isStatic(), false);
-
-            //Generate instructions
+            //Store field
             generatePutField(fieldSymbol);
         }
     }
@@ -2168,8 +2163,7 @@ public final class CodeGenerator implements NodeVisitor {
 
         //Visit increment
         visitIncrement(unaryExpression, (Primitive) fieldSymbol.getType(), isResultNeeded, true, false);
-
-        //Generate instructions
+        //Store field
         generatePutInstanceField(fieldSymbol);
     }
 
