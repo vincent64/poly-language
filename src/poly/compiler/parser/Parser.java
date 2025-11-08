@@ -336,7 +336,7 @@ public final class Parser {
             node.setConstructor();
         } else {
             //Parse method return type
-            if(!matches(METHOD_VOID))
+            if(!isPeekMatching(OPENING_PARENTHESIS))
                 node.setReturnType(parseType());
 
             //Check if method is operator
