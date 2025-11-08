@@ -315,9 +315,9 @@ public final class Parser {
         MethodDeclaration node = new MethodDeclaration(Node.Meta.fromLeadingToken(currentToken));
 
         //Match method keyword
-        if(matches(METHOD) || isMatching(METHOD_OPERATOR)) {
-            if(matches(METHOD_OPERATOR)) node.setOperator();
-        }
+        if(matches(METHOD_OPERATOR))
+            node.setOperator();
+        else match(METHOD);
 
         //Parse method access modifier
         if(isAccessModifierSymbol(currentToken)) {
