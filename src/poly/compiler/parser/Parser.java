@@ -133,12 +133,21 @@ public final class Parser {
     }
 
     /**
-     * Returns wether the current token is matching the given token type.
+     * Returns whether the current token is matching the given token type.
      * @param type the token type
      * @return true if the current token is matching the type
      */
     private boolean isMatchingType(Token.Type type) {
         return currentToken.getType() == type;
+    }
+
+    /**
+     * Returns whether the peeked token is matching the given token type.
+     * @param type the token type
+     * @return true if the peeked token is matching the type
+     */
+    private boolean isPeekMatchingType(Token.Type type) {
+        return peekToken().getType() == type;
     }
 
     /**
