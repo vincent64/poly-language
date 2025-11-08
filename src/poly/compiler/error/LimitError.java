@@ -79,4 +79,14 @@ public abstract class LimitError extends Error {
                     classDefinition.getClassSymbol().getClassQualifiedName(), MESSAGE);
         }
     }
+
+    public static class LocalVariableCount extends LimitError {
+        private static final String MESSAGE = "Local variables amount exceeded (max. %d)"
+                .formatted(Limitations.MAX_LOCAL_VARIABLES_COUNT);
+
+        public LocalVariableCount(ClassDefinition classDefinition) {
+            super(classDefinition.getClassDeclaration().getMeta().getFileName(),
+                    classDefinition.getClassSymbol().getClassQualifiedName(), MESSAGE);
+        }
+    }
 }
