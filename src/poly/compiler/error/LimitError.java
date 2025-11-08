@@ -1,5 +1,6 @@
 package poly.compiler.error;
 
+import poly.compiler.output.jvm.Limitations;
 import poly.compiler.resolver.ClassDefinition;
 
 /**
@@ -30,7 +31,8 @@ public abstract class LimitError extends Error {
     }
 
     public static class FieldCount extends LimitError {
-        private static final String MESSAGE = "Fields amount in class exceeded (max. 65535)";
+        private static final String MESSAGE = "Fields amount in class exceeded (max. %d)"
+                .formatted(Limitations.MAX_FIELDS_COUNT);
 
         public FieldCount(ClassDefinition classDefinition) {
             super(classDefinition.getClassDeclaration().getMeta().getFileName(),
@@ -39,7 +41,8 @@ public abstract class LimitError extends Error {
     }
 
     public static class MethodCount extends LimitError {
-        private static final String MESSAGE = "Methods amount in class exceeded (max. 65535)";
+        private static final String MESSAGE = "Methods amount in class exceeded (max. %d)"
+                .formatted(Limitations.MAX_METHODS_COUNT);
 
         public MethodCount(ClassDefinition classDefinition) {
             super(classDefinition.getClassDeclaration().getMeta().getFileName(),
@@ -48,7 +51,8 @@ public abstract class LimitError extends Error {
     }
 
     public static class InterfaceCount extends LimitError {
-        private static final String MESSAGE = "Interfaces amount in class exceeded (max. 65535)";
+        private static final String MESSAGE = "Interfaces amount in class exceeded (max. %d)"
+                .formatted(Limitations.MAX_INTERFACES_COUNT);
 
         public InterfaceCount(ClassDefinition classDefinition) {
             super(classDefinition.getClassDeclaration().getMeta().getFileName(),
@@ -57,7 +61,8 @@ public abstract class LimitError extends Error {
     }
 
     public static class IdentifierLength extends LimitError {
-        private static final String MESSAGE = "Identifier length in class exceeded (max. 65535)";
+        private static final String MESSAGE = "Identifier length in class exceeded (max. %d)"
+                .formatted(Limitations.MAX_IDENTIFIER_LENGTH);
 
         public IdentifierLength(ClassDefinition classDefinition) {
             super(classDefinition.getClassDeclaration().getMeta().getFileName(),
@@ -66,7 +71,8 @@ public abstract class LimitError extends Error {
     }
 
     public static class MethodParameterCount extends LimitError {
-        private static final String MESSAGE = "Method parameters amount in method exceeded (max. 255)";
+        private static final String MESSAGE = "Method parameters amount in method exceeded (max. %d)"
+                .formatted(Limitations.MAX_PARAMETERS_COUNT);
 
         public MethodParameterCount(ClassDefinition classDefinition) {
             super(classDefinition.getClassDeclaration().getMeta().getFileName(),
