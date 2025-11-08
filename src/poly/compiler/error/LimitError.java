@@ -89,4 +89,14 @@ public abstract class LimitError extends Error {
                     classDefinition.getClassSymbol().getClassQualifiedName(), MESSAGE);
         }
     }
+
+    public static class OperandStackOverflow extends LimitError {
+        private static final String MESSAGE = "Operand stack size exceeded (max. %d)"
+                .formatted(Limitations.MAX_OPERAND_STACK_SIZE);
+
+        public OperandStackOverflow(ClassDefinition classDefinition) {
+            super(classDefinition.getClassDeclaration().getMeta().getFileName(),
+                    classDefinition.getClassSymbol().getClassQualifiedName(), MESSAGE);
+        }
+    }
 }
