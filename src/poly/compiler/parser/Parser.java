@@ -124,6 +124,15 @@ public final class Parser {
     }
 
     /**
+     * Returns whether the peeked token is matching the given string content.
+     * @param content the string content
+     * @return true if the peeked token is matching the content
+     */
+    private boolean isPeekMatching(char[] content) {
+        return isSameString(peekToken().getContent(), content);
+    }
+
+    /**
      * Returns wether the current token is matching the given token type.
      * @param type the token type
      * @return true if the current token is matching the type
