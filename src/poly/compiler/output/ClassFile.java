@@ -266,7 +266,7 @@ public class ClassFile implements Byteable {
 
         //Add Java magic code and version
         byteArray.add(Instructions.MAGIC);
-        byteArray.add(Instructions.Version.JAVA_19);
+        byteArray.add(Instructions.Version.JAVA_24);
 
         //Add constant pool count and content
         byteArray.add(constantPool.getBytes());
