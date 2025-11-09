@@ -370,18 +370,10 @@ public final class SymbolResolver {
         PrimitiveType integerType = new PrimitiveType(null);
         integerType.setKind(Primitive.Kind.INTEGER);
 
-        //Generate implicit parameters
-        Parameter parameter1 = new Parameter(null);
-        parameter1.setName("");
-        parameter1.setType(stringType);
-        Parameter parameter2 = new Parameter(null);
-        parameter2.setName("");
-        parameter2.setType(integerType);
-
         //Generate method parameters list
         ParameterList parameterList = new ParameterList(null);
-        parameterList.addParameter(parameter1);
-        parameterList.addParameter(parameter2);
+        parameterList.addParameter(NodeGenerator.forEmptyParameter(stringType));
+        parameterList.addParameter(NodeGenerator.forEmptyParameter(integerType));
 
         //Generate method declaration
         MethodDeclaration methodDeclaration = new MethodDeclaration(null);
@@ -405,11 +397,8 @@ public final class SymbolResolver {
         arrayType.setType(QualifiedName.fromClassName(ClassName.STRING));
 
         //Generate implicit parameter
-        Parameter parameter = new Parameter(methodDeclaration.getMeta());
-        parameter.setName("");
-        parameter.setType(arrayType);
         ParameterList parameterList = (ParameterList) methodDeclaration.getParameterList();
-        parameterList.addParameter(parameter);
+        parameterList.addParameter(NodeGenerator.forEmptyParameter(arrayType));
     }
 
     /**
@@ -422,17 +411,9 @@ public final class SymbolResolver {
         PrimitiveType integerType = new PrimitiveType(null);
         integerType.setKind(Primitive.Kind.INTEGER);
 
-        //Generate implicit parameters
-        Parameter parameter1 = new Parameter(null);
-        parameter1.setName("");
-        parameter1.setType(stringType);
-        Parameter parameter2 = new Parameter(null);
-        parameter2.setName("");
-        parameter2.setType(integerType);
-
-        //Generate implicit enum parameters
+        //Add implicit enum parameters
         ParameterList parameterList = (ParameterList) methodDeclaration.getParameterList();
-        parameterList.addFirstParameter(parameter2);
-        parameterList.addFirstParameter(parameter1);
+        parameterList.addFirstParameter(NodeGenerator.forEmptyParameter(stringType));
+        parameterList.addFirstParameter(NodeGenerator.forEmptyParameter(integerType));
     }
 }
