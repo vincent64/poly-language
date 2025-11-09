@@ -6,10 +6,7 @@ import poly.compiler.analyzer.type.Primitive;
 import poly.compiler.analyzer.type.Void;
 import poly.compiler.error.ResolvingError;
 import poly.compiler.output.content.AccessModifier;
-import poly.compiler.parser.tree.ClassDeclaration;
-import poly.compiler.parser.tree.FieldDeclaration;
-import poly.compiler.parser.tree.MethodDeclaration;
-import poly.compiler.parser.tree.Node;
+import poly.compiler.parser.tree.*;
 import poly.compiler.parser.tree.expression.ArrayType;
 import poly.compiler.parser.tree.expression.Expression;
 import poly.compiler.parser.tree.expression.PrimitiveType;
@@ -247,7 +244,7 @@ public final class SymbolResolver {
 
         //Add private constructor for static class
         if(classSymbol.isStatic())
-            addConstructor(classSymbol);
+            addConstructor(classSymbol, AccessModifier.PRIVATE);
 
         //Add private constructor for enum class with no constructors
         if(!hasConstructor && classSymbol.isEnum())
@@ -314,11 +311,12 @@ public final class SymbolResolver {
     }
 
     /**
-     * Adds a constructor to the given class symbol.
+     * Adds a constructor with the given access modifier to the given class symbol.
      * @param classSymbol the class symbol
+     * @param accessModifier the access modifier
      */
-    private void addConstructor(ClassSymbol classSymbol) {
-        MethodSymbol constructorSymbol = MethodSymbol.generateConstructor(classSymbol, AccessModifier.PRIVATE);
+    private void addConstructor(ClassSymbol classSymbol, AccessModifier accessModifier) {
+        MethodSymbol constructorSymbol = MethodSymbol.generateConstructor(classSymbol, accessModifier);
 
         //Generate method content
         SuperStatement superStatement = new SuperStatement(null);
