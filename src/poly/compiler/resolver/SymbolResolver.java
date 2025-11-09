@@ -240,7 +240,7 @@ public final class SymbolResolver {
         //Make sure there is at least one constructor
         if(!hasConstructor && !classSymbol.isInterface()
                 && !classSymbol.isStatic() && !classSymbol.isEnum())
-            new ResolvingError.MissingConstructor(classDeclaration);
+            addConstructor(classSymbol, classSymbol.getAccessModifier());
 
         //Add private constructor for static class
         if(classSymbol.isStatic())
