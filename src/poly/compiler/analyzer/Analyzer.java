@@ -1435,6 +1435,10 @@ public final class Analyzer implements NodeModifier {
         //Make sure the condition is a boolean expression
         matchBooleanExpression(ifExpression.getCondition());
 
+        //Inter type if possible
+        if(ifExpression.getExpressionType() != null)
+            inferType(ifExpression, ifExpression.getExpressionType());
+
         //Visit expressions
         ifExpression.setExpression(ifExpression.getExpression().accept(this));
         ifExpression.setElseExpression(ifExpression.getElseExpression().accept(this));
