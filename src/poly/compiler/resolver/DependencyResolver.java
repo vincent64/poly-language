@@ -249,7 +249,7 @@ public final class DependencyResolver {
         //Make sure both methods have the same return type
         if(!(methodSymbol.getReturnType() == null && overridenMethod.getReturnType() == null)) {
             if(methodSymbol.getReturnType() == null || overridenMethod.getReturnType() == null
-                    || !methodSymbol.getReturnType().equals(overridenMethod.getReturnType())) {
+                    || !methodSymbol.getReturnType().isAssignableTo(overridenMethod.getReturnType())) {
                 new ResolvingError.InvalidOverrideReturnType(classDefinition.getClassDeclaration(),
                         methodSymbol, overridenMethod.getClassSymbol().getClassInternalQualifiedName());
             }
