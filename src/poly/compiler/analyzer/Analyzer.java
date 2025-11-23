@@ -975,7 +975,7 @@ public final class Analyzer implements NodeModifier {
                 new AnalyzingError.UnresolvableSymbol(simpleName, fieldSymbol.getName());
 
             //Make sure the class is initialized
-            if(!isInitialized)
+            if(!isInitialized && !fieldSymbol.isStatic())
                 new AnalyzingError.UninitializedThisReference(simpleName);
 
             //Define resulting type
