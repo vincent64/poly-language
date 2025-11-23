@@ -320,7 +320,7 @@ public final class Parser {
         else match(METHOD);
 
         //Parse method access modifier
-        if(isAccessModifierSymbol(currentToken)) {
+        if(isAccessModifierSymbol(currentToken) && !isPeekMatching(OPENING_PARENTHESIS)) {
             node.setAccessModifier(currentToken);
             nextToken();
         }
