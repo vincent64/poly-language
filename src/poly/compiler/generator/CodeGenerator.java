@@ -1163,7 +1163,7 @@ public final class CodeGenerator implements NodeVisitor {
         methodCall.getArgumentList().accept(this);
 
         //Generate instructions
-        if(methodSymbol.getClassSymbol().isInterface()) {
+        if(methodSymbol.getClassSymbol().isInterface() && !methodSymbol.isStatic()) {
             generateCallInterfaceMethod(methodSymbol);
         } else if(methodSymbol.isStatic()) {
             generateCallStaticMethod(methodSymbol);
@@ -2427,7 +2427,9 @@ public final class CodeGenerator implements NodeVisitor {
      */
     private void generateCallStaticMethod(MethodSymbol methodSymbol) {
         addInstruction(new Instruction.Builder(INVOKESTATIC, 3)
-                .add(getMethodReference(methodSymbol))
+                .add(methodSymbol.getClassSymbol().isInterface()
+                        ? getInterfaceMethodReference(methodSymbol)
+                        : getMethodReference(methodSymbol))
                 .build());
 
         //Remove arguments from stack
