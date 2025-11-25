@@ -1006,7 +1006,7 @@ public final class Analyzer implements NodeModifier {
                 new AnalyzingError.UnresolvableMethod(methodCall, methodSymbol.getName(), methodSymbol.getParameterTypes());
 
             //Make sure the class is initialized
-            if(!isInitialized)
+            if(!isInitialized && !methodSymbol.isStatic())
                 new AnalyzingError.UninitializedThisReference(methodCall);
 
             //Define resulting type
