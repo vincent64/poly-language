@@ -2,7 +2,6 @@
 A **method** (also called **function**) is a procedure that can take as input a set of _parameters_, and can return a result.
 
 The method name and its parameters are called the _signature_ of the method.
-Two methods cannot have the same signature in a class.
 
 
 ---
@@ -15,19 +14,33 @@ The naming convention for method names is [camelCase](https://en.wikipedia.org/w
 To declare a method, the `fn` keyword must be followed by the _return type_ of the method,
 its name, and a list of _parameters_ enclosed by parenthesis, as such :
 ```poly
-fn int myMethod(int a, int b) { }
+fn returnType methodName(parameters...) { }
 ```
 
+Two methods cannot have the same signature in a class.
 What's inside the curly brackets is commonly called the _method's content_, or _method's body_.
+
+The method's body is where the code is written.
+If the method has a return type, there must be a return statement inside the method content.
+
 If the method's body contains a single statement, it is possible to omit the curly brackets.
+If the method's body contains only a _return-statement_, it is possible to use the following shortened syntax :
+```poly
+fn returnType methodName(parameters...) = expression;
+```
+where the expression is the return-statement's expression.
+
+If the method does not return anything, the return type is omitted.
 
 
 ## Parameters
 A parameter is a variable that is used inside the method's body and whose value is the value passed as argument when calling the method.
 A method can have any amount of parameters, including none.
+If there is more than one parameter, they must be separated by a comma.
+
 Similar to a variable, a parameter can be declared constant using the `const` keyword.
 
-An _attribute parameter_ is a parameter that is also used to define a class field with the same name, with the same value.
+An _attribute parameter_ is a parameter that is also used to define a class field with the same name to the same value.
 A parameter can be declared as attribute by using the `attr` keyword before the parameter type.
 
 In the example below, the method declarations are equivalent.
@@ -44,25 +57,32 @@ fn void setValues(int value) {
 A parameter cannot be both constant and an attribute.
 
 
-## Content
-A method body is where the code is written.
-
-If the method has a return type that is not `void`, there must be a return statement inside the method content.
-
-
 ## Overloading
-_Overloading_ a method is having several methods with the same name in a class,
-but with a different set of paramaters.
+_Overloading_ a method is having several methods with the same name but a different signature within the same class.
 Overloading a method is often used as a way to have default parameter values.
 
 In the example below, the two method have the same name, but the second is missing the `b` integer parameter.
 This method's only purpose is to call the first method, with `7` acting as the default value for `b`.
 ```poly
-fn void doSomething(int a, int b) { }
+fn doSomething(int a, int b) { }
 
-fn void doSomething(int a) {
+fn doSomething(int a) {
     doSomething(a, 7);
 }
+```
+
+
+## Main method
+A main method is a method designated as the program's entry point and that is called when executing the program.
+
+A method is a main method if its name is `main`, it has no return type and it is _static_.
+The main method can either have no parameter, or a single string array parameter.
+
+The string array holds the values of the inputs given to the program when executing it.
+In the declaration with no parameters, these inputs are omitted.
+```poly
+fn main() { }                      // Main method
+fn main(String[] args) { }         // Main method with input arguments
 ```
 
 

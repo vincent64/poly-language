@@ -8,15 +8,17 @@ It provides the variables and functions that dictates how an object behaves.
 
 ## Declaration
 A class can be declared either in a source code file, or inside another class.
-Multiple classes can be declared in a same file.
+A class that is not nested inside another class is called a _top-level class_.
+Any amount of top-level classes can be declared in a same file, and any amount of classes can be declared inside another class.
+
 The naming convention for class names is [CamelCase](https://en.wikipedia.org/wiki/Camel_case).
 
 To declare a class, the name of the class must be preceded by the `class` keyword, as such :
 ```poly
-class MyClass { }
+class ClassName { }
 ```
 
-What's inside the curly brackets is called the _class' content_.
+What's inside the curly brackets is commonly called the _class' content_, or _class' body_.
 
 
 ## Content
@@ -32,7 +34,7 @@ Please note that the declaration order does not change the way fields, methods a
 
 
 ### Constructor
-The constructor is a special method that is called when an object of the class is instanciated.
+The constructor is a special method that is called when an instance of the class is instanciated.
 This method should contain the code necessary to initialize the object state.
 
 The constructor can be declared using the `constructor` keyword, which replaces the method name and return type :
@@ -43,14 +45,16 @@ The constructor can be declared using the `constructor` keyword, which replaces 
 ```
 
 Like any method, the constructor can have any amount of parameters, and can be overloaded.
-Furthermore, it is possible to initialize an uninitialized constant field inside the constructor.
+Furthermore, it is possible to initialize an uninitialized constant instance field inside the constructor.
 
-It is possible to call another constructor from the current constructor using `this(...);`.
+It is possible to call another constructor from the current constructor using a _this-statement_ : `this(...);`.
 
 
 ### Destructor
 In Poly, there is no explicit destructor.
 This is a deliberate choice, as a destructor can cause major issues, such as ghost references.
+
+An object is automatically destroyed by the JVM's garbage collector once there is no reference to that object in the code anymore.
 
 
 ## Access & behavior

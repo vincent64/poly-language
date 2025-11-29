@@ -1,5 +1,5 @@
 # Inheritance
-**Inheritance** allows a class to inherit the functionnality of another class.
+**Inheritance** allows a class to inherit the functionnalities of another class.
 This class is said to extend from its _superclass_.
 From the point of view of the superclass, this class is called a _subclass_.
 
