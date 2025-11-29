@@ -1838,13 +1838,11 @@ public final class CodeGenerator implements NodeVisitor {
         branching.addJumpIndex(instructions.size(), programCounter, jumpOnTrue, isInverted);
 
         //Generate instructions
-        if(binaryExpression.getKind() == BinaryExpression.Kind.TYPE_EQUAL) {
-            byte instruction = jumpOnTrue ? IFNE : IFEQ;
-            addInstruction(new Instruction.Builder(instruction, 3).build());
-        } else {
-            byte instruction = jumpOnTrue ? IFEQ : IFNE;
-            addInstruction(new Instruction.Builder(instruction, 3).build());
-        }
+        byte code = binaryExpression.getKind() == BinaryExpression.Kind.TYPE_EQUAL
+                ? (jumpOnTrue ? IFNE : IFEQ)
+                : (jumpOnTrue ? IFEQ : IFNE);
+
+        addInstruction(new Instruction.Builder(code, 3).build());
     }
 
     /**
