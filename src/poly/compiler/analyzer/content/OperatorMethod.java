@@ -19,9 +19,9 @@ public class OperatorMethod {
      * @param operator the operator
      * @return the operator overload method name
      */
-    public static String getNameFromOperator(char[] operator) {
+    public static String getNameFromOperator(String operator) {
         for(Kind kind : Kind.values()) {
-            if(Character.isSameString(kind.operator, operator))
+            if(kind.operator.equals(operator))
                 return kind.getMethodName();
         }
 
@@ -171,15 +171,15 @@ public class OperatorMethod {
         //Array access operation
         ARRAY_ACCESS(Operator.ARRAY_ACCESS, Name.ARRAY_ACCESS);
 
-        private final char[] operator;
+        private final String operator;
         private final String methodName;
 
-        Kind(char[] operator, String methodName) {
+        Kind(String operator, String methodName) {
             this.operator = operator;
             this.methodName = methodName;
         }
 
-        public char[] getOperator() {
+        public String getOperator() {
             return operator;
         }
 
