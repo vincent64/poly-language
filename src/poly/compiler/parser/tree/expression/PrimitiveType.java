@@ -19,22 +19,16 @@ public class PrimitiveType extends Expression {
     }
 
     public void setKind(Token token) {
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_BOOLEAN))
-            kind = Primitive.Kind.BOOLEAN;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_BYTE))
-            kind = Primitive.Kind.BYTE;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_SHORT))
-            kind = Primitive.Kind.SHORT;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_INTEGER))
-            kind = Primitive.Kind.INTEGER;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_LONG))
-            kind = Primitive.Kind.LONG;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_FLOAT))
-            kind = Primitive.Kind.FLOAT;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_DOUBLE))
-            kind = Primitive.Kind.DOUBLE;
-        if(Character.isSameString(token.getContent(), Keyword.PRIMITIVE_CHAR))
-            kind = Primitive.Kind.CHAR;
+        switch(token.getContent()) {
+            case Keyword.PRIMITIVE_BOOLEAN -> kind = Primitive.Kind.BOOLEAN;
+            case Keyword.PRIMITIVE_BYTE -> kind = Primitive.Kind.BYTE;
+            case Keyword.PRIMITIVE_SHORT -> kind = Primitive.Kind.SHORT;
+            case Keyword.PRIMITIVE_CHAR -> kind = Primitive.Kind.CHAR;
+            case Keyword.PRIMITIVE_INTEGER -> kind = Primitive.Kind.INTEGER;
+            case Keyword.PRIMITIVE_LONG -> kind = Primitive.Kind.LONG;
+            case Keyword.PRIMITIVE_FLOAT -> kind = Primitive.Kind.FLOAT;
+            case Keyword.PRIMITIVE_DOUBLE -> kind = Primitive.Kind.DOUBLE;
+        }
     }
 
     public void setKind(Primitive.Kind kind) {
