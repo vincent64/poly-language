@@ -23,7 +23,7 @@ public abstract class ParsingError extends Error {
         private static final String MESSAGE = "Unexpected token '%s'";
 
         public UnexpectedToken(Token token) {
-            super(token, MESSAGE.formatted(String.valueOf(token.getContent())));
+            super(token, MESSAGE.formatted(token.getContent()));
         }
     }
 
@@ -38,8 +38,8 @@ public abstract class ParsingError extends Error {
     public static class MissingToken extends ParsingError {
         private static final String MESSAGE = "Missing token '%s'";
 
-        public MissingToken(Token token, char[] symbol) {
-            super(token, MESSAGE.formatted(String.valueOf(symbol)));
+        public MissingToken(Token token, String symbol) {
+            super(token, MESSAGE.formatted(symbol));
         }
     }
 
@@ -47,7 +47,7 @@ public abstract class ParsingError extends Error {
         private static final String MESSAGE = "Invalid literal numerical value '%s'";
 
         public InvalidNumericalValue(Token token) {
-            super(token, MESSAGE.formatted(String.valueOf(token.getContent())));
+            super(token, MESSAGE.formatted(token.getContent()));
         }
     }
 
@@ -55,7 +55,7 @@ public abstract class ParsingError extends Error {
         private static final String MESSAGE = "Invalid literal character value '%s'";
 
         public InvalidCharacterValue(Token token) {
-            super(token, MESSAGE.formatted(String.valueOf(token.getContent())));
+            super(token, MESSAGE.formatted(token.getContent()));
         }
     }
 }
