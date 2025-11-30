@@ -42,7 +42,7 @@ import java.util.List;
  * </pre>
  * @author Vincent Philippe (@vincent64)
  */
-public class ClassFile implements Byteable {
+public final class ClassFile implements Byteable {
     private final String classQualifiedName;
     private final ConstantPool constantPool;
     private final Interfaces interfaces;
