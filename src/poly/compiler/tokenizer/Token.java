@@ -1,9 +1,5 @@
 package poly.compiler.tokenizer;
 
-import poly.compiler.util.Character;
-
-import java.util.Arrays;
-
 /**
  * The Token class. This class represents a lexical token (i.e. an atomic string element with a meaning)
  * and its associated string content and type. The token also has a metadata attribute, which
@@ -11,8 +7,8 @@ import java.util.Arrays;
  * @author Vincent Philippe (@vincent64)
  */
 public final class Token {
-    /** The token characters content. */
-    private final char[] content;
+    /** The token string content. */
+    private final String content;
     /** The token type. */
     private final Type type;
     /** The token metadata. */
@@ -25,7 +21,7 @@ public final class Token {
      * @param meta the metadata information
      */
     public Token(char[] content, Type type, Meta meta) {
-        this.content = content;
+        this.content = String.valueOf(content);
         this.type = type;
         this.meta = meta;
     }
@@ -34,7 +30,7 @@ public final class Token {
      * Returns the token content.
      * @return the token content
      */
-    public char[] getContent() {
+    public String getContent() {
         return content;
     }
 
@@ -62,20 +58,17 @@ public final class Token {
         if(type != token.type)
             return false;
 
-        return Character.isSameString(content, token.content);
+        return content.equals(token.content);
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(content);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-
-        return result;
+        return 31 * content.hashCode() + type.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Token(" + type + "): \"" + String.valueOf(content) + "\"";
+        return "Token(" + type + "): \"" + content + "\"";
     }
 
     /**
