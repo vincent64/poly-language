@@ -19,7 +19,7 @@ public enum AccessModifier {
             Instructions.ClassAccessFlag.PROTECTED,
             Instructions.FieldAccessFlag.PROTECTED,
             Instructions.MethodAccessFlag.PROTECTED),
-    DEFAULT(new char[0],
+    DEFAULT("",
             (short) 0x0000,
             (short) 0x0000,
             (short) 0x0000),
@@ -28,12 +28,12 @@ public enum AccessModifier {
             Instructions.FieldAccessFlag.PRIVATE,
             Instructions.MethodAccessFlag.PRIVATE);
 
-    private final char[] symbol;
+    private final String symbol;
     private final short classAccessFlag;
     private final short fieldAccessFlag;
     private final short methodAccessFlag;
 
-    AccessModifier(char[] symbol, short classAccessFlag, short fieldAccessFlag, short methodAccessFlag) {
+    AccessModifier(String symbol, short classAccessFlag, short fieldAccessFlag, short methodAccessFlag) {
         this.symbol = symbol;
         this.classAccessFlag = classAccessFlag;
         this.fieldAccessFlag = fieldAccessFlag;
@@ -79,9 +79,9 @@ public enum AccessModifier {
      * @param symbol the symbol
      * @return the corresponding access modifier
      */
-    public static AccessModifier findAccessModifier(char[] symbol) {
+    public static AccessModifier findAccessModifier(String symbol) {
         for(AccessModifier accessModifier : values()) {
-            if(Character.isSameString(accessModifier.symbol, symbol))
+            if(accessModifier.symbol.equals(symbol))
                 return accessModifier;
         }
 
