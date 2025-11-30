@@ -12,13 +12,11 @@ import poly.compiler.parser.tree.variable.*;
 import poly.compiler.tokenizer.Token;
 import poly.compiler.tokenizer.content.Operator;
 import poly.compiler.tokenizer.content.Symbol;
-import poly.compiler.util.Character;
 
 import static poly.compiler.tokenizer.content.Attribute.*;
 import static poly.compiler.tokenizer.content.Keyword.*;
 import static poly.compiler.tokenizer.content.Operator.*;
 import static poly.compiler.tokenizer.content.Symbol.*;
-import static poly.compiler.util.Character.isSameString;
 
 /**
  * The Parser class. This class is used to transform the list of tokens produced by
@@ -100,10 +98,10 @@ public final class Parser {
      * and advances to the next token.
      * @param content the string content
      */
-    private void match(char[] content) {
-        if(!isSameString(currentToken.getContent(), content)) {
+    private void match(String content) {
+        if(!currentToken.getContent().equals(content)) {
             //Throw missing token error
-            if(isSameString(content, SEMICOLON) || isSameString(content, CLOSING_PARENTHESIS))
+            if(content.equals(SEMICOLON) || content.equals(CLOSING_PARENTHESIS))
                 new ParsingError.MissingToken(currentToken, content);
 
             //Throw unexpected token error
@@ -119,8 +117,8 @@ public final class Parser {
      * @param content the string content
      * @return true if the current token is matching the content
      */
-    private boolean isMatching(char[] content) {
-        return !isPastLastToken() && isSameString(currentToken.getContent(), content);
+    private boolean isMatching(String content) {
+        return !isPastLastToken() && currentToken.getContent().equals(content);
     }
 
     /**
@@ -128,8 +126,8 @@ public final class Parser {
      * @param content the string content
      * @return true if the peeked token is matching the content
      */
-    private boolean isPeekMatching(char[] content) {
-        return isSameString(peekToken().getContent(), content);
+    private boolean isPeekMatching(String content) {
+        return peekToken().getContent().equals(content);
     }
 
     /**
@@ -156,7 +154,7 @@ public final class Parser {
      * @param content the string content
      * @return true if the current token is matching the content
      */
-    private boolean matches(char[] content) {
+    private boolean matches(String content) {
         if(isMatching(content)) {
             nextToken();
             return true;
