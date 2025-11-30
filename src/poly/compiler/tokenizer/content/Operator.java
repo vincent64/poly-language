@@ -2,7 +2,8 @@ package poly.compiler.tokenizer.content;
 
 import poly.compiler.tokenizer.Token;
 
-import static poly.compiler.util.Character.isSameString;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The Operator class. This class contains every operator used in the language.
@@ -11,65 +12,65 @@ import static poly.compiler.util.Character.isSameString;
  */
 public class Operator {
     //Equality operators
-    public static final char[] EQUAL = {'=', '='};
-    public static final char[] NOT_EQUAL = {'!', '='};
+    public static final String EQUAL = "==";
+    public static final String NOT_EQUAL = "!=";
 
     //Comparison operators
-    public static final char[] GREATER = {'>'};
-    public static final char[] LESS = {'<'};
-    public static final char[] GREATER_EQUAL = {'>', '='};
-    public static final char[] LESS_EQUAL = {'<', '='};
-    public static final char[] TYPE_EQUAL = {'=', '=', ':'};
-    public static final char[] TYPE_NOT_EQUAL = {'!', '=', ':'};
-    public static final char[] ELVIS = {'?', ':'};
-    public static final char[] NULL_COALESCING = {'?', '?'};
-    public static final char[] SPACESHIP = {'<', '=', '>'};
-    public static final char[] REFERENCE_EQUAL = {'=', '=', '='};
-    public static final char[] REFERENCE_NOT_EQUAL = {'!', '=', '='};
+    public static final String GREATER = ">";
+    public static final String LESS = "<";
+    public static final String GREATER_EQUAL = ">=";
+    public static final String LESS_EQUAL = "<=";
+    public static final String TYPE_EQUAL = "==:";
+    public static final String TYPE_NOT_EQUAL = "!=:";
+    public static final String ELVIS = "?:";
+    public static final String NULL_COALESCING = "??";
+    public static final String SPACESHIP = "<=>";
+    public static final String REFERENCE_EQUAL = "===";
+    public static final String REFERENCE_NOT_EQUAL = "!==";
 
     //Mathematical operators
-    public static final char[] ADD = {'+'};
-    public static final char[] SUB = {'-'};
-    public static final char[] MUL = {'*'};
-    public static final char[] DIV = {'/'};
-    public static final char[] MOD = {'%'};
+    public static final String ADD = "+";
+    public static final String SUB = "-";
+    public static final String MUL = "*";
+    public static final String DIV = "/";
+    public static final String MOD = "%";
 
     //Logical operators
-    public static final char[] LOGICAL_AND = {'&', '&'};
-    public static final char[] LOGICAL_OR = {'|', '|'};
-    public static final char[] LOGICAL_NOT = {'!'};
+    public static final String LOGICAL_AND = "&&";
+    public static final String LOGICAL_OR = "||";
+    public static final String LOGICAL_NOT = "!";
 
     //Bitwise operators
-    public static final char[] BITWISE_AND = {'&'};
-    public static final char[] BITWISE_XOR = {'^'};
-    public static final char[] BITWISE_OR = {'|'};
-    public static final char[] BITWISE_NOT = {'~'};
-    public static final char[] SHIFT_LEFT = {'<', '<'};
-    public static final char[] SHIFT_RIGHT = {'>', '>'};
-    public static final char[] SHIFT_RIGHT_ARITHMETIC = {'>', '>', '>'};
+    public static final String BITWISE_AND = "&";
+    public static final String BITWISE_XOR = "^";
+    public static final String BITWISE_OR = "|";
+    public static final String BITWISE_NOT = "~";
+    public static final String SHIFT_LEFT = "<<";
+    public static final String SHIFT_RIGHT = ">>";
+    public static final String SHIFT_RIGHT_ARITHMETIC = ">>>";
 
     //Assignment operators
-    public static final char[] ASSIGN_ADD = {'+', '='};
-    public static final char[] ASSIGN_SUB = {'-', '='};
-    public static final char[] ASSIGN_MUL = {'*', '='};
-    public static final char[] ASSIGN_DIV = {'/', '='};
-    public static final char[] ASSIGN_MOD = {'%', '='};
-    public static final char[] ASSIGN_BITWISE_AND = {'&', '='};
-    public static final char[] ASSIGN_BITWISE_XOR = {'^', '='};
-    public static final char[] ASSIGN_BITWISE_OR = {'|', '='};
-    public static final char[] ASSIGN_SHIFT_LEFT = {'<', '<', '='};
-    public static final char[] ASSIGN_SHIFT_RIGHT = {'>', '>', '='};
-    public static final char[] ASSIGN_SHIFT_RIGHT_ARITHMETIC = {'>', '>', '>', '='};
+    public static final String ASSIGN_ADD = "+=";
+    public static final String ASSIGN_SUB = "-=";
+    public static final String ASSIGN_MUL = "*=";
+    public static final String ASSIGN_DIV = "/=";
+    public static final String ASSIGN_MOD = "%=";
+    public static final String ASSIGN_BITWISE_AND = "&=";
+    public static final String ASSIGN_BITWISE_XOR = "^=";
+    public static final String ASSIGN_BITWISE_OR = "|=";
+    public static final String ASSIGN_SHIFT_LEFT = "<<=";
+    public static final String ASSIGN_SHIFT_RIGHT = ">>=";
+    public static final String ASSIGN_SHIFT_RIGHT_ARITHMETIC = ">>>=";
 
     //Increment/decrement operators
-    public static final char[] INCREMENT = {'+', '+'};
-    public static final char[] DECREMENT = {'-', '-'};
+    public static final String INCREMENT = "++";
+    public static final String DECREMENT = "--";
 
     //Special operators
-    public static final char[] METHOD_INVOCATION = {'c', 'a', 'l', 'l'};
-    public static final char[] ARRAY_ACCESS = {'a', 'c', 'c', 'e', 's', 's'};
+    public static final String METHOD_INVOCATION = "call";
+    public static final String ARRAY_ACCESS = "access";
 
-    private static final char[][] ALL = {
+    private static final Set<String> ALL = new HashSet<>(Set.of(
             EQUAL, NOT_EQUAL,
             GREATER, LESS, GREATER_EQUAL, LESS_EQUAL, TYPE_EQUAL, TYPE_NOT_EQUAL, ELVIS, NULL_COALESCING,
             SPACESHIP, REFERENCE_EQUAL, REFERENCE_NOT_EQUAL,
@@ -81,15 +82,15 @@ public class Operator {
             ASSIGN_BITWISE_AND, ASSIGN_BITWISE_XOR, ASSIGN_BITWISE_OR,
             ASSIGN_SHIFT_LEFT, ASSIGN_SHIFT_RIGHT, ASSIGN_SHIFT_RIGHT_ARITHMETIC,
             INCREMENT, DECREMENT
-    };
+    ));
 
-    private static final char[][] ASSIGNMENT = {
+    private static final Set<String> ASSIGNMENT = new HashSet<>(Set.of(
             Symbol.EQUAL, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MUL, ASSIGN_DIV, ASSIGN_MOD,
             ASSIGN_BITWISE_AND, ASSIGN_BITWISE_XOR, ASSIGN_BITWISE_OR,
             ASSIGN_SHIFT_LEFT, ASSIGN_SHIFT_RIGHT, ASSIGN_SHIFT_RIGHT_ARITHMETIC
-    };
+    ));
 
-    private static final char[][] METHOD = {
+    private static final Set<String> METHOD = new HashSet<>(Set.of(
             EQUAL, NOT_EQUAL,
             GREATER, LESS, GREATER_EQUAL, LESS_EQUAL, SPACESHIP,
             ADD, SUB, MUL, DIV, MOD,
@@ -101,7 +102,7 @@ public class Operator {
             ASSIGN_SHIFT_LEFT, ASSIGN_SHIFT_RIGHT, ASSIGN_SHIFT_RIGHT_ARITHMETIC,
             INCREMENT, DECREMENT,
             METHOD_INVOCATION, ARRAY_ACCESS
-    };
+    ));
 
     /**
      * Returns whether the given token is an operator token.
@@ -117,12 +118,17 @@ public class Operator {
      * @param content the content
      * @return true if the content is an operator
      */
-    public static boolean isOperator(char[] content) {
-        for(char[] operator : ALL) {
-            if(isSameString(content, operator)) return true;
-        }
+    public static boolean isOperator(String content) {
+        return ALL.contains(content);
+    }
 
-        return false;
+    /**
+     * Returns whether the given content is an operator.
+     * @param content the content
+     * @return true if the content is an operator
+     */
+    public static boolean isOperator(char[] content) {
+        return isOperator(String.valueOf(content));
     }
 
     /**
@@ -139,12 +145,8 @@ public class Operator {
      * @param content the content
      * @return true if the content is an assignment operator
      */
-    public static boolean isAssignOperator(char[] content) {
-        for(char[] operator : ASSIGNMENT) {
-            if(isSameString(content, operator)) return true;
-        }
-
-        return false;
+    public static boolean isAssignOperator(String content) {
+        return ASSIGNMENT.contains(content);
     }
 
     /**
@@ -161,11 +163,7 @@ public class Operator {
      * @param content the content
      * @return true if the content is a method operator.
      */
-    public static boolean isMethodOperator(char[] content) {
-        for(char[] operator : METHOD) {
-            if(isSameString(content, operator)) return true;
-        }
-
-        return false;
+    public static boolean isMethodOperator(String content) {
+        return METHOD.contains(content);
     }
 }
