@@ -2,7 +2,8 @@ package poly.compiler.tokenizer.content;
 
 import poly.compiler.tokenizer.Token;
 
-import static poly.compiler.util.Character.isSameString;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The Attribute class. This class contains the 4 different primitive attributes.
@@ -10,14 +11,14 @@ import static poly.compiler.util.Character.isSameString;
  * @author Vincent Philippe (@vincent64)
  */
 public class Attribute {
-    public static final char[] BITS = {'b', 'i', 't', 's'};
-    public static final char[] BYTES = {'b', 'y', 't', 'e', 's'};
-    public static final char[] MINIMUM = {'m', 'i', 'n'};
-    public static final char[] MAXIMUM = {'m', 'a', 'x'};
+    public static final String BITS = "bits";
+    public static final String BYTES = "bytes";
+    public static final String MINIMUM = "min";
+    public static final String MAXIMUM = "max";
 
-    private static final char[][] ALL = {
+    private static final Set<String> ALL = new HashSet<>(Set.of(
             BITS, BYTES, MINIMUM, MAXIMUM
-    };
+    ));
 
     /**
      * Returns whether the given token is an attribute token.
@@ -33,11 +34,7 @@ public class Attribute {
      * @param content the content
      * @return true if the content is an attribute
      */
-    public static boolean isAttribute(char[] content) {
-        for(char[] attribute : ALL) {
-            if(isSameString(content, attribute)) return true;
-        }
-
-        return false;
+    public static boolean isAttribute(String content) {
+        return ALL.contains(content);
     }
 }
