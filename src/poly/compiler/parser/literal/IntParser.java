@@ -19,7 +19,7 @@ public class IntParser {
 
     IntParser(Token token) {
         this.token = token;
-        content = token.getContent();
+        content = token.getContent().toCharArray();
     }
 
     int parseInt() {

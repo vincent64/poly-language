@@ -22,7 +22,7 @@ public class CharParser {
 
     public CharParser(Token token) {
         this.token = token;
-        content = token.getContent();
+        content = token.getContent().toCharArray();
     }
 
     /**

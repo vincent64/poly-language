@@ -18,7 +18,7 @@ public class FloatParser {
 
     FloatParser(Token token) {
         this.token = token;
-        content = token.getContent();
+        content = token.getContent().toCharArray();
     }
 
     float parseFloat() {

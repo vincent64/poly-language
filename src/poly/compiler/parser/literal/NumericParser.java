@@ -15,7 +15,7 @@ public class NumericParser {
 
     public NumericParser(Token token) {
         this.token = token;
-        content = token.getContent();
+        content = token.getContent().toCharArray();
     }
 
     /**

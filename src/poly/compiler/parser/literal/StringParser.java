@@ -17,7 +17,7 @@ public class StringParser {
 
     public StringParser(Token token) {
         this.token = token;
-        content = token.getContent();
+        content = token.getContent().toCharArray();
     }
 
     /**
