@@ -287,7 +287,7 @@ public final class Tokenizer {
      * Therefore, it reverses back the tokens list, which means the reversed code still get compiled!
      */
     private void checkReverse() {
-        if(!tokens.isEmpty() && Character.isSameString(tokens.getFirst().getContent(), Symbol.CLOSING_CURLY_BRACKET))
+        if(!tokens.isEmpty() && tokens.getFirst().getContent().equals(Symbol.CLOSING_CURLY_BRACKET))
             Collections.reverse(tokens);
     }
 
