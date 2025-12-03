@@ -2047,7 +2047,7 @@ public final class Analyzer implements NodeModifier {
                 FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), classSymbol);
 
                 //Make sure the field is not assigned outside constructor if constant
-                if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
+                if(!isFieldAssignable(fieldSymbol))
                     new AnalyzingError.InvalidConstantAssignment(variableExpression, simpleName.getName());
             }
         }
@@ -2065,7 +2065,7 @@ public final class Analyzer implements NodeModifier {
             FieldSymbol fieldSymbol = classSymbol.findField(simpleName.getName(), this.classSymbol);
 
             //Make sure the field is not assigned outside constructor if constant
-            if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
+            if(!isFieldAssignable(fieldSymbol))
                 new AnalyzingError.InvalidConstantAssignment(variableExpression, simpleName.getName());
         }
 
@@ -2087,9 +2087,20 @@ public final class Analyzer implements NodeModifier {
             FieldSymbol fieldSymbol = classSymbol.findField(qualifiedName.getName(), this.classSymbol);
 
             //Make sure the field is not assigned outside constructor if constant
-            if(fieldSymbol.isConstant() && currentMethod != null && !currentMethod.isConstructor())
+            if(!isFieldAssignable(fieldSymbol))
                 new AnalyzingError.InvalidConstantAssignment(variableExpression, qualifiedName.getName());
         }
+    }
+
+    /**
+     * Returns whether the given field symbol can be assigned or not given the context.
+     * @param fieldSymbol the field symbol
+     * @return true if the field can be assigned
+     */
+    private boolean isFieldAssignable(FieldSymbol fieldSymbol) {
+        return (!fieldSymbol.isConstant() && (fieldSymbol.isStatic() || !isStaticContext))
+                || (fieldSymbol.isConstant() && !fieldSymbol.isStatic()
+                        && currentMethod != null && currentMethod.isConstructor());
     }
 
 
