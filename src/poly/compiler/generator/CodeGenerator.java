@@ -219,7 +219,7 @@ public final class CodeGenerator implements NodeVisitor {
         if(classSymbol.isInner() && methodDeclaration.isConstructor()) {
             addInstruction(ALOAD_0);
             addInstruction(ALOAD_1);
-            generatePutInstanceField(classSymbol.findField(String.valueOf(Keyword.EXPRESSION_OUTER), classSymbol));
+            generatePutInstanceField(classSymbol.findField(Keyword.EXPRESSION_OUTER, classSymbol));
         }
 
         //Call enum superclass constructor
@@ -1520,7 +1520,7 @@ public final class CodeGenerator implements NodeVisitor {
 
     @Override
     public void visitOuterExpression(OuterExpression outerExpression) {
-        FieldSymbol fieldSymbol = classSymbol.findField(String.valueOf(Keyword.EXPRESSION_OUTER), classSymbol);
+        FieldSymbol fieldSymbol = classSymbol.findField(Keyword.EXPRESSION_OUTER, classSymbol);
 
         //Generate instructions
         addInstruction(ALOAD_0);
