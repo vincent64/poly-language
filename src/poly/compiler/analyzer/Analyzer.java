@@ -333,6 +333,40 @@ public final class Analyzer implements NodeModifier {
     }
 
     @Override
+    public Statement visitForeachStatement(ForeachStatement foreachStatement) {
+        //Get the amount of previous local variables
+        int previousVariableCount = variableTable.getVariableCount();
+
+        //Visit iterable expression
+        foreachStatement.setExpression(foreachStatement.getExpression().accept(this));
+
+        //Make sure the expression is an array
+        if(foreachStatement.getExpression().getExpressionType().getKind() != Type.Kind.ARRAY)
+            new AnalyzingError.ExpectedArrayType(foreachStatement.getExpression());
+
+        //Visit variable declaration
+        foreachStatement.setVariableDeclaration(foreachStatement.getVariableDeclaration().accept(this));
+
+        VariableDeclaration variableDeclaration = (VariableDeclaration) foreachStatement.getVariableDeclaration();
+        Type arrayType = ((Array) foreachStatement.getExpression().getExpressionType()).getType();
+        Type variableType = getTypeFromNode(variableDeclaration.getType());
+
+        //Make sure the array type is assignable to the variable type
+        if(!arrayType.isAssignableTo(variableType))
+            new AnalyzingError.TypeConversion(variableDeclaration, variableType, arrayType);
+
+        //Visit statement body
+        currentLoopLevel++;
+        foreachStatement.setBody(foreachStatement.getBody().accept(this));
+        currentLoopLevel--;
+
+        //Remove local variables added in this foreach-statement
+        variableTable.removeVariables(variableTable.getVariableCount() - previousVariableCount);
+
+        return foreachStatement;
+    }
+
+    @Override
     public Statement visitSwitchStatement(SwitchStatement switchStatement) {
         //Visit expression
         switchStatement.setExpression(switchStatement.getExpression().accept(this));
