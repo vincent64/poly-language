@@ -1753,14 +1753,14 @@ public final class CodeGenerator implements NodeVisitor {
         Primitive operationType = Primitive.getWidestPrimitiveBetween(primitive1, primitive2);
 
         //Visit the first expression
-        binaryExpression.getFirst().accept(this);
+        visitExpression(first);
 
         //Promote primitive if not equal to result type
         if(!primitive1.equals(operationType))
             promotePrimitive(primitive1, operationType);
 
         //Visit the second expression
-        binaryExpression.getSecond().accept(this);
+        visitExpression(second);
 
         //Promote primitive if not equal to result type
         if(!primitive2.equals(operationType))
