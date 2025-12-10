@@ -427,6 +427,84 @@ public final class CodeGenerator implements NodeVisitor {
     }
 
     @Override
+    public void visitForeachStatement(ForeachStatement foreachStatement) {
+        addLineNumber(foreachStatement);
+
+        //Retrieve the current variables state
+        VariableState variableState = retrieveVariableState();
+
+        //Visit iterable expression
+        foreachStatement.getExpression().accept(this);
+
+        //Generate iterable variable
+        Variable iterable = variableTable.addVariable(foreachStatement.getExpression().getExpressionType(), "", true);
+        localTable.addLocal(iterable.getType());
+        addInstruction(Instruction.forStoring(iterable));
+
+        //Generate iterator variable
+        Variable iterator = variableTable.addVariable(new Primitive(Primitive.Kind.INTEGER), "", false);
+        localTable.addLocal(iterator.getType());
+        addInstruction(Instruction.forConstantInteger(0, constantPool));
+        addInstruction(Instruction.forStoring(iterator));
+
+        Branching branching = new Branching();
+
+        int jumpOffset = programCounter;
+        generateStackMapFrame();
+
+        //Generate loop condition operands
+        addInstruction(Instruction.forLoading(iterator));
+        addInstruction(Instruction.forLoading(iterable));
+        addInstruction(ARRAYLENGTH);
+
+        branching.addJumpIndex(instructions.size(), programCounter, false, false);
+        addInstruction(new Instruction.Builder(IF_ICMPGE, 3).build());
+
+        //Resolve jumps to true-clause
+        generateStackMapFrame();
+        branching.resolveTrueJump(instructions, programCounter);
+
+        VariableDeclaration variableDeclaration = (VariableDeclaration) foreachStatement.getVariableDeclaration();
+        Type type = getTypeFromNode(variableDeclaration.getType());
+
+        //Generate element access
+        addInstruction(Instruction.forLoading(iterable));
+        addInstruction(Instruction.forLoading(iterator));
+        addInstruction(Instruction.forLoadingFromArray(type));
+        if(type.getKind() == Type.Kind.OBJECT || type.getKind() == Type.Kind.ARRAY)
+            operandStack.push(type);
+
+        //Generate element variable
+        Variable variable = variableTable.addVariable(getTypeFromNode(variableDeclaration.getType()), variableDeclaration.getName(), true);
+        localTable.addLocal(variable.getType());
+        addInstruction(Instruction.forStoring(variable));
+
+        //Visit statement body
+        loopStack.add(branching);
+        foreachStatement.getBody().accept(this);
+        loopStack.removeLast();
+
+        //Resolve jumps to neutral-clause
+        generateStackMapFrame();
+        branching.resolveJumps(instructions, programCounter);
+
+        //Increment loop counter
+        addInstruction(Instruction.forLoading(iterator));
+        addInstruction(Instruction.forConstantInteger(1, constantPool));
+        addInstruction(Instruction.forAdditionOperation(((Primitive) iterator.getType())));
+        addInstruction(Instruction.forStoring(iterator));
+
+        addInstruction(Instruction.forUnconditionalJump(jumpOffset - programCounter));
+
+        //Restore the variables state
+        restoreVariableState(variableState);
+
+        //Resolve jumps to false-clause
+        generateStackMapFrame();
+        branching.resolveFalseJump(instructions, programCounter);
+    }
+
+    @Override
     public void visitSwitchStatement(SwitchStatement switchStatement) {
         addLineNumber(switchStatement);
 
